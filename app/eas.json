@@ -1,0 +1,52 @@
+{
+  "cli": {
+    "version": ">= 3.14.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "app-bundle"
+      }
+    },
+    "development-simulator": {
+      "extends": "development",
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "production": {
+    },
+    "ios_submit": {
+      "extends": "production"
+    },
+    "android_submit": {
+      "extends": "production"
+    }
+  },
+  "submit": {
+    "development": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "draft"
+      },
+      "ios": {
+      }
+    },
+    "production": {
+    },
+    "ios_submit": {
+      "ios": {
+      }
+    },
+    "android_submit": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "draft"
+      }
+    }
+  }
+}
