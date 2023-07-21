@@ -25,7 +25,7 @@ module.exports = function (api) {
                 {
                     root: ['./'],
                     alias: {
-                        common: '../supabase/functions/common',
+                        // common: '../supabase/functions/common',
                         '@': './src',
                         '@modules': './src/modules',
                         '@common': './src/common',

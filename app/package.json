@@ -5,6 +5,7 @@
   "scripts": {
     "ios": "./scripts/local_env.sh && export $(cat .env.local | xargs) && expo run:ios --device",
     "ios_sim": "./scripts/local_env.sh && export $(cat .env.local | xargs) && expo run:ios",
+    "ios_sim_manual": "expo run:ios",
     "android": "./scripts/local_env.sh && export $(cat .env.local | xargs) && expo run:android --device",
     "build_and_submit": "./scripts/build_and_submit.sh",
     "lint": "eslint App.tsx src --ext .ts,.tsx --fix"

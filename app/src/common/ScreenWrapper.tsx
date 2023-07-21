@@ -12,7 +12,7 @@ export function FullHeightScreenWrapper({ children }: ScreenWrapperProps) {
     const { bottom } = useSafeAreaInsets();
 
     return (
-        <ThemeableStack flex={1} padded paddingTop="$2" paddingBottom={bottom}>
+        <ThemeableStack flex={1} padded paddingBottom={bottom}>
             <StatusBar barStyle="default" />
             {children}
         </ThemeableStack>

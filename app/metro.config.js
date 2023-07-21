@@ -8,17 +8,17 @@ const { getDefaultConfig } = require('expo/metro-config');
 
 const config = getDefaultConfig(__dirname);
 
-const extraNodeModules = {
-    common: path.resolve(__dirname + '/../supabase/functions/common'),
-};
-
-config.watchFolders = [path.resolve(__dirname + '/../supabase/functions/common')];
-
-config.resolver.extraNodeModules = new Proxy(extraNodeModules, {
-    get: (target, name) =>
-        //redirects dependencies referenced from common/ to local node_modules
-        name in target ? target[name] : path.join(process.cwd(), `node_modules/${name}`),
-});
+// const extraNodeModules = {
+//     common: path.resolve(__dirname + '/../supabase/functions/common'),
+// };
+//
+// config.watchFolders = [path.resolve(__dirname + '/../supabase/functions/common')];
+//
+// config.resolver.extraNodeModules = new Proxy(extraNodeModules, {
+//     get: (target, name) =>
+//         //redirects dependencies referenced from common/ to local node_modules
+//         name in target ? target[name] : path.join(process.cwd(), `node_modules/${name}`),
+// });
 
 config.resolver.sourceExts = [...config.resolver.sourceExts, 'mjs', 'cjs'];
 
