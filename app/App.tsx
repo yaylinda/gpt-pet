@@ -16,6 +16,10 @@ export default function App() {
     const [loaded] = useFonts({
         Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
         InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+        Silkscreen: require('@tamagui/font-silkscreen/files/slkscr.ttf'),
+        SilkscreenBold: require('@tamagui/font-silkscreen/files/slkscrb.ttf'),
+        // Silkscreen: require('assets/fonts/silkscreen/Silkscreen-Regular.ttf'),
+        // SilkscreenBold: require('assets/fonts/silkscreen/Silkscreen-Bold.ttf'),
         // play around with silkscreen and fira-mono
     });
 

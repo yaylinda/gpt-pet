@@ -26,11 +26,11 @@ const animations = createAnimations({
     },
 });
 
-// const headingFont = createSilkscreenFont();
-// const bodyFont = createSilkscreenFont();
+const headingFont = createSilkscreenFont();
+const bodyFont = createSilkscreenFont();
 
-const headingFont = createInterFont();
-const bodyFont = createInterFont();
+// const headingFont = createInterFont();
+// const bodyFont = createInterFont();
 
 const config = createTamagui({
     animations,

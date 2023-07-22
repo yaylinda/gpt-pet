@@ -1,31 +1,33 @@
 import {FullHeightScreenWrapper} from '@common/ScreenWrapper';
 import {Dog, Sparkles} from '@tamagui/lucide-icons';
-import {wrap} from 'lodash';
-import Animated, {BounceInDown, BounceInUp} from 'react-native-reanimated';
-import {Text, XStack} from 'tamagui';
+import Animated, {BounceInDown, BounceInUp, FadeIn} from 'react-native-reanimated';
+import {Button, H6, XStack, YStack} from 'tamagui';
 
 const AuthScreen = () => {
-    return (<FullHeightScreenWrapper>
+    return (
+        <FullHeightScreenWrapper centered space={"$8"}>
 
-            <Animated.View style={{
-                flex: 1, justifyContent: 'center', alignItems: 'center'
-            }}>
-
-                <Animated.View entering={BounceInUp}>
-                    <Dog size="$15"/>
-                </Animated.View>
-
-                <Animated.View entering={BounceInDown.delay(500)}>
-                    <XStack justifyContent="space-between" alignItems="center" gap='$4'>
-                        <Sparkles />
-                        <Text>Conquer daily tasks with an adorable sidekick</Text>
-                        <Sparkles />
-                    </XStack>
-                </Animated.View>
-
-
+            <Animated.View entering={BounceInUp} style={{ alignItems: 'center'}}>
+                <Dog size="$10"/>
             </Animated.View>
-        </FullHeightScreenWrapper>);
+
+            <Animated.View entering={BounceInDown.delay(500)}>
+                <XStack justifyContent="space-evenly" alignItems="center">
+                    <Sparkles/>
+                    <H6 width='50%' textAlign="center">Conquer daily tasks with an adorable sidekick</H6>
+                    <Sparkles/>
+                </XStack>
+            </Animated.View>
+
+            <Animated.View entering={FadeIn.delay(1000)}>
+                <YStack space>
+                    <Button themeInverse>Sign Up</Button>
+                    <Button bordered>Log In</Button>
+                </YStack>
+            </Animated.View>
+
+        </FullHeightScreenWrapper>
+    );
 };
 
 export default AuthScreen;
