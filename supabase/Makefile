@@ -22,7 +22,10 @@ list:
 	npx supabase migration list
 
 init:
-	npx supabase db remote commit && npx supabase db remote commit -s auth
+	npx supabase db remote commit
+
+init_auth:
+	npx supabase db remote commit -s auth
 
 push:
 	npx supabase db push
