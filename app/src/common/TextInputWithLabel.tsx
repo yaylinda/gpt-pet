@@ -1,16 +1,16 @@
 import React from 'react';
-import {Fieldset, Input, Label, SizableText} from 'tamagui';
+import { Fieldset, Input, Label, SizableText } from 'tamagui';
 import type { InputProps } from 'tamagui/src/views/Input';
 
 interface TextInputWithLabelProps {
     id: string;
     label: string;
-    placeholder: string;
+    placeholder?: string;
     value: string;
     onUpdate: (value: string) => void;
-    disabled: boolean;
+    disabled?: boolean;
     horizontal?: boolean;
-    errorMessage: string;
+    errorMessage?: string;
     additionalProps?: InputProps;
 }
 
@@ -39,12 +39,13 @@ const TextInputWithLabel = ({
             />
             {errorMessage && (
                 <SizableText
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    fontFamily='Inter'
-                    paddingLeft='$2'
-                    marginTop='$2'
+                    fontFamily="Inter"
+                    paddingLeft="$2"
+                    marginTop="$2"
                     fontSize={12}
-                    color='red'
+                    color="red"
                 >
                     {errorMessage}
                 </SizableText>

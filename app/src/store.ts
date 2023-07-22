@@ -10,6 +10,7 @@ interface StoreStateData {
 
 interface StoreStateFunctions {
     setUserId: (userId: string) => void;
+    reset: () => void;
 }
 
 interface StoreState extends StoreStateData, StoreStateFunctions {}
@@ -20,7 +21,7 @@ const DEFAULT_DATA: StoreStateData = {
     currentUser: null,
 };
 
-const useStore = create<StoreState>()((set ) => ({
+const useStore = create<StoreState>()((set) => ({
     ...DEFAULT_DATA,
 
     setUserId: (userId: string) => {
@@ -37,6 +38,13 @@ const useStore = create<StoreState>()((set ) => ({
                     set({ currentUser: users[userId] || null });
                 });
         }
+    },
+
+    reset: () => {
+        set({
+            ...DEFAULT_DATA,
+            loadingSession: false,
+        });
     },
 }));
 

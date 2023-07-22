@@ -1,12 +1,12 @@
-import {DUPLICATE_EMAIL, INVALID_LOGIN} from '@/errors';
-import useUserStore from '@/store';
-import {supabase} from '@/supabase';
-import {errorAlert} from '@/alerts';
-import {EMAIL_REGEX} from '@/constants';
-import {AuthStackNavigationProps} from '@nav/AuthStackNavigator';
 import * as Burnt from 'burnt';
-import {isEmpty} from 'lodash';
-import {create} from 'zustand';
+import { isEmpty } from 'lodash';
+import { create } from 'zustand';
+import type { AuthStackNavigationProps } from '@nav/AuthStackNavigator';
+import { errorAlert } from '@/alerts';
+import { EMAIL_REGEX } from '@/constants';
+import { DUPLICATE_EMAIL, INVALID_LOGIN } from '@/errors';
+import useUserStore from '@/store';
+import { supabase } from '@/supabase';
 
 interface AuthStoreStateData {
     signingIn: boolean;
@@ -14,7 +14,11 @@ interface AuthStoreStateData {
 }
 
 interface AuthStoreStateFunctions {
-    submit: (email: string, password: string, passwordConf: string | null) => Record<string, string> | void;
+    submit: (
+        email: string,
+        password: string,
+        passwordConf: string | null
+    ) => Record<string, string> | void;
     signInWithEmailPassword: (email: string, password: string) => void;
     signUpWithEmailPassword: (email: string, password: string) => void;
     navSignUp: (navigation: AuthStackNavigationProps<'Auth'>) => void;
@@ -25,17 +29,23 @@ interface AuthStoreStateFunctions {
 type AuthStoreState = AuthStoreStateData & AuthStoreStateFunctions;
 
 const DEFAULT_DATA: AuthStoreStateData = {
-    signingIn: false, justSignedUp: false,
+    signingIn: false,
+    justSignedUp: false,
 };
 
 const useAuthStore = create<AuthStoreState>()((set, get) => ({
     ...DEFAULT_DATA,
 
-    submit: (email: string, password: string, passwordConf: string | null): Record<string, string> | void => {
+    submit: (
+        email: string,
+        password: string,
+        passwordConf: string | null
+    ): Record<string, string> | void => {
         const errors: Record<string, string> = {};
 
         if (!EMAIL_REGEX.test(email)) {
-            errors['email'] = 'Please enter a valid email address (ex: email@address.com)';
+            errors['email'] =
+                'Please enter a valid email address (ex: email@address.com)';
         }
 
         if (!password) {
@@ -59,18 +69,22 @@ const useAuthStore = create<AuthStoreState>()((set, get) => ({
     },
 
     signInWithEmailPassword: async (email: string, password: string) => {
-        set({signingIn: true});
+        set({ signingIn: true });
 
-        const {error} = await supabase.auth.signInWithPassword({
-            email: email, password,
+        const { error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password,
         });
 
-        set({signingIn: false});
+        set({ signingIn: false });
 
         if (error) {
             switch (error.message) {
                 case INVALID_LOGIN:
-                    errorAlert('Invalid Login', 'Email and/or password are incorrect.',);
+                    errorAlert(
+                        'Invalid Login',
+                        'Email and/or password are incorrect.'
+                    );
                     break;
                 default:
                     errorAlert('Oops! Unknown error.', JSON.stringify(error));
@@ -80,30 +94,36 @@ const useAuthStore = create<AuthStoreState>()((set, get) => ({
         }
 
         if (get().justSignedUp) {
-            Burnt.alert({
-                title: 'Welcome 👋',
-                message: 'Since it\'s your first time here, let me show you around.',
+            Burnt.toast({
+                title: 'Sign Up Success!',
                 preset: 'done',
+                haptic: 'success',
             });
         } else {
             Burnt.toast({
-                title: 'Login Success', message: 'Welcome back 👋', preset: 'done', haptic: 'success'
+                title: 'Login Success!',
+                preset: 'done',
+                haptic: 'success',
             });
         }
     },
 
-    signUpWithEmailPassword: async (email: string, password: string,) => {
-        set({signingIn: true});
+    signUpWithEmailPassword: async (email: string, password: string) => {
+        set({ signingIn: true });
 
-        const {error} = await supabase.auth.signUp({
-            email, password,
+        const { error } = await supabase.auth.signUp({
+            email,
+            password,
         });
 
         if (error) {
-            set({signingIn: false});
+            set({ signingIn: false });
             switch (error.message) {
                 case DUPLICATE_EMAIL:
-                    errorAlert('Duplicate Email', 'This email address has already been registered.');
+                    errorAlert(
+                        'Duplicate Email',
+                        'This email address has already been registered.'
+                    );
                     break;
                 default:
                     errorAlert('Oops! Unknown error.', JSON.stringify(error));
@@ -117,17 +137,17 @@ const useAuthStore = create<AuthStoreState>()((set, get) => ({
 
     navSignUp: (navigation: AuthStackNavigationProps<'Auth'>) => {
         navigation.navigate('SignUp');
-        set({justSignedUp: true});
+        set({ justSignedUp: true });
     },
 
     navLogIn: (navigation: AuthStackNavigationProps<'Auth'>) => {
         navigation.navigate('LogIn');
-        set({justSignedUp: false});
+        set({ justSignedUp: false });
     },
 
     signOut: () => {
         supabase.auth.signOut();
-        useUserStore.getState().setUserId('');
+        useUserStore.getState().reset();
         set({
             ...DEFAULT_DATA,
         });
