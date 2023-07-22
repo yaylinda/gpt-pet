@@ -39,6 +39,4 @@ const TextInputWithLabel = ({
     );
 };
 
-TextInputWithLabel.displayName = 'TextInputWithLabel';
-
 export default TextInputWithLabel;
