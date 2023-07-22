@@ -1,5 +1,4 @@
 import { createAnimations } from '@tamagui/animations-react-native';
-import { createInterFont } from '@tamagui/font-inter';
 import { createSilkscreenFont } from '@tamagui/font-silkscreen';
 import { createMedia } from '@tamagui/react-native-media-driver';
 import { shorthands } from '@tamagui/shorthands';
@@ -30,7 +29,6 @@ const headingFont = createSilkscreenFont();
 const bodyFont = createSilkscreenFont();
 
 // const headingFont = createInterFont();
-// const bodyFont = createInterFont();
 
 const config = createTamagui({
     animations,
@@ -62,12 +60,12 @@ const config = createTamagui({
     }),
 });
 
-export type AppConfig = typeof config
+export type AppConfig = typeof config;
 
 declare module 'tamagui' {
     // overrides TamaguiCustomConfig so your custom types
     // work everywhere you import `tamagui`
-    type TamaguiCustomConfig = AppConfig
+    type TamaguiCustomConfig = AppConfig;
 }
 
 export default config;

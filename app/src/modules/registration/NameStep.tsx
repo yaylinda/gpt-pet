@@ -1,14 +1,17 @@
 import React from 'react';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { Button } from 'tamagui';
 import TextInputWithLabel from '@common/TextInputWithLabel';
 import VerticalSpacer from '@common/VerticalSpacer';
+import useAuthStore from '@modules/auth/store';
+import StepButtons from '@modules/registration/StepButtons';
 import useRegistrationStore from '@modules/registration/store';
+import { Step } from '@modules/registration/types';
 
 const MIN_DISPLAY_NAME_LENGTH = 3;
 
-const NameRegistrationStep = ({ nextStep }: RegistrationStepProps) => {
-    const { displayName, setDisplayName } = useRegistrationStore();
+const NameStep = () => {
+    const { displayName, setDisplayName, setStep } = useRegistrationStore();
+    const { signOut } = useAuthStore();
 
     return (
         <Animated.View
@@ -22,18 +25,14 @@ const NameRegistrationStep = ({ nextStep }: RegistrationStepProps) => {
                 onUpdate={(value) => setDisplayName(value)}
             />
             <VerticalSpacer />
-            {displayName.length >= MIN_DISPLAY_NAME_LENGTH && (
-                <Animated.View entering={FadeIn}>
-                    <Button
-                        themeInverse
-                        onPress={nextStep}
-                    >
-                        Next
-                    </Button>
-                </Animated.View>
-            )}
+            <StepButtons
+                disabled={displayName.length < MIN_DISPLAY_NAME_LENGTH}
+                showNext={displayName.length >= MIN_DISPLAY_NAME_LENGTH}
+                nextStep={() => setStep(Step.PET_TYPE)}
+                prevStep={signOut}
+            />
         </Animated.View>
     );
 };
 
-export default NameRegistrationStep;
+export default NameStep;

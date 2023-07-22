@@ -46,12 +46,14 @@ const AuthScreen = () => {
             <Animated.View entering={FadeIn.delay(1500)}>
                 <YStack space="$2">
                     <Button
+                        size="$4"
                         onPress={() => navSignUp(navigation)}
                         themeInverse
                     >
                         Sign Up
                     </Button>
                     <Button
+                        size="$4"
                         onPress={() => navLogIn(navigation)}
                         bordered
                     >

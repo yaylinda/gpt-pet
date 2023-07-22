@@ -22,21 +22,41 @@ function ScreenHeader({
 
     const leftComponent =
         leftButtonIcon && leftButtonAction ? (
-            <Button circular icon={leftButtonIcon} onPress={() => leftButtonAction()} />
+            <Button
+                size="$4"
+                circular
+                icon={leftButtonIcon}
+                onPress={() => leftButtonAction()}
+            />
         ) : undefined;
 
     const rightComponent =
         rightButtonIcon && rightButtonAction ? (
-            <Button circular icon={rightButtonIcon} onPress={() => rightButtonAction()} />
+            <Button
+                size="$4"
+                circular
+                icon={rightButtonIcon}
+                onPress={() => rightButtonAction()}
+            />
         ) : undefined;
 
     return (
-        <XStack paddingTop={top} justifyContent="space-between" alignItems="center">
-            <XStack justifyContent="flex-start" width="20%">
+        <XStack
+            paddingTop={top}
+            justifyContent="space-between"
+            alignItems="center"
+        >
+            <XStack
+                justifyContent="flex-start"
+                width="20%"
+            >
                 {leftComponent}
             </XStack>
             <Heading>{title}</Heading>
-            <XStack justifyContent="flex-end" width="20%">
+            <XStack
+                justifyContent="flex-end"
+                width="20%"
+            >
                 {rightComponent}
             </XStack>
         </XStack>
