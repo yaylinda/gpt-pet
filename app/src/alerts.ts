@@ -1,6 +1,6 @@
 import * as Burnt from 'burnt';
 
-export const errorToast = (title: string, message: string) => {
+export const errorAlert = (title: string, message: string) => {
     Burnt.alert({
         title,
         message,

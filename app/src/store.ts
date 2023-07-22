@@ -1,8 +1,11 @@
 import { create } from 'zustand';
+import type { User } from '@modules/users/types';
+import useUsersStore from '@modules/users/store';
 
 interface StoreStateData {
     loadingSession: boolean;
     userId: string;
+    currentUser: User | null;
 }
 
 interface StoreStateFunctions {
@@ -14,19 +17,25 @@ interface StoreState extends StoreStateData, StoreStateFunctions {}
 const DEFAULT_DATA: StoreStateData = {
     loadingSession: true,
     userId: '',
+    currentUser: null,
 };
 
-const useStore = create<StoreState>()((set, get) => ({
+const useStore = create<StoreState>()((set ) => ({
     ...DEFAULT_DATA,
 
     setUserId: (userId: string) => {
         set({
-                loadingSession: false,
-                userId,
-            });
+            loadingSession: false,
+            userId,
+        });
 
         if (userId) {
-            // useProfileStore.getState().fetchProfiles([userId]);
+            useUsersStore
+                .getState()
+                .fetchUsers([userId])
+                .then((users) => {
+                    set({ currentUser: users[userId] || null });
+                });
         }
     },
 }));

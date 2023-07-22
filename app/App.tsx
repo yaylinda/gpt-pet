@@ -1,27 +1,27 @@
-import useStore from '@/store';
-import {supabase} from '@/supabase';
-import AppStackNavigator from '@nav/AppStackNavigator';
-import {NavigationContainer} from '@react-navigation/native';
-import {useFonts} from 'expo-font';
+import { NavigationContainer } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
 import React from 'react';
-import {useColorScheme} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {TamaguiProvider, Theme} from 'tamagui';
+import { LogBox, useColorScheme } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { TamaguiProvider, Theme } from 'tamagui';
 import config from './tamagui.config';
+import useStore from '@/store';
+import { supabase } from '@/supabase';
+import AppStackNavigator from '@nav/AppStackNavigator';
 
-import { LogBox } from "react-native";
-LogBox.ignoreLogs(['No font size found $true undefined in size tokens ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12", "$13", "$14", "$15", "$16"]']);
+LogBox.ignoreLogs([
+    'No font size found $true undefined in size tokens ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12", "$13", "$14", "$15", "$16"]',
+]);
 
 export default function App() {
-    const { setUserId, userId } = useStore();
+    const { setUserId  } = useStore();
     const colorScheme = useColorScheme();
 
     const [loaded] = useFonts({
         Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
         InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
         Silkscreen: require('@tamagui/font-silkscreen/files/slkscr.ttf'),
-        SilkscreenBold: require('@tamagui/font-silkscreen/files/slkscrb.ttf'),
-        // Silkscreen: require('assets/fonts/silkscreen/Silkscreen-Regular.ttf'),
+        SilkscreenBold: require('@tamagui/font-silkscreen/files/slkscrb.ttf'), // Silkscreen: require('assets/fonts/silkscreen/Silkscreen-Regular.ttf'),
         // SilkscreenBold: require('assets/fonts/silkscreen/Silkscreen-Bold.ttf'),
         // play around with silkscreen and fira-mono
     });
@@ -60,7 +60,7 @@ export default function App() {
             <Theme name={colorScheme === 'dark' ? 'dark' : 'light'}>
                 <SafeAreaProvider>
                     <NavigationContainer>
-                        <AppStackNavigator userId={userId} />
+                        <AppStackNavigator />
                     </NavigationContainer>
                 </SafeAreaProvider>
             </Theme>

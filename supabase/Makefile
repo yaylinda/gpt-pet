@@ -13,7 +13,7 @@ stop:
 	npx supabase stop --no-backup
 
 new_migration:
-	npx supabase migration new
+	npx supabase migration new $(name)
 
 apply:
 	npx supabase migration up
@@ -32,3 +32,6 @@ push:
 
 reset:
 	npx supabase db reset
+
+gen_local:
+	npx supabase gen types typescript --local --schema public > ../app/gen/db.ts

@@ -1,48 +1,85 @@
-import HomeScreen from '@modules/home/HomeScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import AuthStackNavigator from './AuthStackNavigator';
 import type { AuthStackParamList } from './AuthStackNavigator';
+import type { RegistrationStackParamList } from '@nav/RegistrationStackNavigator';
+import type { TabStackParamList } from '@nav/TabStackNavigator';
 import type { NavigatorScreenParams } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import useStore from '@/store';
 import LoadingScreen from '@common/LoadingScreen';
+import RegistrationStackNavigator from '@nav/RegistrationStackNavigator';
+import TabStackNavigator from '@nav/TabStackNavigator';
 import 'react-native-gesture-handler';
 
 export type AppStackParamList = {
     Loading: undefined;
-    Home: undefined;
     AuthStack: NavigatorScreenParams<AuthStackParamList>;
+    RegistrationStack: NavigatorScreenParams<RegistrationStackParamList>;
+    TabStack: NavigatorScreenParams<TabStackParamList>;
 };
 
-export type AppStackNavigationProps<T extends keyof AppStackParamList> = NativeStackScreenProps<AppStackParamList, T>['navigation'];
+export type AppStackNavigationProps<T extends keyof AppStackParamList> = NativeStackScreenProps<
+    AppStackParamList,
+    T
+>['navigation'];
 
-export type AppStackRouteProps<T extends keyof AppStackParamList> = NativeStackScreenProps<AppStackParamList, T>['route'];
+export type AppStackRouteProps<T extends keyof AppStackParamList> = NativeStackScreenProps<
+    AppStackParamList,
+    T
+>['route'];
 
 const AppStack = createNativeStackNavigator<AppStackParamList>();
 
-function AppStackNavigator({userId}: { userId?: string }) {
-    const {loadingSession} = useStore();
+function AppStackNavigator() {
+    const { loadingSession, userId, currentUser } = useStore();
 
-    return (<AppStack.Navigator>
-        {loadingSession ? (
-            <AppStack.Screen
-            name="Loading"
-            options={{headerShown: false}}
-            component={LoadingScreen}
-        />) : userId ? (
-            <AppStack.Screen
-                name="Home"
-                options={{headerShown: false}}
-                component={HomeScreen}
-            />
-        ) : (
-            <AppStack.Screen
-            name="AuthStack"
-            options={{headerShown: false}}
-            component={AuthStackNavigator}
-        />)}
-    </AppStack.Navigator>);
+    const hasUser = currentUser !== null;
+    const hasRegistered = currentUser?.hasRegistered;
+
+    const renderStack = React.useCallback(() => {
+        if (loadingSession || (userId && !hasUser)) {
+            return (
+                <AppStack.Screen
+                    name="Loading"
+                    options={{ headerShown: false }}
+                    component={LoadingScreen}
+                />
+            );
+        }
+
+        if (!userId) {
+            return (
+                <AppStack.Screen
+                    name="AuthStack"
+                    options={{ headerShown: false }}
+                    component={AuthStackNavigator}
+                />
+            );
+        }
+
+        if (hasRegistered) {
+            return (
+                <AppStack.Screen
+                    name="TabStack"
+                    options={{ headerShown: false }}
+                    component={TabStackNavigator}
+                />
+            );
+        }
+
+        if (hasUser && !hasRegistered) {
+            return (
+                <AppStack.Screen
+                    name="RegistrationStack"
+                    options={{ headerShown: false }}
+                    component={RegistrationStackNavigator}
+                />
+            );
+        }
+    }, [loadingSession, userId, hasUser, hasRegistered]);
+
+    return <AppStack.Navigator>{renderStack()}</AppStack.Navigator>;
 }
 
-export default React.memo(AppStackNavigator, (prev, next) => prev.userId === next.userId);
+export default AppStackNavigator;
