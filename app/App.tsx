@@ -9,6 +9,9 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {TamaguiProvider, Theme} from 'tamagui';
 import config from './tamagui.config';
 
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(['No font size found $true undefined in size tokens ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12", "$13", "$14", "$15", "$16"]']);
+
 export default function App() {
     const { setUserId, userId } = useStore();
     const colorScheme = useColorScheme();

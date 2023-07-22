@@ -1,10 +1,10 @@
 import * as Burnt from 'burnt';
 
 export const errorToast = (title: string, message: string) => {
-    Burnt.toast({
+    Burnt.alert({
         title,
-        preset: "error",
         message,
-        haptic: 'error'
+        preset: "error",
+        duration: 4,
     });
 };

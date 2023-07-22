@@ -7,21 +7,25 @@ import {useNavigation} from '@react-navigation/native';
 import {Dog, Heart} from '@tamagui/lucide-icons';
 import React from 'react';
 import {KeyboardAvoidingView, Platform} from 'react-native';
-import Animated, {BounceInDown, BounceInUp} from 'react-native-reanimated';
+import Animated, {BounceInDown, BounceInUp, FadeIn} from 'react-native-reanimated';
 import {Button, H6, Paragraph, XStack, YStack} from 'tamagui';
 
 const AuthStackSignUpScreen = () => {
     const navigation = useNavigation<AuthStackNavigationProps<'Auth'>>();
 
-    const {signInWithEmailPassword, signUpWithEmailPassword, signingIn, isLogin, navLogIn, navSignUp} = useAuthStore();
+    const {submit, signingIn, navSignUp} = useAuthStore();
 
     const [email, setEmail] = React.useState<string>('');
+    const [emailErr, setEmailErr] = React.useState<string>('');
     const [password, setPassword] = React.useState<string>('');
-    const [passwordConf, setPasswordConf] = React.useState<string>('');
+    const [passwordErr, setPasswordErr] = React.useState<string>('');
 
-    const submit = () => {
-        setEmail(email);
-        setPassword(password);
+    const submitAndValidate = () => {
+        const errors = submit(email, password, null);
+        if (errors) {
+            setEmailErr(errors['email']);
+            setPasswordErr(errors['password']);
+        }
     };
 
     return (
@@ -33,6 +37,7 @@ const AuthStackSignUpScreen = () => {
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 >
                     <YStack space="$10">
+
                         <Animated.View entering={BounceInUp} style={{alignItems: 'center'}}>
                             <Dog size="$12"/>
                         </Animated.View>
@@ -40,35 +45,48 @@ const AuthStackSignUpScreen = () => {
                         <Animated.View entering={BounceInDown.delay(500)}>
                             <XStack justifyContent="space-evenly" alignItems="center">
                                 <Heart size="$4"/>
-                                <H6 width="50%" textAlign="center">Your pets are eagerly awaiting your return</H6>
+                                <H6 width="50%" textAlign="center">
+                                    Your pets are eagerly awaiting your return
+                                </H6>
                                 <Heart size="$4"/>
                             </XStack>
                         </Animated.View>
 
-                        <YStack space="$4">
-                            <YStack space="$1">
-                                <TextInputWithLabel
-                                    id="login"
-                                    label="Email Address"
-                                    placeholder="email@email.com"
-                                    value={email}
-                                    onUpdate={setEmail}
-                                    disabled={signingIn}
-                                />
-                                <TextInputWithLabel
-                                    id="pwd"
-                                    label="Password"
-                                    placeholder=""
-                                    value={password}
-                                    onUpdate={setPassword}
-                                    disabled={signingIn}
-                                    additionalProps={{
-                                        secureTextEntry: true,
-                                    }}
-                                />
+                        <Animated.View entering={FadeIn.delay(1500)}>
+                            <YStack space="$4">
+                                <YStack space="$1">
+                                    <TextInputWithLabel
+                                        id="login"
+                                        label="Email Address"
+                                        placeholder="email@email.com"
+                                        value={email}
+                                        onUpdate={(value) => {
+                                            setEmail(value);
+                                            setEmailErr('');
+                                        }}
+                                        disabled={signingIn}
+                                        errorMessage={emailErr}
+                                    />
+                                    <TextInputWithLabel
+                                        id="pwd"
+                                        label="Password"
+                                        placeholder=""
+                                        value={password}
+                                        onUpdate={(value) => {
+                                            setPassword(value);
+                                            setPasswordErr('');
+                                        }}
+                                        disabled={signingIn}
+                                        errorMessage={passwordErr}
+                                        additionalProps={{
+                                            secureTextEntry: true,
+                                        }}
+                                    />
+                                </YStack>
+                                <Button themeInverse onPress={submitAndValidate}>Log In</Button>
                             </YStack>
-                            <Button themeInverse onPress={submit}>Log In</Button>
-                        </YStack>
+                        </Animated.View>
+
                     </YStack>
 
                     <XStack justifyContent="center" alignItems="center">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Fieldset, Input, Label } from 'tamagui';
+import {Fieldset, Input, Label, SizableText} from 'tamagui';
 import type { InputProps } from 'tamagui/src/views/Input';
 
 interface TextInputWithLabelProps {
@@ -10,6 +10,7 @@ interface TextInputWithLabelProps {
     onUpdate: (value: string) => void;
     disabled: boolean;
     horizontal?: boolean;
+    errorMessage: string;
     additionalProps?: InputProps;
 }
 
@@ -21,6 +22,7 @@ const TextInputWithLabel = ({
     onUpdate,
     disabled,
     horizontal = false,
+    errorMessage,
     additionalProps = {},
 }: TextInputWithLabelProps) => {
     return (
@@ -35,6 +37,18 @@ const TextInputWithLabel = ({
                 disabled={disabled}
                 {...additionalProps}
             />
+            {errorMessage && (
+                <SizableText
+                    // @ts-ignore
+                    fontFamily='Inter'
+                    paddingLeft='$2'
+                    marginTop='$2'
+                    fontSize={12}
+                    color='red'
+                >
+                    {errorMessage}
+                </SizableText>
+            )}
         </Fieldset>
     );
 };
