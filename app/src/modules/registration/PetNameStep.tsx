@@ -3,14 +3,12 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { MIN_DISPLAY_NAME_LENGTH } from '@/constants';
 import TextInputWithLabel from '@common/TextInputWithLabel';
 import VerticalSpacer from '@common/VerticalSpacer';
-import useAuthStore from '@modules/auth/store';
 import StepButtons from '@modules/registration/StepButtons';
 import useRegistrationStore from '@modules/registration/store';
 import { Step } from '@modules/registration/types';
 
-const NameStep = () => {
-    const { displayName, setDisplayName, setStep } = useRegistrationStore();
-    const { signOut } = useAuthStore();
+const PetNameStep = () => {
+    const { petName, setPetName, setStep } = useRegistrationStore();
 
     return (
         <Animated.View
@@ -18,19 +16,19 @@ const NameStep = () => {
             exiting={FadeOut}
         >
             <TextInputWithLabel
-                id="displayName"
+                id="petName"
                 label="What's your name?"
-                value={displayName}
-                onUpdate={(value) => setDisplayName(value)}
+                value={petName}
+                onUpdate={(value) => setPetName(value)}
             />
             <VerticalSpacer />
             <StepButtons
-                showNext={displayName.length >= MIN_DISPLAY_NAME_LENGTH}
-                nextStep={() => setStep(Step.PET_TYPE)}
-                prevStep={signOut}
+                showNext={petName.length >= MIN_DISPLAY_NAME_LENGTH}
+                nextStep={() => setStep(Step.PET_NAME)}
+                prevStep={() => setStep(Step.PET_TYPE)}
             />
         </Animated.View>
     );
 };
 
-export default NameStep;
+export default PetNameStep;

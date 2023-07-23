@@ -4,16 +4,10 @@ import { Button, XStack } from 'tamagui';
 import type { RegistrationStepProps } from '@modules/registration/types';
 
 interface StepButtonsProps extends RegistrationStepProps {
-    disabled: boolean;
     showNext: boolean;
 }
 
-const StepButtons = ({
-    prevStep,
-    nextStep,
-    disabled,
-    showNext,
-}: StepButtonsProps) => {
+const StepButtons = ({ prevStep, nextStep, showNext }: StepButtonsProps) => {
     return (
         <XStack justifyContent="space-between">
             {prevStep && (
@@ -21,8 +15,9 @@ const StepButtons = ({
                     size="$4"
                     bordered
                     onPress={prevStep}
+                    borderColor="$color"
                 >
-                    Previous
+                    Back
                 </Button>
             )}
             {showNext && (
@@ -34,7 +29,6 @@ const StepButtons = ({
                         size="$4"
                         themeInverse
                         onPress={nextStep}
-                        disabled={disabled}
                     >
                         Next
                     </Button>

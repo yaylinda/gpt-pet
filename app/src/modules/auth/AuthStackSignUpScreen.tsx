@@ -61,7 +61,7 @@ const AuthStackSignUpScreen = () => {
                                     width="50%"
                                     textAlign="center"
                                 >
-                                    Meet cute Blobbies and complete tasks
+                                    Team up with cute pets and complete tasks
                                     together
                                 </H6>
                                 <PartyPopper size="$4" />
