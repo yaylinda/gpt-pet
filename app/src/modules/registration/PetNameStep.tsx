@@ -1,5 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import type { RegistrationStackNavigationProps } from '@nav/RegistrationStackNavigator';
 import { MIN_DISPLAY_NAME_LENGTH } from '@/constants';
 import TextInputWithLabel from '@common/TextInputWithLabel';
 import VerticalSpacer from '@common/VerticalSpacer';
@@ -8,7 +10,14 @@ import useRegistrationStore from '@modules/registration/store';
 import { Step } from '@modules/registration/types';
 
 const PetNameStep = () => {
+    const navigation =
+        useNavigation<RegistrationStackNavigationProps<'Registration'>>();
+
     const { petName, setPetName, setStep } = useRegistrationStore();
+
+    const onStart = () => {
+        navigation.navigate('RegistrationLoading');
+    };
 
     return (
         <Animated.View
@@ -17,15 +26,16 @@ const PetNameStep = () => {
         >
             <TextInputWithLabel
                 id="petName"
-                label="What's your name?"
+                label="Give your pet a name"
                 value={petName}
                 onUpdate={(value) => setPetName(value)}
             />
             <VerticalSpacer />
             <StepButtons
-                showNext={petName.length >= MIN_DISPLAY_NAME_LENGTH}
-                nextStep={() => setStep(Step.PET_NAME)}
+                nextButtonVisible={petName.length >= MIN_DISPLAY_NAME_LENGTH}
+                nextStep={onStart}
                 prevStep={() => setStep(Step.PET_TYPE)}
+                nextButtonText="Start!"
             />
         </Animated.View>
     );

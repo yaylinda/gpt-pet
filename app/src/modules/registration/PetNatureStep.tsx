@@ -29,8 +29,7 @@ const PetNatureOption = ({ nature, selected }: PetNatureOptionProps) => {
 };
 
 const PetNatureStep = () => {
-    const { selectedNatures, randomizePetNatures, setStep } =
-        useRegistrationStore();
+    const { petNatures, randomizePetNatures, setStep } = useRegistrationStore();
 
     return (
         <Animated.View
@@ -48,7 +47,7 @@ const PetNatureStep = () => {
                     <PetNatureOption
                         key={nature}
                         nature={nature}
-                        selected={selectedNatures.includes(nature)}
+                        selected={petNatures.includes(nature)}
                     />
                 ))}
             </XStack>
@@ -64,7 +63,7 @@ const PetNatureStep = () => {
             </XStack>
             <VerticalSpacer />
             <StepButtons
-                showNext={selectedNatures.length === NUM_NATURES}
+                nextButtonVisible={petNatures.length === NUM_NATURES}
                 nextStep={() => setStep(Step.PET_NATURE)}
                 prevStep={() => setStep(Step.PET_TYPE)}
             />

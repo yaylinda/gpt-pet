@@ -1,8 +1,10 @@
 import type moment from 'moment';
 
-export interface User {
+export interface Pet {
     id: string;
+    type: string;
+    natures: string[];
     createdAt: moment.Moment;
     displayName: string;
-    hasRegistered: boolean;
+    userId: string;
 }

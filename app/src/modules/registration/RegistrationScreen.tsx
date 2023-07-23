@@ -4,6 +4,7 @@ import { H1 } from 'tamagui';
 import ScreenHeader from '@common/ScreenHeader';
 import { FullHeightScreenWrapper } from '@common/ScreenWrapper';
 import NameStep from '@modules/registration/NameStep';
+import PetNameStep from '@modules/registration/PetNameStep';
 import PetNatureStep from '@modules/registration/PetNatureStep';
 import PetTypeStep from '@modules/registration/PetTypeStep';
 import useRegistrationStore from '@modules/registration/store';
@@ -20,6 +21,8 @@ const RegistrationScreen = () => {
                 return <PetTypeStep />;
             case Step.PET_NATURE:
                 return <PetNatureStep />;
+            case Step.PET_NAME:
+                return <PetNameStep />;
         }
     };
 

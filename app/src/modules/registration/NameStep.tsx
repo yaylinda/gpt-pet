@@ -25,7 +25,9 @@ const NameStep = () => {
             />
             <VerticalSpacer />
             <StepButtons
-                showNext={displayName.length >= MIN_DISPLAY_NAME_LENGTH}
+                nextButtonVisible={
+                    displayName.length >= MIN_DISPLAY_NAME_LENGTH
+                }
                 nextStep={() => setStep(Step.PET_TYPE)}
                 prevStep={signOut}
             />

@@ -45,7 +45,7 @@ export interface Database {
           created_at: string
           display_name: string
           id: string
-          nature: string
+          natures: string[]
           type: string
           user_id: string
         }
@@ -53,7 +53,7 @@ export interface Database {
           created_at?: string
           display_name: string
           id?: string
-          nature: string
+          natures: string[]
           type: string
           user_id: string
         }
@@ -61,7 +61,7 @@ export interface Database {
           created_at?: string
           display_name?: string
           id?: string
-          nature?: string
+          natures?: string[]
           type?: string
           user_id?: string
         }

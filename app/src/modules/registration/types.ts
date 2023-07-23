@@ -5,7 +5,4 @@ export enum Step {
     PET_NAME = 'PET_NAME',
 }
 
-export interface RegistrationStepProps {
-    nextStep: () => void;
-    prevStep?: () => void;
-}
+export interface RegistrationStepProps {}

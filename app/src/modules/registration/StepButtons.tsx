@@ -4,10 +4,18 @@ import { Button, XStack } from 'tamagui';
 import type { RegistrationStepProps } from '@modules/registration/types';
 
 interface StepButtonsProps extends RegistrationStepProps {
-    showNext: boolean;
+    nextStep: () => void;
+    prevStep?: () => void;
+    nextButtonVisible: boolean;
+    nextButtonText?: string;
 }
 
-const StepButtons = ({ prevStep, nextStep, showNext }: StepButtonsProps) => {
+const StepButtons = ({
+    prevStep,
+    nextStep,
+    nextButtonVisible,
+    nextButtonText = 'Next',
+}: StepButtonsProps) => {
     return (
         <XStack justifyContent="space-between">
             {prevStep && (
@@ -20,7 +28,7 @@ const StepButtons = ({ prevStep, nextStep, showNext }: StepButtonsProps) => {
                     Back
                 </Button>
             )}
-            {showNext && (
+            {nextButtonVisible && (
                 <Animated.View
                     entering={FadeIn}
                     exiting={FadeOut}
@@ -30,7 +38,7 @@ const StepButtons = ({ prevStep, nextStep, showNext }: StepButtonsProps) => {
                         themeInverse
                         onPress={nextStep}
                     >
-                        Next
+                        {nextButtonText}
                     </Button>
                 </Animated.View>
             )}

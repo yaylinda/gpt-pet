@@ -38,7 +38,7 @@ const PetOption = ({ value, selectedValue, onPress }: PetOptionProps) => {
 const petIcons = Object.keys(PET_ICON_MAP);
 
 const PetTypeStep = () => {
-    const { selectedPet, setSelectedPet, setStep } = useRegistrationStore();
+    const { petType, setPetType, setStep } = useRegistrationStore();
 
     return (
         <Animated.View
@@ -56,8 +56,8 @@ const PetTypeStep = () => {
                             <PetOption
                                 key={pet}
                                 value={pet}
-                                selectedValue={selectedPet}
-                                onPress={(value) => setSelectedPet(value)}
+                                selectedValue={petType}
+                                onPress={(value) => setPetType(value)}
                             />
                         ))}
                     </XStack>
@@ -69,7 +69,7 @@ const PetTypeStep = () => {
                     icon={Dices}
                     size="$4"
                     onPress={() =>
-                        setSelectedPet(
+                        setPetType(
                             petIcons[
                                 Math.floor(Math.random() * petIcons.length)
                             ]
@@ -81,8 +81,8 @@ const PetTypeStep = () => {
             </XStack>
             <VerticalSpacer />
             <StepButtons
-                showNext={!!selectedPet}
-                nextStep={() => setStep(Step.PET_NATURE)}
+                nextButtonVisible={!!petType}
+                nextStep={() => setStep(Step.PET_NAME)}
                 prevStep={() => setStep(Step.NAME)}
             />
         </Animated.View>
