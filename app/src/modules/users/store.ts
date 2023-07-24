@@ -1,7 +1,9 @@
+import { produce } from 'immer';
 import { isEmpty } from 'lodash';
 import { create } from 'zustand';
-import type { User } from '@modules/users/types';
+import type { User , UserRow } from '@modules/users/types';
 import { reduce } from '@/utils';
+import { userAdapter } from '@modules/users/adapters';
 import { fetchUsers } from '@modules/users/api';
 
 interface UsersStoreStateData {
@@ -10,6 +12,7 @@ interface UsersStoreStateData {
 
 interface UsersStoreStateFunctions {
     fetchUsers: (userIds: string[]) => Promise<Record<string, User>>;
+    upsertUser: (userRow: UserRow) => void;
 }
 
 type UsersStoreState = UsersStoreStateData & UsersStoreStateFunctions;
@@ -35,6 +38,16 @@ const useUsersStore = create<UsersStoreState>()((set, get) => ({
         };
         set({ users });
         return reduce(userIds.filter((u) => users[u]).map((u) => users[u]));
+    },
+
+    upsertUser: (userRow: UserRow) => {
+        console.log('[usersStore][upsertUser] userRow update');
+
+        set((state) => ({
+            users: produce(state.users, (draft) => {
+                draft[userRow.id] = userAdapter(userRow);
+            }),
+        }));
     },
 }));
 

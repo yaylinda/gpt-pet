@@ -1,20 +1,20 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import React from 'react';
-import { LogBox, useColorScheme } from 'react-native';
+import { useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { TamaguiProvider, Theme } from 'tamagui';
 import config from './tamagui.config';
+import type { UserRow } from '@modules/users/types';
+import { Tables } from '@/enums';
 import useStore from '@/store';
 import { supabase } from '@/supabase';
+import useUsersStore from '@modules/users/store';
 import AppStackNavigator from '@nav/AppStackNavigator';
 
-LogBox.ignoreLogs([
-    'No font size found $true undefined in size tokens ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10", "$11", "$12", "$13", "$14", "$15", "$16"]',
-]);
-
 export default function App() {
-    const { setUserId  } = useStore();
+    const { userId, setUserId, updateCurrentUser } = useStore();
+    const { upsertUser } = useUsersStore();
     const colorScheme = useColorScheme();
 
     const [loaded] = useFonts({
@@ -50,6 +50,99 @@ export default function App() {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+        if (!userId) {
+            return;
+        }
+
+        console.log(
+            `[App] subscribing to user, pets, tasks, completed_tasks, on channel='user_${userId}'`
+        );
+
+        const userSubscriptions = supabase
+            .channel(`user_${userId}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: Tables.USERS,
+                    filter: `id=eq.${userId}`,
+                },
+                (payload) => {
+                    updateCurrentUser(payload.new as UserRow);
+                    upsertUser(payload.new as UserRow);
+                }
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: Tables.PETS,
+                },
+                (payload) => {
+                    upsertChat(payload.new as Chats);
+                }
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: Tables.PETS,
+                },
+                (payload) => {
+                    upsertChat(payload.new as Chats);
+                }
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: Tables.TASKS,
+                },
+                (payload) => upsertFriends(payload.new as Friends)
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: Tables.TASKS,
+                },
+                (payload) => upsertFriends(payload.new as Friends)
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: Tables.COMPLETED_TASKS,
+                },
+                (payload) => upsertPurchases(payload.new as Purchases)
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'DELETE',
+                    schema: 'public',
+                    table: Tables.COMPLETED_TASKS,
+                },
+                (payload) => upsertPurchases(payload.new as Purchases)
+            )
+            .subscribe();
+
+        return () => {
+            console.log(
+                `[App] unsubscribing from profiles, chats, friends on channel='user_${userId}'`
+            );
+            userSubscriptions.unsubscribe();
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userId]);
 
     if (!loaded) {
         return null;

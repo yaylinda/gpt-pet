@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import type { User } from '@modules/users/types';
+import type { User, UserRow } from '@modules/users/types';
+import { userAdapter } from '@modules/users/adapters';
 import useUsersStore from '@modules/users/store';
 
 interface StoreStateData {
@@ -10,6 +11,7 @@ interface StoreStateData {
 
 interface StoreStateFunctions {
     setUserId: (userId: string) => void;
+    updateCurrentUser: (userRow: UserRow) => void;
     reset: () => void;
 }
 
@@ -38,6 +40,11 @@ const useStore = create<StoreState>()((set) => ({
                     set({ currentUser: users[userId] || null });
                 });
         }
+    },
+
+    updateCurrentUser: (userRow: UserRow) => {
+        console.log('[store][updateCurrentUser] currentUser update');
+        set({ currentUser: userAdapter(userRow) });
     },
 
     reset: () => {

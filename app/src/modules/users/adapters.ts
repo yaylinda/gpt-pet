@@ -1,10 +1,7 @@
 import moment from 'moment';
-import type { Database } from '@/gen';
-import type { User } from '@modules/users/types';
+import type { User , UserRow } from '@modules/users/types';
 
-export const userAdapter = (
-    row: Database['public']['Tables']['users']['Row']
-): User => {
+export const userAdapter = (row: UserRow): User => {
     return {
         id: row.id,
         createdAt: moment(row.created_at),
