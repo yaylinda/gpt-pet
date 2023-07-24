@@ -47,14 +47,14 @@ const AuthScreen = () => {
                 <YStack space="$2">
                     <Button
                         size="$4"
-                        onPress={() => navSignUp(navigation)}
+                        onPress={() => navSignUp(navigation, true)}
                         themeInverse
                     >
                         Sign Up
                     </Button>
                     <Button
                         size="$4"
-                        onPress={() => navLogIn(navigation)}
+                        onPress={() => navLogIn(navigation, true)}
                         bordered
                     >
                         Log In

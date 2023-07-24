@@ -21,8 +21,14 @@ interface AuthStoreStateFunctions {
     ) => Record<string, string> | void;
     signInWithEmailPassword: (email: string, password: string) => void;
     signUpWithEmailPassword: (email: string, password: string) => void;
-    navSignUp: (navigation: AuthStackNavigationProps<'Auth'>) => void;
-    navLogIn: (navigation: AuthStackNavigationProps<'Auth'>) => void;
+    navSignUp: (
+        navigation: AuthStackNavigationProps<'Auth'>,
+        animate: boolean
+    ) => void;
+    navLogIn: (
+        navigation: AuthStackNavigationProps<'Auth'>,
+        animate: boolean
+    ) => void;
     signOut: () => void;
 }
 
@@ -135,13 +141,19 @@ const useAuthStore = create<AuthStoreState>()((set, get) => ({
         get().signInWithEmailPassword(email, password);
     },
 
-    navSignUp: (navigation: AuthStackNavigationProps<'Auth'>) => {
-        navigation.navigate('SignUp');
+    navSignUp: (
+        navigation: AuthStackNavigationProps<'Auth'>,
+        animate: boolean
+    ) => {
+        navigation.navigate('SignUp', { animate });
         set({ justSignedUp: true });
     },
 
-    navLogIn: (navigation: AuthStackNavigationProps<'Auth'>) => {
-        navigation.navigate('LogIn');
+    navLogIn: (
+        navigation: AuthStackNavigationProps<'Auth'>,
+        animate: boolean
+    ) => {
+        navigation.navigate('LogIn', { animate });
         set({ justSignedUp: false });
     },
 
