@@ -1,10 +1,7 @@
 import moment from 'moment';
-import type { Database } from '@/gen';
-import type { Pet } from '@modules/pets/types';
+import type { Pet , PetRow } from '@modules/pets/types';
 
-export const petAdapter = (
-    row: Database['public']['Tables']['pets']['Row']
-): Pet => ({
+export const petAdapter = (row: PetRow): Pet => ({
     id: row.id,
     type: row.type,
     natures: row.natures,

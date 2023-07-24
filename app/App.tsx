@@ -5,25 +5,33 @@ import { useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { TamaguiProvider, Theme } from 'tamagui';
 import config from './tamagui.config';
+import type { PetRow } from '@modules/pets/types';
+import type { TaskRow } from '@modules/tasks/types';
 import type { UserRow } from '@modules/users/types';
 import { Tables } from '@/enums';
 import useStore from '@/store';
 import { supabase } from '@/supabase';
+import useCompletedTasksStore from '@modules/completedTasks/store';
+import { CompletedTaskRow } from '@modules/completedTasks/types';
+import usePetsStore from '@modules/pets/store';
+import useTasksStore from '@modules/tasks/store';
 import useUsersStore from '@modules/users/store';
 import AppStackNavigator from '@nav/AppStackNavigator';
 
 export default function App() {
     const { userId, setUserId, updateCurrentUser } = useStore();
     const { upsertUser } = useUsersStore();
+    const { upsertPet } = usePetsStore();
+    const { upsertTask } = useTasksStore();
+    const { insertCompletedTask, deleteCompletedTask } =
+        useCompletedTasksStore();
     const colorScheme = useColorScheme();
 
     const [loaded] = useFonts({
         Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
         InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
         Silkscreen: require('@tamagui/font-silkscreen/files/slkscr.ttf'),
-        SilkscreenBold: require('@tamagui/font-silkscreen/files/slkscrb.ttf'), // Silkscreen: require('assets/fonts/silkscreen/Silkscreen-Regular.ttf'),
-        // SilkscreenBold: require('assets/fonts/silkscreen/Silkscreen-Bold.ttf'),
-        // play around with silkscreen and fira-mono
+        SilkscreenBold: require('@tamagui/font-silkscreen/files/slkscrb.ttf'),
     });
 
     React.useEffect(() => {
@@ -81,9 +89,10 @@ export default function App() {
                     event: 'INSERT',
                     schema: 'public',
                     table: Tables.PETS,
+                    filter: `userId=eq.${userId}`,
                 },
                 (payload) => {
-                    upsertChat(payload.new as Chats);
+                    upsertPet(payload.new as PetRow);
                 }
             )
             .on(
@@ -92,9 +101,10 @@ export default function App() {
                     event: 'UPDATE',
                     schema: 'public',
                     table: Tables.PETS,
+                    filter: `userId=eq.${userId}`,
                 },
                 (payload) => {
-                    upsertChat(payload.new as Chats);
+                    upsertPet(payload.new as PetRow);
                 }
             )
             .on(
@@ -103,8 +113,9 @@ export default function App() {
                     event: 'INSERT',
                     schema: 'public',
                     table: Tables.TASKS,
+                    filter: `userId=eq.${userId}`,
                 },
-                (payload) => upsertFriends(payload.new as Friends)
+                (payload) => upsertTask(payload.new as TaskRow)
             )
             .on(
                 'postgres_changes',
@@ -112,8 +123,9 @@ export default function App() {
                     event: 'UPDATE',
                     schema: 'public',
                     table: Tables.TASKS,
+                    filter: `userId=eq.${userId}`,
                 },
-                (payload) => upsertFriends(payload.new as Friends)
+                (payload) => upsertTask(payload.new as TaskRow)
             )
             .on(
                 'postgres_changes',
@@ -121,8 +133,10 @@ export default function App() {
                     event: 'INSERT',
                     schema: 'public',
                     table: Tables.COMPLETED_TASKS,
+                    filter: `userId=eq.${userId}`,
                 },
-                (payload) => upsertPurchases(payload.new as Purchases)
+                (payload) =>
+                    insertCompletedTask(payload.old as CompletedTaskRow)
             )
             .on(
                 'postgres_changes',
@@ -130,14 +144,16 @@ export default function App() {
                     event: 'DELETE',
                     schema: 'public',
                     table: Tables.COMPLETED_TASKS,
+                    filter: `userId=eq.${userId}`,
                 },
-                (payload) => upsertPurchases(payload.new as Purchases)
+                (payload) =>
+                    deleteCompletedTask(payload.old as CompletedTaskRow)
             )
             .subscribe();
 
         return () => {
             console.log(
-                `[App] unsubscribing from profiles, chats, friends on channel='user_${userId}'`
+                `[App] unsubscribing from user, pets, tasks, completed_tasks, on channel='user_${userId}'`
             );
             userSubscriptions.unsubscribe();
         };

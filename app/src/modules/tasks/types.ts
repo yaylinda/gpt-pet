@@ -1,13 +1,13 @@
 import type { Database } from '@/gen';
 import type moment from 'moment';
 
-export type PetRow = Database['public']['Tables']['pets']['Row'];
+export type TaskRow = Database['public']['Tables']['tasks']['Row'];
 
-export interface Pet {
+export interface Task {
     id: string;
+    title: string;
     type: string;
-    natures: string[];
+    difficulty: string;
     createdAt: moment.Moment;
-    displayName: string;
     userId: string;
 }
