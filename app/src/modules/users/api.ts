@@ -1,5 +1,4 @@
-import type {Database} from '@/gen';
-import type {User} from '@modules/users/types';
+import type {User, UserRow,UserUpdate} from '@modules/users/types';
 import {Tables} from '@/enums';
 import {supabase} from '@/supabase';
 import {userAdapter} from '@modules/users/adapters';
@@ -19,9 +18,7 @@ export const fetchUsers = async (userIds: string[]): Promise<User[]> => {
         throw error;
     }
 
-    return (data || []).map((p) =>
-        userAdapter(p as Database['public']['Tables']['users']['Row'])
-    );
+    return (data || []).map((p) => userAdapter(p as UserRow));
 };
 
 /**
@@ -31,12 +28,13 @@ export const fetchUsers = async (userIds: string[]): Promise<User[]> => {
  */
 export const updateUser = async (
     userId: string,
-    update: Database['public']['Tables']['users']['Update']
+    update: UserUpdate
 ): Promise<User> => {
     const { data, error } = await supabase
         .from(Tables.USERS)
         .update(update)
         .eq('id', userId)
+        .select()
         .single();
 
     if (error) {
@@ -44,5 +42,5 @@ export const updateUser = async (
         throw error;
     }
 
-    return userAdapter(data as Database['public']['Tables']['users']['Row']);
+    return userAdapter(data as UserRow);
 };

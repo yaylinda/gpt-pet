@@ -37,6 +37,11 @@ const useStore = create<StoreState>()((set) => ({
                 .getState()
                 .fetchUsers([userId])
                 .then((users) => {
+                    console.log(
+                        `[useStore] logged in user: ${JSON.stringify(
+                            users[userId]
+                        )}`
+                    );
                     set({ currentUser: users[userId] || null });
                 });
         }

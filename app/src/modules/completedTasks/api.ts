@@ -11,6 +11,7 @@ export const insertCompletedTask = async (row: CompletedTaskRow) => {
     const { data, error } = await supabase
         .from(Tables.COMPLETED_TASKS)
         .insert(row)
+        .select()
         .single();
 
     if (error) {

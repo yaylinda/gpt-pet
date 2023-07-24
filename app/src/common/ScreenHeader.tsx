@@ -4,7 +4,7 @@ import { Button, Heading, XStack } from 'tamagui';
 import type { NamedExoticComponent } from 'react';
 
 interface ScreenHeaderProps {
-    title: string;
+    title?: string;
     leftButtonIcon?: NamedExoticComponent;
     leftButtonAction?: () => void;
     rightButtonIcon?: NamedExoticComponent;
@@ -52,7 +52,7 @@ function ScreenHeader({
             >
                 {leftComponent}
             </XStack>
-            <Heading>{title}</Heading>
+            {title && <Heading>{title}</Heading>}
             <XStack
                 justifyContent="flex-end"
                 width="20%"

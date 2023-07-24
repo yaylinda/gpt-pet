@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { errorAlert } from '@/alerts';
 import { NUM_NATURES, PET_NATURES } from '@/constants';
 import useStore from '@/store';
 import { insertPet } from '@modules/pets/api';
@@ -22,7 +23,7 @@ interface RegistrationStoreStateFunctions {
     togglePetNature: (nature: string) => void;
     randomizePetNatures: () => void;
     setPetName: (value: string) => void;
-    doRegistration: () => void;
+    doRegistration: () => Promise<boolean>;
 }
 
 type RegistrationStoreState = RegistrationStoreStateData &
@@ -75,27 +76,42 @@ const useRegistrationStore = create<RegistrationStoreState>()((set, get) => ({
 
     setPetName: (value: string) => set({ petName: value }),
 
-    doRegistration: () => {
+    doRegistration: async (): Promise<boolean> => {
         set({ progressUpdateUser: false, progressInsertPet: false });
 
         const userId = useStore.getState().userId;
 
         if (!userId) {
-            return;
+            return false;
         }
-
-        updateUser(userId, { display_name: get().displayName }).then(() => {
-            set({ progressUpdateUser: true });
-        });
 
         get().randomizePetNatures();
 
-        insertPet({
-            user_id: userId,
-            display_name: get().petName,
-            natures: get().petNatures,
-            type: get().petType,
-        }).then(() => set({ progressInsertPet: true }));
+        try {
+            const user = await updateUser(userId, {
+                display_name: get().displayName,
+                has_registered: true,
+            });
+            set({ progressUpdateUser: true });
+        } catch (e) {
+            errorAlert('updateUser', JSON.stringify(e));
+            return false;
+        }
+
+        try {
+            const pet = await insertPet({
+                user_id: userId,
+                display_name: get().petName,
+                natures: get().petNatures,
+                type: get().petType,
+            });
+            set({ progressInsertPet: true });
+        } catch (e) {
+            errorAlert('insertPet', JSON.stringify(e));
+            return false;
+        }
+
+        return true;
     },
 }));
 

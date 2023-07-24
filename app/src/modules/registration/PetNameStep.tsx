@@ -1,7 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
+import * as Burnt from 'burnt';
 import React from 'react';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import type { RegistrationStackNavigationProps } from '@nav/RegistrationStackNavigator';
 import { MIN_DISPLAY_NAME_LENGTH } from '@/constants';
 import TextInputWithLabel from '@common/TextInputWithLabel';
 import VerticalSpacer from '@common/VerticalSpacer';
@@ -10,13 +9,22 @@ import useRegistrationStore from '@modules/registration/store';
 import { Step } from '@modules/registration/types';
 
 const PetNameStep = () => {
-    const navigation =
-        useNavigation<RegistrationStackNavigationProps<'Registration'>>();
+    const { petName, setPetName, setStep, doRegistration } =
+        useRegistrationStore();
 
-    const { petName, setPetName, setStep } = useRegistrationStore();
+    const onStart = async () => {
+        Burnt.alert({
+            title: 'Hang on',
+            message: 'Getting things ready for you and your new pet',
+            preset: 'spinner',
+            duration: 2,
+        });
 
-    const onStart = () => {
-        navigation.navigate('RegistrationLoading');
+        const status = await doRegistration();
+
+        if (status) {
+            Burnt.dismissAllAlerts();
+        }
     };
 
     return (

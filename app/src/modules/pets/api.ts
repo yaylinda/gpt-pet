@@ -1,4 +1,4 @@
-import type {PetRow} from '@modules/pets/types';
+import type {PetRow,PetInsert} from '@modules/pets/types';
 import {Tables} from '@/enums';
 import {supabase} from '@/supabase';
 import {petAdapter} from '@modules/pets/adapters';
@@ -7,10 +7,11 @@ import {petAdapter} from '@modules/pets/adapters';
  *
  * @param row
  */
-export const insertPet = async (row: PetRow) => {
+export const insertPet = async (row: PetInsert) => {
     const { data, error } = await supabase
         .from(Tables.PETS)
         .insert(row)
+        .select()
         .single();
 
     if (error) {

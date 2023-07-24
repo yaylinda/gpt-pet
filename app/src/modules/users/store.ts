@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { isEmpty } from 'lodash';
 import { create } from 'zustand';
-import type { User , UserRow } from '@modules/users/types';
+import type { User, UserRow } from '@modules/users/types';
 import { reduce } from '@/utils';
 import { userAdapter } from '@modules/users/adapters';
 import { fetchUsers } from '@modules/users/api';
@@ -41,7 +41,7 @@ const useUsersStore = create<UsersStoreState>()((set, get) => ({
     },
 
     upsertUser: (userRow: UserRow) => {
-        console.log('[usersStore][upsertUser] userRow update');
+        console.log(`[usersStore][upsertUser] userRow update=${userRow}`);
 
         set((state) => ({
             users: produce(state.users, (draft) => {
