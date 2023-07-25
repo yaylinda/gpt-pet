@@ -1,8 +1,10 @@
 import moment from 'moment';
 import { create } from 'zustand';
+import type { Pet } from '@modules/pets/types';
 
 interface TodayStoreStateData {
     currentDate: moment.Moment;
+    pet: Pet | null;
 }
 
 interface TodayStoreStateFunctions {
@@ -14,6 +16,7 @@ type TodayStoreState = TodayStoreStateData & TodayStoreStateFunctions;
 
 const DEFAULT_DATA: TodayStoreStateData = {
     currentDate: moment().startOf('day'),
+    pet: null,
 };
 
 const useTodayStore = create<TodayStoreState>()((set) => ({
