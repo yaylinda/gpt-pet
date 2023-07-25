@@ -1,9 +1,9 @@
-import { Plus } from '@tamagui/lucide-icons';
 import moment from 'moment/moment';
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
-import { Button, SizableText, YStack } from 'tamagui';
+import { SizableText, YStack } from 'tamagui';
 import VerticalSpacer from '@common/VerticalSpacer';
+import AddTaskButton from '@modules/tasks/AddTaskButton';
 import { TaskType } from '@modules/tasks/types';
 import useTodayStore from '@modules/today/store';
 
@@ -58,12 +58,7 @@ const EmptyTaskContent = ({ type }: EmptyTaskContentProps) => {
 
                 <VerticalSpacer size="$2" />
 
-                <Button
-                    size="$4"
-                    icon={Plus}
-                >
-                    Add A Task
-                </Button>
+                <AddTaskButton type={type} />
             </>
         );
     }, [currentDate, type, petName]);

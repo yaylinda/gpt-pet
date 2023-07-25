@@ -11,11 +11,14 @@ interface TasksStoreStateData {
     loadingTasks: boolean;
     dailyTasks: Record<string, Task>;
     specialTasks: Record<string, Task>;
+    taskDialog: { open: boolean; type: TaskType | null };
 }
 
 interface TasksStoreStateFunctions {
     fetchTasks: (userId: string) => void;
     upsertTask: (taskRow: TaskRow) => void;
+    openTaskDialog: (type: TaskType) => void;
+    closeTaskDialog: () => void;
 }
 
 type TasksStoreState = TasksStoreStateData & TasksStoreStateFunctions;
@@ -24,6 +27,7 @@ const DEFAULT_DATA: TasksStoreStateData = {
     loadingTasks: false,
     dailyTasks: {},
     specialTasks: {},
+    taskDialog: { open: false, type: null },
 };
 
 const useTasksStore = create<TasksStoreState>()((set) => ({
@@ -55,6 +59,14 @@ const useTasksStore = create<TasksStoreState>()((set) => ({
                 }),
             };
         });
+    },
+
+    openTaskDialog: (type: TaskType) => {
+        set({ taskDialog: { open: true, type: type } });
+    },
+
+    closeTaskDialog: () => {
+        set({ taskDialog: { open: false, type: null } });
     },
 }));
 
