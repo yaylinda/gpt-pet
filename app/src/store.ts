@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { User, UserRow } from '@modules/users/types';
+import usePetsStore from '@modules/pets/store';
 import { userAdapter } from '@modules/users/adapters';
 import useUsersStore from '@modules/users/store';
 
@@ -44,6 +45,7 @@ const useStore = create<StoreState>()((set) => ({
                     );
                     set({ currentUser: users[userId] || null });
                 });
+            usePetsStore.getState().fetchPets(userId);
         }
     },
 

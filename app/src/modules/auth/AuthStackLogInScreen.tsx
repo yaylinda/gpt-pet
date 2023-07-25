@@ -69,7 +69,7 @@ const AuthStackSignUpScreen = () => {
                         }
                     >
                         <TextInputWithLabel
-                            id="login"
+                            id="login_email"
                             label="Email Address"
                             placeholder="email@email.com"
                             value={email}
@@ -81,7 +81,7 @@ const AuthStackSignUpScreen = () => {
                             errorMessage={emailErr}
                         />
                         <TextInputWithLabel
-                            id="pwd"
+                            id="login_pwd"
                             label="Password"
                             placeholder=""
                             value={password}

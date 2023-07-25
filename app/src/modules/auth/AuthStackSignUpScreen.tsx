@@ -4,7 +4,10 @@ import React from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import Animated, { BounceInUp, FadeIn } from 'react-native-reanimated';
 import { Button, H6, Paragraph, Spinner, XStack, YStack } from 'tamagui';
-import type { AuthStackNavigationProps , AuthStackRouteProps } from '@nav/AuthStackNavigator';
+import type {
+    AuthStackNavigationProps,
+    AuthStackRouteProps,
+} from '@nav/AuthStackNavigator';
 import ScreenHeader from '@common/ScreenHeader';
 import { FullHeightScreenWrapper } from '@common/ScreenWrapper';
 import TextInputWithLabel from '@common/TextInputWithLabel';
@@ -70,7 +73,7 @@ const AuthStackSignUpScreen = () => {
                         }
                     >
                         <TextInputWithLabel
-                            id="login"
+                            id="signup_email"
                             label="Email Address"
                             placeholder="email@email.com"
                             value={email}
@@ -82,7 +85,7 @@ const AuthStackSignUpScreen = () => {
                             errorMessage={emailErr}
                         />
                         <TextInputWithLabel
-                            id="pwd"
+                            id="signup_pwd"
                             label="Password"
                             placeholder=""
                             value={password}

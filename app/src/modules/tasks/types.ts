@@ -6,8 +6,19 @@ export type TaskRow = Database['public']['Tables']['tasks']['Row'];
 export interface Task {
     id: string;
     title: string;
-    type: string;
-    difficulty: string;
+    type: TaskType;
+    difficulty: TaskDifficulty;
     createdAt: moment.Moment;
     userId: string;
+}
+
+export enum TaskType {
+    DAILY = 'DAILY',
+    SPECIAL = 'SPECIAL',
+}
+
+export enum TaskDifficulty {
+    S = 'S',
+    M = 'M',
+    L = 'L',
 }

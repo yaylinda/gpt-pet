@@ -5,7 +5,7 @@ import moment from 'moment';
  * @param list
  */
 export const reduce = <T extends { id: string }>(
-    list: T[],
+    list: T[]
 ): Record<string, T> =>
         list.reduce<Record<string, T>>((prev, curr) => {
             prev[curr.id] = curr;
@@ -27,7 +27,6 @@ export const formatMoment = (date: moment.Moment) => {
         return `${date.format('l').slice(0, -5)} ${date.format('h:mm a')}`;
     }
     return `${date.format('l')} ${date.format('h:mm a')}`;
-
 };
 
 /**
@@ -53,3 +52,15 @@ export function stringToColor(string: string) {
 
     return color;
 }
+
+export const formatDateHeader = (date: moment.Moment) => {
+    if (date.isSame(moment(), 'day')) {
+        return 'Today';
+    }
+
+    if (date.isSame(moment().subtract(1, 'day'), 'day')) {
+        return 'Yesterday';
+    }
+
+    return date.format('MMM Do');
+};

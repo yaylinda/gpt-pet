@@ -1,10 +1,17 @@
-import {TabbedScreenWrapper} from '@common/ScreenWrapper';
+import ScreenHeader from '@common/ScreenHeader';
+import { TabbedScreenWrapper } from '@common/ScreenWrapper';
+import PetCard from '@modules/pets/PetCard';
+import TaskSection from '@modules/tasks/TaskSection';
 
 const TodayScreen = () => {
     return (
-        <TabbedScreenWrapper>
-
-        </TabbedScreenWrapper>
+        <>
+            <ScreenHeader />
+            <TabbedScreenWrapper>
+                <PetCard />
+                <TaskSection />
+            </TabbedScreenWrapper>
+        </>
     );
 };
 

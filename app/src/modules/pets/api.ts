@@ -1,4 +1,4 @@
-import type {PetRow,PetInsert} from '@modules/pets/types';
+import type {PetInsert, PetRow} from '@modules/pets/types';
 import {Tables} from '@/enums';
 import {supabase} from '@/supabase';
 import {petAdapter} from '@modules/pets/adapters';
@@ -30,7 +30,7 @@ export const fetchPetsForUser = async (userId: string) => {
     const { data, error } = await supabase
         .from(Tables.PETS)
         .select()
-        .eq('userId', userId);
+        .eq('user_id', userId);
 
     if (error) {
         console.error(`[fetchPetsForUser] error: ${JSON.stringify(error)}`);
@@ -38,6 +38,10 @@ export const fetchPetsForUser = async (userId: string) => {
     }
 
     const petRows: PetRow[] = data;
+
+    console.log(
+        `[fetchPetsForUser] userId=${userId}, pets=${JSON.stringify(petRows)}`
+    );
 
     return petRows.map((p) => petAdapter(p));
 };
