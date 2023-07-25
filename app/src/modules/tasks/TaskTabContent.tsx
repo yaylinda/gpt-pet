@@ -1,4 +1,4 @@
-import { Plus, ScrollText, Swords } from '@tamagui/lucide-icons';
+import { Plus } from '@tamagui/lucide-icons';
 import React from 'react';
 import { FlatList, useWindowDimensions } from 'react-native';
 import { Button, SizableText, Tabs, YStack } from 'tamagui';
@@ -27,13 +27,33 @@ const getEmptyText = (type: TaskType, petName: string) => {
     }
 };
 
-const getIcon = (type: TaskType) => {
-    switch (type) {
-        case TaskType.DAILY:
-            return <ScrollText />;
-        case TaskType.SPECIAL:
-            return <Swords />;
-    }
+const renderEmptyText = (width: number, type: TaskType, petName: string) => {
+    return (
+        <YStack
+            height={'100%'}
+            justifyContent="center"
+            alignItems={'center'}
+        >
+            <VerticalSpacer />
+
+            <SizableText
+                size={'$2'}
+                color="$color7"
+                width={width * 0.5}
+            >
+                {getEmptyText(type, petName)}
+            </SizableText>
+
+            <VerticalSpacer size="$2" />
+
+            <Button
+                size="$4"
+                icon={Plus}
+            >
+                Add A Task
+            </Button>
+        </YStack>
+    );
 };
 
 interface TaskTabContentProps {
@@ -71,31 +91,7 @@ const TaskTabContent = ({ type }: TaskTabContentProps) => {
                 data={tasks}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
-                ListEmptyComponent={
-                    <YStack
-                        height={'100%'}
-                        justifyContent="center"
-                        alignItems={'center'}
-                    >
-                        <VerticalSpacer />
-                        <SizableText
-                            size={'$2'}
-                            color="$color7"
-                            width={width * 0.5}
-                        >
-                            {getEmptyText(type, petName)}
-                        </SizableText>
-
-                        <VerticalSpacer />
-
-                        <Button
-                            size="$4"
-                            icon={Plus}
-                        >
-                            Add A Task
-                        </Button>
-                    </YStack>
-                }
+                ListEmptyComponent={renderEmptyText(width, type, petName)}
             />
         </Tabs.Content>
     );
