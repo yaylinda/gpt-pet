@@ -7,7 +7,16 @@ interface TaskTabContentProps {
 
 const TaskTabContent = ({ type }: TaskTabContentProps) => {
     return (
-        <Tabs.Content value={type}>
+        <Tabs.Content
+            value={type}
+            flex={1}
+            backgroundColor="$background"
+            borderColor="$background"
+            borderRadius="$2"
+            borderTopLeftRadius={0}
+            borderTopRightRadius={0}
+            borderWidth="$2"
+        >
             <SizableText>{type}</SizableText>
         </Tabs.Content>
     );

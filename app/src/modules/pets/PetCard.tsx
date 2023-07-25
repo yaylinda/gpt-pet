@@ -10,8 +10,7 @@ import {
     Rat,
     Skull,
 } from '@tamagui/lucide-icons';
-import { H6, XStack, YGroup } from 'tamagui';
-import VerticalSpacer from '@common/VerticalSpacer';
+import { H6, Separator, SizableText, XStack, YGroup } from 'tamagui';
 import usePetsStore from '@modules/pets/store';
 
 const getIconForPet = (icon: string) => {
@@ -50,8 +49,8 @@ const PetCard = () => {
 
     return (
         <YGroup
+            flex={1}
             elevate
-            bordered
             padded
         >
             <YGroup.Item>
@@ -61,9 +60,9 @@ const PetCard = () => {
                     alignItems="center"
                 >
                     <H6>{pet.displayName}</H6>
-                    <H6>LVL {1}</H6>
+                    <SizableText>LVL {1}</SizableText>
                 </XStack>
-                <VerticalSpacer />
+                <Separator marginVertical="$2" />
                 {petIcon}
             </YGroup.Item>
         </YGroup>

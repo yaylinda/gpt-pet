@@ -41,7 +41,9 @@ const useUsersStore = create<UsersStoreState>()((set, get) => ({
     },
 
     upsertUser: (userRow: UserRow) => {
-        console.log(`[usersStore][upsertUser] userRow update=${userRow}`);
+        console.log(
+            `[usersStore][upsertUser] userRow update=${JSON.stringify(userRow)}`
+        );
 
         set((state) => ({
             users: produce(state.users, (draft) => {

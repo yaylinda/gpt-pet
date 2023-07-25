@@ -6,6 +6,7 @@ import useUsersStore from '@modules/users/store';
 
 interface StoreStateData {
     loadingSession: boolean;
+    theme: string;
     userId: string;
     currentUser: User | null;
 }
@@ -13,6 +14,7 @@ interface StoreStateData {
 interface StoreStateFunctions {
     setUserId: (userId: string) => void;
     updateCurrentUser: (userRow: UserRow) => void;
+    setTheme: (color: string, dark?: boolean, alt?: 'alt1' | 'alt2') => void;
     reset: () => void;
 }
 
@@ -22,6 +24,7 @@ const DEFAULT_DATA: StoreStateData = {
     loadingSession: true,
     userId: '',
     currentUser: null,
+    theme: 'light_blue',
 };
 
 const useStore = create<StoreState>()((set) => ({
@@ -52,6 +55,12 @@ const useStore = create<StoreState>()((set) => ({
     updateCurrentUser: (userRow: UserRow) => {
         console.log('[store][updateCurrentUser] currentUser update');
         set({ currentUser: userAdapter(userRow) });
+    },
+
+    setTheme: (color: string, dark = false, alt) => {
+        set({
+            theme: `${dark ? 'dark' : 'light'}_${color}${alt ? `_${alt}` : ''}`,
+        });
     },
 
     reset: () => {

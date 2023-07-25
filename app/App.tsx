@@ -1,7 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import React from 'react';
-import { useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { TamaguiProvider, Theme } from 'tamagui';
 import config from './tamagui.config';
@@ -12,20 +11,19 @@ import { Tables } from '@/enums';
 import useStore from '@/store';
 import { supabase } from '@/supabase';
 import useCompletedTasksStore from '@modules/completedTasks/store';
-import { CompletedTaskRow } from '@modules/completedTasks/types';
+import type { CompletedTaskRow } from '@modules/completedTasks/types';
 import usePetsStore from '@modules/pets/store';
 import useTasksStore from '@modules/tasks/store';
 import useUsersStore from '@modules/users/store';
 import AppStackNavigator from '@nav/AppStackNavigator';
 
 export default function App() {
-    const { userId, setUserId, updateCurrentUser } = useStore();
+    const { userId, setUserId, updateCurrentUser, theme } = useStore();
     const { upsertUser } = useUsersStore();
     const { upsertPet } = usePetsStore();
     const { upsertTask } = useTasksStore();
     const { insertCompletedTask, deleteCompletedTask } =
         useCompletedTasksStore();
-    const colorScheme = useColorScheme();
 
     const [loaded] = useFonts({
         Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
@@ -89,7 +87,7 @@ export default function App() {
                     event: 'INSERT',
                     schema: 'public',
                     table: Tables.PETS,
-                    filter: `userId=eq.${userId}`,
+                    filter: `user_id=eq.${userId}`,
                 },
                 (payload) => {
                     upsertPet(payload.new as PetRow);
@@ -101,7 +99,7 @@ export default function App() {
                     event: 'UPDATE',
                     schema: 'public',
                     table: Tables.PETS,
-                    filter: `userId=eq.${userId}`,
+                    filter: `user_id=eq.${userId}`,
                 },
                 (payload) => {
                     upsertPet(payload.new as PetRow);
@@ -113,7 +111,7 @@ export default function App() {
                     event: 'INSERT',
                     schema: 'public',
                     table: Tables.TASKS,
-                    filter: `userId=eq.${userId}`,
+                    filter: `user_id=eq.${userId}`,
                 },
                 (payload) => upsertTask(payload.new as TaskRow)
             )
@@ -123,7 +121,7 @@ export default function App() {
                     event: 'UPDATE',
                     schema: 'public',
                     table: Tables.TASKS,
-                    filter: `userId=eq.${userId}`,
+                    filter: `user_id=eq.${userId}`,
                 },
                 (payload) => upsertTask(payload.new as TaskRow)
             )
@@ -133,7 +131,7 @@ export default function App() {
                     event: 'INSERT',
                     schema: 'public',
                     table: Tables.COMPLETED_TASKS,
-                    filter: `userId=eq.${userId}`,
+                    filter: `user_id=eq.${userId}`,
                 },
                 (payload) =>
                     insertCompletedTask(payload.old as CompletedTaskRow)
@@ -144,7 +142,7 @@ export default function App() {
                     event: 'DELETE',
                     schema: 'public',
                     table: Tables.COMPLETED_TASKS,
-                    filter: `userId=eq.${userId}`,
+                    filter: `user_id=eq.${userId}`,
                 },
                 (payload) =>
                     deleteCompletedTask(payload.old as CompletedTaskRow)
@@ -166,7 +164,7 @@ export default function App() {
 
     return (
         <TamaguiProvider config={config}>
-            <Theme name={colorScheme === 'dark' ? 'dark' : 'light'}>
+            <Theme name={theme}>
                 <SafeAreaProvider>
                     <NavigationContainer>
                         <AppStackNavigator />
