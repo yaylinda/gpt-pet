@@ -59,8 +59,8 @@ const PetCard = () => {
                     justifyContent="space-between"
                     alignItems="center"
                 >
-                    <H6>{pet.displayName}</H6>
-                    <SizableText>LVL {1}</SizableText>
+                    <H6 color="$colorFocus">{pet.displayName}</H6>
+                    <SizableText color="$color7">LVL {1}</SizableText>
                 </XStack>
                 <Separator marginVertical="$2" />
                 {petIcon}

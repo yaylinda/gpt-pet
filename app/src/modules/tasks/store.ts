@@ -4,9 +4,13 @@ import type { Task, TaskRow } from '@modules/tasks/types';
 import { reduce } from '@/utils';
 import { taskAdapter } from '@modules/tasks/adapters';
 import { fetchTasksForUser } from '@modules/tasks/api';
+import { TASK_TYPE_FIELD } from '@modules/tasks/constants';
+import { TaskType } from '@modules/tasks/types';
 
 interface TasksStoreStateData {
-    tasks: Record<string, Task>;
+    loadingTasks: boolean;
+    dailyTasks: Record<string, Task>;
+    specialTasks: Record<string, Task>;
 }
 
 interface TasksStoreStateFunctions {
@@ -17,25 +21,40 @@ interface TasksStoreStateFunctions {
 type TasksStoreState = TasksStoreStateData & TasksStoreStateFunctions;
 
 const DEFAULT_DATA: TasksStoreStateData = {
-    tasks: {},
+    loadingTasks: false,
+    dailyTasks: {},
+    specialTasks: {},
 };
 
 const useTasksStore = create<TasksStoreState>()((set) => ({
     ...DEFAULT_DATA,
 
     fetchTasks: async (userId: string) => {
+        set({ loadingTasks: true });
         const tasks = await fetchTasksForUser(userId);
-        set({ tasks: reduce(tasks) });
+
+        const daily = tasks.filter((t) => t.type === TaskType.DAILY);
+        const special = tasks.filter((t) => t.type === TaskType.SPECIAL);
+
+        set({
+            loadingTasks: false,
+            dailyTasks: reduce(daily),
+            specialTasks: reduce(special),
+        });
     },
 
     upsertTask: (taskRow: TaskRow) => {
         console.log('[tasksStore][upsertTask] taskRow update');
 
-        set((state) => ({
-            tasks: produce(state.tasks, (draft) => {
-                draft[taskRow.id] = taskAdapter(taskRow);
-            }),
-        }));
+        set((state) => {
+            const task = taskAdapter(taskRow);
+            const typeField = TASK_TYPE_FIELD[task.type];
+            return {
+                [typeField]: produce(state[typeField], (draft) => {
+                    draft[task.id] = task;
+                }),
+            };
+        });
     },
 }));
 
