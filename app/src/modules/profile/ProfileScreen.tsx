@@ -4,11 +4,9 @@ import LogOutButton from '@common/LogOutButton';
 import ScreenHeader from '@common/ScreenHeader';
 import { TabbedScreenWrapper } from '@common/ScreenWrapper';
 import usePetsStore from '@modules/pets/store';
-import useTasksStore from '@modules/tasks/store';
 
 const ProfileScreen = () => {
-    const { currentUser } = useStore();
-    const { dailyTasks } = useTasksStore();
+    const { currentUser, dailyTasks } = useStore();
     const { pets } = usePetsStore();
 
     if (!currentUser) {

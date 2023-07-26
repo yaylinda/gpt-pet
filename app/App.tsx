@@ -11,19 +11,27 @@ import type { UserRow } from '@modules/users/types';
 import { Tables } from '@/enums';
 import useStore from '@/store';
 import { supabase } from '@/supabase';
-import useCompletedTasksStore from '@modules/completedTasks/store';
 import usePetsStore from '@modules/pets/store';
 import useTasksStore from '@modules/tasks/store';
+import { TaskType } from '@modules/tasks/types';
+import useTodayStore from '@modules/today/store';
 import useUsersStore from '@modules/users/store';
 import AppStackNavigator from '@nav/AppStackNavigator';
 
 export default function App() {
-    const { userId, setUserId, updateCurrentUser, theme } = useStore();
+    const {
+        userId,
+        setUserId,
+        updateCurrentUser,
+        updateCurrentPet,
+        insertDailyTask,
+        theme,
+    } = useStore();
     const { upsertUser } = useUsersStore();
     const { upsertPet } = usePetsStore();
     const { upsertTask } = useTasksStore();
-    const { insertCompletedTask, deleteCompletedTask } =
-        useCompletedTasksStore();
+    const { insertSpecialTask, insertCompletedTask, deleteCompletedTask } =
+        useTodayStore();
 
     const [loaded] = useFonts({
         Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
@@ -90,6 +98,7 @@ export default function App() {
                     filter: `user_id=eq.${userId}`,
                 },
                 (payload) => {
+                    updateCurrentPet(payload.new as PetRow);
                     upsertPet(payload.new as PetRow);
                 }
             )
@@ -102,6 +111,7 @@ export default function App() {
                     filter: `user_id=eq.${userId}`,
                 },
                 (payload) => {
+                    updateCurrentPet(payload.new as PetRow);
                     upsertPet(payload.new as PetRow);
                 }
             )
@@ -113,7 +123,13 @@ export default function App() {
                     table: Tables.TASKS,
                     filter: `user_id=eq.${userId}`,
                 },
-                (payload) => upsertTask(payload.new as TaskRow)
+                (payload) => {
+                    const row = payload.new as TaskRow;
+                    upsertTask(row);
+                    row.type === TaskType.DAILY
+                        ? insertDailyTask(row.date_key)
+                        : insertSpecialTask(row.date_key, row.id);
+                }
             )
             .on(
                 'postgres_changes',
@@ -133,8 +149,10 @@ export default function App() {
                     table: Tables.COMPLETED_TASKS,
                     filter: `user_id=eq.${userId}`,
                 },
-                (payload) =>
-                    insertCompletedTask(payload.old as CompletedTaskRow)
+                (payload) => {
+                    const row = payload.new as CompletedTaskRow;
+                    insertCompletedTask(row.date_key, row.task_id);
+                }
             )
             .on(
                 'postgres_changes',
@@ -144,8 +162,10 @@ export default function App() {
                     table: Tables.COMPLETED_TASKS,
                     filter: `user_id=eq.${userId}`,
                 },
-                (payload) =>
-                    deleteCompletedTask(payload.old as CompletedTaskRow)
+                (payload) => {
+                    const row = payload.new as CompletedTaskRow;
+                    deleteCompletedTask(row.date_key, row.task_id);
+                }
             )
             .subscribe();
 

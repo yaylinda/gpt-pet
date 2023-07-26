@@ -1,6 +1,8 @@
+import { produce } from 'immer';
 import { create } from 'zustand';
-import type { Pet } from '@modules/pets/types';
+import type { Pet, PetRow } from '@modules/pets/types';
 import type { User, UserRow } from '@modules/users/types';
+import { petAdapter } from '@modules/pets/adapters';
 import usePetsStore from '@modules/pets/store';
 import useTasksStore from '@modules/tasks/store';
 import { userAdapter } from '@modules/users/adapters';
@@ -18,6 +20,8 @@ interface StoreStateData {
 interface StoreStateFunctions {
     setUserId: (userId: string) => void;
     updateCurrentUser: (userRow: UserRow) => void;
+    updateCurrentPet: (petRow: PetRow) => void;
+    insertDailyTask: (taskId: string) => void;
     setTheme: (color: string, dark?: boolean, alt?: 'alt1' | 'alt2') => void;
     reset: () => void;
 }
@@ -68,6 +72,19 @@ const useStore = create<StoreState>()((set) => ({
     updateCurrentUser: (userRow: UserRow) => {
         console.log('[store][updateCurrentUser] currentUser update');
         set({ currentUser: userAdapter(userRow) });
+    },
+
+    updateCurrentPet: (petRow: PetRow) => {
+        console.log('[store][updateCurrentPet] currentPet update');
+        set({ currentPet: petAdapter(petRow) });
+    },
+
+    insertDailyTask: (taskId: string) => {
+        set((state) => ({
+            dailyTasks: produce(state.dailyTasks, (draft) => {
+                draft.push(taskId);
+            }),
+        }));
     },
 
     setTheme: (color: string, dark = false, alt) => {

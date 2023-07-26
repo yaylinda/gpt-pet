@@ -1,3 +1,4 @@
+import { produce } from 'immer';
 import moment from 'moment';
 import { create } from 'zustand';
 import type { Pet } from '@modules/pets/types';
@@ -16,6 +17,9 @@ interface TodayStoreStateFunctions {
     prevDay: () => void;
     nextDay: () => void;
     fetchDataForDay: () => void;
+    insertSpecialTask: (dateKey: string, taskId: string) => void;
+    insertCompletedTask: (dateKey: string, taskId: string) => void;
+    deleteCompletedTask: (dateKey: string, taskId: string) => void;
 }
 
 type TodayStoreState = TodayStoreStateData & TodayStoreStateFunctions;
@@ -80,6 +84,41 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
         } finally {
             // TODO
         }
+    },
+
+    insertSpecialTask: (dateKey: string, taskId: string) => {
+        set((state) => ({
+            data: produce(state.data, (draft) => {
+                if (!draft[dateKey]) {
+                    draft[dateKey] = { specialTasks: [], completedTasks: [] };
+                }
+                draft[dateKey].specialTasks.push(taskId);
+            }),
+        }));
+    },
+
+    insertCompletedTask: (dateKey: string, taskId: string) => {
+        set((state) => ({
+            data: produce(state.data, (draft) => {
+                if (!draft[dateKey]) {
+                    draft[dateKey] = { specialTasks: [], completedTasks: [] };
+                }
+                draft[dateKey].completedTasks.push(taskId);
+            }),
+        }));
+    },
+
+    deleteCompletedTask: (dateKey: string, taskId: string) => {
+        set((state) => ({
+            data: produce(state.data, (draft) => {
+                if (!draft[dateKey]) {
+                    draft[dateKey] = { specialTasks: [], completedTasks: [] };
+                }
+                draft[dateKey].completedTasks = draft[
+                    dateKey
+                ].completedTasks.filter((t) => t !== taskId);
+            }),
+        }));
     },
 }));
 

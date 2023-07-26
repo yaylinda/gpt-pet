@@ -7,13 +7,14 @@ import type {
 } from '@modules/tasks/types';
 import type moment from 'moment';
 import useStore from '@/store';
-import { reduce } from '@/utils';
+import { getDateKey, reduce } from '@/utils';
 import { taskAdapter } from '@modules/tasks/adapters';
 import {
     fetchDailyTasksForUser,
     fetchSpecialTasksForUserOnDate,
     insertTask,
 } from '@modules/tasks/api';
+import useTodayStore from '@modules/today/store';
 
 interface TasksStoreStateData {
     creating: boolean;
@@ -88,7 +89,13 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
         set({ creating: true });
 
         try {
-            await insertTask({ type, title, difficulty, user_id: userId });
+            await insertTask({
+                type,
+                title,
+                difficulty,
+                user_id: userId,
+                date_key: getDateKey(useTodayStore.getState().currentDate),
+            });
             return true;
         } catch (e) {
             return false;
