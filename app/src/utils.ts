@@ -53,6 +53,10 @@ export function stringToColor(string: string) {
     return color;
 }
 
+/**
+ *
+ * @param date
+ */
 export const formatDateHeader = (date: moment.Moment) => {
     if (date.isSame(moment(), 'day')) {
         return 'Today';
@@ -64,3 +68,9 @@ export const formatDateHeader = (date: moment.Moment) => {
 
     return date.format('MMM Do');
 };
+
+/**
+ *
+ * @param date
+ */
+export const getDateKey = (date: moment.Moment) => date.format('YYYY-MM-DD');

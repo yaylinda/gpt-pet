@@ -1,7 +1,9 @@
-import type {TaskRow,TaskInsert} from '@modules/tasks/types';
+import type {TaskInsert, TaskRow} from '@modules/tasks/types';
+import type moment from 'moment';
 import {Tables} from '@/enums';
 import {supabase} from '@/supabase';
 import {taskAdapter} from '@modules/tasks/adapters';
+import {TaskType} from '@modules/tasks/types';
 
 /**
  *
@@ -26,18 +28,62 @@ export const insertTask = async (row: TaskInsert) => {
  *
  * @param userId
  */
-export const fetchTasksForUser = async (userId: string) => {
+export const fetchDailyTasksForUser = async (userId: string) => {
     const { data, error } = await supabase
         .from(Tables.TASKS)
         .select()
-        .eq('userId', userId);
+        .eq('user_id', userId)
+        .eq('type', TaskType.DAILY);
 
     if (error) {
-        console.error(`[fetchTasksForUser] error: ${JSON.stringify(error)}`);
+        console.error(
+            `[fetchDailyTasksForUser] error: ${JSON.stringify(error)}`
+        );
         throw error;
     }
 
     const taskRows: TaskRow[] = data;
+
+    console.log(
+        `[fetchDailyTasksForUser] userId=${userId}, tasks=${JSON.stringify(
+            taskRows
+        )}`
+    );
+
+    return taskRows.map((p) => taskAdapter(p));
+};
+
+/**
+ *
+ * @param userId
+ * @param date
+ */
+export const fetchSpecialTasksForUserOnDate = async (
+    userId: string,
+    date: moment.Moment
+) => {
+    const { data, error } = await supabase
+        .from(Tables.TASKS)
+        .select()
+        .eq('user_id', userId)
+        .eq('type', TaskType.SPECIAL)
+        .gte('created_at', date.clone().startOf('day').valueOf())
+        .lte('created_at', date.clone().endOf('day').valueOf());
+
+    if (error) {
+        console.error(
+            `[fetchSpecialTasksForUserOnDay] error: ${JSON.stringify(error)}`
+        );
+        throw error;
+    }
+
+    const taskRows: TaskRow[] = data;
+
+    console.log(
+        `[fetchSpecialTasksForUserOnDay] userId=${userId}, tasks=${JSON.stringify(
+            taskRows
+        )}`
+    );
 
     return taskRows.map((p) => taskAdapter(p));
 };

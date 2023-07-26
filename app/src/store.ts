@@ -1,6 +1,8 @@
 import { create } from 'zustand';
+import type { Pet } from '@modules/pets/types';
 import type { User, UserRow } from '@modules/users/types';
 import usePetsStore from '@modules/pets/store';
+import useTasksStore from '@modules/tasks/store';
 import { userAdapter } from '@modules/users/adapters';
 import useUsersStore from '@modules/users/store';
 
@@ -9,6 +11,8 @@ interface StoreStateData {
     theme: string;
     userId: string;
     currentUser: User | null;
+    currentPet: Pet | null;
+    dailyTasks: string[];
 }
 
 interface StoreStateFunctions {
@@ -24,31 +28,40 @@ const DEFAULT_DATA: StoreStateData = {
     loadingSession: true,
     userId: '',
     currentUser: null,
+    currentPet: null,
     theme: 'light_blue',
+    dailyTasks: [],
 };
 
 const useStore = create<StoreState>()((set) => ({
     ...DEFAULT_DATA,
 
-    setUserId: (userId: string) => {
+    setUserId: async (userId: string) => {
         set({
             loadingSession: false,
             userId,
         });
 
-        if (userId) {
-            useUsersStore
+        if (!userId) {
+            return;
+        }
+
+        try {
+            const users = await useUsersStore.getState().fetchUsers([userId]);
+            const pets = await usePetsStore.getState().fetchPets(userId);
+            const dailyTasks = await useTasksStore
                 .getState()
-                .fetchUsers([userId])
-                .then((users) => {
-                    console.log(
-                        `[useStore] logged in user: ${JSON.stringify(
-                            users[userId]
-                        )}`
-                    );
-                    set({ currentUser: users[userId] || null });
-                });
-            usePetsStore.getState().fetchPets(userId);
+                .fetchDailyTasks(userId);
+
+            set({
+                currentUser: users[userId],
+                currentPet: pets[0],
+                dailyTasks,
+            });
+        } catch (e) {
+            // TODO
+        } finally {
+            // TODO
         }
     },
 

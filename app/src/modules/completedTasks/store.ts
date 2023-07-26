@@ -1,14 +1,12 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
 import type { CompletedTaskRow } from '@modules/completedTasks/types';
-import { fetchCompletedTasksForUser } from '@modules/completedTasks/api';
 
 interface CompletedTasksStoreStateData {
     completedTasks: Record<string, string[]>;
 }
 
 interface CompletedTasksStoreStateFunctions {
-    fetchCompletedTasks: (userId: string, date: string) => void;
     insertCompletedTask: (completedTaskRow: CompletedTaskRow) => void;
     deleteCompletedTask: (completedTaskRow: CompletedTaskRow) => void;
 }
@@ -22,15 +20,6 @@ const DEFAULT_DATA: CompletedTasksStoreStateData = {
 
 const useCompletedTasksStore = create<CompletedTasksStoreState>()((set) => ({
     ...DEFAULT_DATA,
-
-    fetchCompletedTasks: async (userId: string, date: string) => {
-        const completedTasks = await fetchCompletedTasksForUser(userId, date);
-        set((state) => ({
-            completedTasks: produce(state.completedTasks, (draft) => {
-                draft[date] = completedTasks.map((t) => t.taskId);
-            }),
-        }));
-    },
 
     insertCompletedTask: (completedTaskRow: CompletedTaskRow) => {
         console.log(

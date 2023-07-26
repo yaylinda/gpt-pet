@@ -1,11 +1,14 @@
 import { ListItem } from 'tamagui';
-import type { Task } from '@modules/tasks/types';
+import useTasksStore from '@modules/tasks/store';
 
 interface TaskItemProps {
-    task: Task;
+    taskId: string;
+    completed: boolean;
 }
 
-const TaskItem = ({ task }: TaskItemProps) => {
+const TaskItem = ({ taskId  }: TaskItemProps) => {
+    const task = useTasksStore((state) => state.tasks[taskId]);
+
     return (
         <ListItem
             pressTheme

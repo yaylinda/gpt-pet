@@ -11,7 +11,7 @@ import {
     Skull,
 } from '@tamagui/lucide-icons';
 import { H6, Separator, SizableText, XStack, YGroup } from 'tamagui';
-import usePetsStore from '@modules/pets/store';
+import type { Pet } from '@modules/pets/types';
 
 const getIconForPet = (icon: string) => {
     switch (icon) {
@@ -38,13 +38,11 @@ const getIconForPet = (icon: string) => {
     }
 };
 
-const PetCard = () => {
-    const pet = usePetsStore((state) => state.pets?.[0]);
+interface PetCardProps {
+    pet: Pet;
+}
 
-    if (!pet) {
-        return null;
-    }
-
+const PetCard = ({ pet }: PetCardProps) => {
     const petIcon = getIconForPet(pet.type);
 
     return (

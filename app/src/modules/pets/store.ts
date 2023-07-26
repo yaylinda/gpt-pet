@@ -9,7 +9,7 @@ interface PetsStoreStateData {
 }
 
 interface PetsStoreStateFunctions {
-    fetchPets: (userId: string) => void;
+    fetchPets: (userId: string) => Promise<Pet[]>;
     upsertPet: (petRow: PetRow) => void;
 }
 
@@ -25,6 +25,7 @@ const usePetsStore = create<PetsStoreState>()((set) => ({
     fetchPets: async (userId: string) => {
         const pets = await fetchPetsForUser(userId);
         set({ pets });
+        return pets;
     },
 
     upsertPet: (petRow: PetRow) => {

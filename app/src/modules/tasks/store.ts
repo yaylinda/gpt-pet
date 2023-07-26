@@ -1,28 +1,38 @@
-import { produce } from 'immer';
 import { create } from 'zustand';
-import type { Task, TaskDifficulty, TaskRow } from '@modules/tasks/types';
+import type {
+    Task,
+    TaskDifficulty,
+    TaskRow,
+    TaskType,
+} from '@modules/tasks/types';
+import type moment from 'moment';
 import useStore from '@/store';
 import { reduce } from '@/utils';
 import { taskAdapter } from '@modules/tasks/adapters';
-import { fetchTasksForUser, insertTask } from '@modules/tasks/api';
-import { TASK_TYPE_FIELD } from '@modules/tasks/constants';
-import { TaskType } from '@modules/tasks/types';
+import {
+    fetchDailyTasksForUser,
+    fetchSpecialTasksForUserOnDate,
+    insertTask,
+} from '@modules/tasks/api';
 
 interface TasksStoreStateData {
-    loadingTasks: boolean;
     creating: boolean;
-    dailyTasks: Record<string, Task>;
-    specialTasks: Record<string, Task>;
+    tasks: Record<string, Task>;
     taskDialog: { open: boolean; type: TaskType | null };
 }
 
 interface TasksStoreStateFunctions {
-    fetchTasks: (userId: string) => void;
+    fetchDailyTasks: (userId: string) => Promise<string[]>;
+    fetchSpecialTasks: (
+        userId: string,
+        date: moment.Moment
+    ) => Promise<string[]>;
     createTask: (
         type: TaskType,
         title: string,
         difficulty: TaskDifficulty
     ) => Promise<boolean>;
+    getTask: (taskId: string) => Task;
     upsertTask: (taskRow: TaskRow) => void;
     openTaskDialog: (type: TaskType) => void;
     closeTaskDialog: () => void;
@@ -31,28 +41,41 @@ interface TasksStoreStateFunctions {
 type TasksStoreState = TasksStoreStateData & TasksStoreStateFunctions;
 
 const DEFAULT_DATA: TasksStoreStateData = {
-    loadingTasks: false,
     creating: false,
-    dailyTasks: {},
-    specialTasks: {},
+    tasks: {},
     taskDialog: { open: false, type: null },
 };
 
-const useTasksStore = create<TasksStoreState>()((set) => ({
+const useTasksStore = create<TasksStoreState>()((set, get) => ({
     ...DEFAULT_DATA,
 
-    fetchTasks: async (userId: string) => {
-        set({ loadingTasks: true });
-        const tasks = await fetchTasksForUser(userId);
+    fetchDailyTasks: async (userId: string): Promise<string[]> => {
+        const tasks = await fetchDailyTasksForUser(userId);
 
-        const daily = tasks.filter((t) => t.type === TaskType.DAILY);
-        const special = tasks.filter((t) => t.type === TaskType.SPECIAL);
+        set((state) => ({
+            tasks: {
+                ...state.tasks,
+                ...reduce(tasks),
+            },
+        }));
 
-        set({
-            loadingTasks: false,
-            dailyTasks: reduce(daily),
-            specialTasks: reduce(special),
-        });
+        return tasks.map((t) => t.id);
+    },
+
+    fetchSpecialTasks: async (
+        userId: string,
+        date: moment.Moment
+    ): Promise<string[]> => {
+        const tasks = await fetchSpecialTasksForUserOnDate(userId, date);
+
+        set((state) => ({
+            tasks: {
+                ...state.tasks,
+                ...reduce(tasks),
+            },
+        }));
+
+        return tasks.map((t) => t.id);
     },
 
     createTask: async (
@@ -74,18 +97,17 @@ const useTasksStore = create<TasksStoreState>()((set) => ({
         }
     },
 
+    getTask: (taskId: string) => get().tasks[taskId],
+
     upsertTask: (taskRow: TaskRow) => {
         console.log('[tasksStore][upsertTask] taskRow update');
 
-        set((state) => {
-            const task = taskAdapter(taskRow);
-            const typeField = TASK_TYPE_FIELD[task.type];
-            return {
-                [typeField]: produce(state[typeField], (draft) => {
-                    draft[task.id] = task;
-                }),
-            };
-        });
+        set((state) => ({
+            tasks: {
+                ...state.tasks,
+                [taskRow.id]: taskAdapter(taskRow),
+            },
+        }));
     },
 
     openTaskDialog: (type: TaskType) => {

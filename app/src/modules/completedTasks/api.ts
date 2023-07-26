@@ -1,4 +1,5 @@
 import type {CompletedTaskRow} from '@modules/completedTasks/types';
+import type moment from 'moment';
 import {Tables} from '@/enums';
 import {supabase} from '@/supabase';
 import {completedTaskAdapter} from '@modules/completedTasks/adapters';
@@ -27,15 +28,16 @@ export const insertCompletedTask = async (row: CompletedTaskRow) => {
  * @param userId
  * @param date
  */
-export const fetchCompletedTasksForUser = async (
+export const fetchCompletedTasksForUserOnDate = async (
     userId: string,
-    date: string
+    date: moment.Moment
 ) => {
     const { data, error } = await supabase
         .from(Tables.COMPLETED_TASKS)
         .select()
-        .eq('userId', userId)
-        .eq('date', date);
+        .eq('user_id', userId)
+        .gte('date', date.clone().startOf('day').valueOf())
+        .lte('date', date.clone().endOf('day').valueOf());
 
     if (error) {
         console.error(

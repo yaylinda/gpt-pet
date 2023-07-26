@@ -1,26 +1,29 @@
 import React from 'react';
 import { FlatList } from 'react-native';
 import { Tabs } from 'tamagui';
-import type { Task, TaskType } from '@modules/tasks/types';
+import type { TaskType } from '@modules/tasks/types';
 import EmptyTaskContent from '@modules/tasks/EmptyTaskContent';
 import TaskItem from '@modules/tasks/TaskItem';
-import { TASK_TYPE_FIELD } from '@modules/tasks/constants';
 import useTasksStore from '@modules/tasks/store';
 
 interface TaskTabContentProps {
     type: TaskType;
+    taskIds: string[];
+    completedTaskIds: string[];
 }
 
-const TaskTabContent = ({ type }: TaskTabContentProps) => {
-    const tasks = useTasksStore((state) => {
-        const field = TASK_TYPE_FIELD[type];
-        return Object.values(state[field]);
-    });
+const TaskTabContent = ({
+    type,
+    taskIds,
+    completedTaskIds,
+}: TaskTabContentProps) => {
+    const {} = useTasksStore();
 
-    const renderItem = ({ item }: { item: Task; index: number }) => (
+    const renderItem = ({ item }: { item: string; index: number }) => (
         <TaskItem
-            key={item.id}
-            task={item}
+            key={item}
+            taskId={item}
+            completed={completedTaskIds.includes(item)}
         />
     );
 
@@ -36,7 +39,7 @@ const TaskTabContent = ({ type }: TaskTabContentProps) => {
             borderWidth="$2"
         >
             <FlatList
-                data={tasks}
+                data={taskIds}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={<EmptyTaskContent type={type} />}
