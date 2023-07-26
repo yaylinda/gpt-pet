@@ -1,4 +1,4 @@
-import type {TaskRow} from '@modules/tasks/types';
+import type {TaskRow,TaskInsert} from '@modules/tasks/types';
 import {Tables} from '@/enums';
 import {supabase} from '@/supabase';
 import {taskAdapter} from '@modules/tasks/adapters';
@@ -7,7 +7,7 @@ import {taskAdapter} from '@modules/tasks/adapters';
  *
  * @param row
  */
-export const insertTask = async (row: TaskRow) => {
+export const insertTask = async (row: TaskInsert) => {
     const { data, error } = await supabase
         .from(Tables.TASKS)
         .insert(row)

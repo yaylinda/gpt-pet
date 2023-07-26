@@ -4,7 +4,7 @@ import type { InputProps } from 'tamagui/src/views/Input';
 
 interface TextInputWithLabelProps {
     id: string;
-    label: string;
+    label?: string;
     placeholder?: string;
     value: string;
     onUpdate: (value: string) => void;
@@ -27,11 +27,13 @@ const TextInputWithLabel = ({
 }: TextInputWithLabelProps) => {
     return (
         <Fieldset horizontal={horizontal}>
-            <Label htmlFor={id}>{label}</Label>
+            {label && <Label htmlFor={id}>{label}</Label>}
             <Input
                 id={id}
                 size="$4"
                 placeholder={placeholder}
+                placeholderTextColor="$color6"
+                color="$color8"
                 value={value}
                 onChangeText={onUpdate}
                 disabled={disabled}

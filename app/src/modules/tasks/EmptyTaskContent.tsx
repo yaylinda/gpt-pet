@@ -18,7 +18,7 @@ const getEmptyText = (type: TaskType, petName: string) => {
             return (
                 'Need to conquer a special quest?\n\n' +
                 'Track them here!\n\n' +
-                'Who knows? Maybe Special Quest = Special Reward?'
+                'Who knows? Maybe Special Quest = Special Reward!'
             );
     }
 };

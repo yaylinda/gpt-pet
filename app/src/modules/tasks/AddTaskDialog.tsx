@@ -1,13 +1,42 @@
 import { X } from '@tamagui/lucide-icons';
-import { Button, Dialog, Unspaced } from 'tamagui';
+import * as Burnt from 'burnt';
+import React from 'react';
+import { Button, Dialog, Separator, Spinner, Unspaced, XStack } from 'tamagui';
+import TextInputWithLabel from '@common/TextInputWithLabel';
+import TaskDifficultySelection from '@modules/tasks/TaskDifficultySelection';
 import useTasksStore from '@modules/tasks/store';
+import { TaskDifficulty } from '@modules/tasks/types';
 
 const AddTaskDialog = () => {
     const {
-        taskDialog: {  open },
-        
+        taskDialog: { open, type },
+        creating,
+        createTask,
         closeTaskDialog,
     } = useTasksStore();
+
+    const [title, setTitle] = React.useState<string>('');
+    const [difficulty, setDifficulty] = React.useState<TaskDifficulty>(
+        TaskDifficulty.M
+    );
+
+    const onClose = () => {
+        setTitle('');
+        setDifficulty(TaskDifficulty.M);
+        closeTaskDialog();
+    };
+
+    const onSave = async () => {
+        const success = await createTask(type!, title, difficulty);
+        if (success) {
+            onClose();
+            Burnt.toast({
+                title: 'Added new Task!',
+                preset: 'done',
+                duration: 2,
+            });
+        }
+    };
 
     return (
         <Dialog
@@ -21,10 +50,11 @@ const AddTaskDialog = () => {
                     opacity={0.5}
                     enterStyle={{ opacity: 0 }}
                     exitStyle={{ opacity: 0 }}
-                    onPress={closeTaskDialog}
+                    onPress={onClose}
                 />
 
                 <Dialog.Content
+                    width="90%"
                     bordered
                     elevate
                     key="content"
@@ -41,18 +71,54 @@ const AddTaskDialog = () => {
                     exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
                     space
                 >
-                    <Dialog.Title>Edit profile</Dialog.Title>
-                    <Dialog.Description>
-                        Make changes to your profile here. Click save when
-                        you&#39;re done.
-                    </Dialog.Description>
+                    <Dialog.Title size="$6">New {type} Task</Dialog.Title>
+
+                    <Separator />
+
+                    <TextInputWithLabel
+                        id="task_title"
+                        value={title}
+                        onUpdate={setTitle}
+                        placeholder="Task Title"
+                        disabled={creating}
+                    />
+
+                    <TaskDifficultySelection
+                        value={difficulty}
+                        onValueChange={setDifficulty}
+                        disabled={creating}
+                    />
+
+                    <Separator />
+
+                    <XStack justifyContent="space-between">
+                        <Button
+                            size="$4"
+                            onPress={onClose}
+                            bordered
+                            backgroundColor="$backgroundTransparent"
+                            borderColor="$background"
+                            borderWidth="$1"
+                            disabled={creating}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            size="$4"
+                            onPress={onSave}
+                            disabled={creating}
+                            icon={creating ? () => <Spinner /> : undefined}
+                        >
+                            Save
+                        </Button>
+                    </XStack>
 
                     <Unspaced>
                         <Dialog.Close asChild>
                             <Button
                                 position="absolute"
-                                top="$3"
-                                right="$3"
+                                top="$4"
+                                right="$4"
                                 size="$2"
                                 circular
                                 icon={X}

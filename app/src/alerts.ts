@@ -4,7 +4,7 @@ export const errorAlert = (title: string, message: string) => {
     Burnt.alert({
         title,
         message,
-        preset: "error",
-        duration: 4,
+        preset: 'error',
+        duration: 2,
     });
 };

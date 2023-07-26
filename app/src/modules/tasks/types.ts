@@ -2,6 +2,7 @@ import type { Database } from '@/gen';
 import type moment from 'moment';
 
 export type TaskRow = Database['public']['Tables']['tasks']['Row'];
+export type TaskInsert = Database['public']['Tables']['tasks']['Insert'];
 
 export interface Task {
     id: string;
