@@ -66,6 +66,10 @@ export const formatDateHeader = (date: moment.Moment) => {
         return 'Yesterday';
     }
 
+    if (date.isSame(moment().add(1, 'day'), 'day')) {
+        return 'Tomorrow';
+    }
+
     return date.format('MMM Do');
 };
 

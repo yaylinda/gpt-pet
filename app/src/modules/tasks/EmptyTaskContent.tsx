@@ -3,7 +3,6 @@ import React from 'react';
 import { useWindowDimensions } from 'react-native';
 import { SizableText, YStack } from 'tamagui';
 import VerticalSpacer from '@common/VerticalSpacer';
-import AddTaskButton from '@modules/tasks/AddTaskButton';
 import { TaskType } from '@modules/tasks/types';
 import useTodayStore from '@modules/today/store';
 
@@ -55,10 +54,8 @@ const EmptyTaskContent = ({ type }: EmptyTaskContentProps) => {
                 >
                     {getEmptyText(type, petName)}
                 </SizableText>
-
-                <VerticalSpacer size="$2" />
-
-                <AddTaskButton type={type} />
+                {/*<VerticalSpacer size="$2" />*/}
+                {/*<AddTaskButton type={type} />*/}
             </>
         );
     }, [currentDate, type, petName]);

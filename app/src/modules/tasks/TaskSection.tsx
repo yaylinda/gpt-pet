@@ -1,3 +1,4 @@
+import React from 'react';
 import { Separator, SizableText, Tabs } from 'tamagui';
 import useStore from '@/store';
 import { getDateKey } from '@/utils';

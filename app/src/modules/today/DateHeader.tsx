@@ -28,8 +28,9 @@ const DateHeader = () => {
                 chromeless
                 onPress={prevDay}
                 disabled={!showPrev}
+                color="$colorFocus"
             />
-            <H6>{formatDateHeader(currentDate)}</H6>
+            <H6 color="$colorFocus">{formatDateHeader(currentDate)}</H6>
             <Button
                 circular
                 icon={ChevronRight}
@@ -37,6 +38,7 @@ const DateHeader = () => {
                 size="$4"
                 chromeless
                 onPress={nextDay}
+                color="$colorFocus"
             />
         </XStack>
     );

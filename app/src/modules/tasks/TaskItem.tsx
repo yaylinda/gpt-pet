@@ -6,13 +6,15 @@ interface TaskItemProps {
     completed: boolean;
 }
 
-const TaskItem = ({ taskId  }: TaskItemProps) => {
+const TaskItem = ({ taskId }: TaskItemProps) => {
     const task = useTasksStore((state) => state.tasks[taskId]);
 
     return (
         <ListItem
+            size="$3"
             pressTheme
             title={task.title}
+            subTitle={task.difficulty}
         />
     );
 };
