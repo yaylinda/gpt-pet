@@ -2,6 +2,7 @@ import type {TaskInsert, TaskRow} from '@modules/tasks/types';
 import type moment from 'moment';
 import {Tables} from '@/enums';
 import {supabase} from '@/supabase';
+import {getDateKey} from '@/utils';
 import {taskAdapter} from '@modules/tasks/adapters';
 import {TaskType} from '@modules/tasks/types';
 
@@ -67,8 +68,7 @@ export const fetchSpecialTasksForUserOnDate = async (
         .select()
         .eq('user_id', userId)
         .eq('type', TaskType.SPECIAL)
-        .gte('created_at', date.clone().startOf('day').valueOf())
-        .lte('created_at', date.clone().endOf('day').valueOf());
+        .eq('date_key', getDateKey(date));
 
     if (error) {
         console.error(

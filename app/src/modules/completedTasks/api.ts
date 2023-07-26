@@ -2,6 +2,7 @@ import type {CompletedTaskRow} from '@modules/completedTasks/types';
 import type moment from 'moment';
 import {Tables} from '@/enums';
 import {supabase} from '@/supabase';
+import {getDateKey} from '@/utils';
 import {completedTaskAdapter} from '@modules/completedTasks/adapters';
 
 /**
@@ -36,8 +37,7 @@ export const fetchCompletedTasksForUserOnDate = async (
         .from(Tables.COMPLETED_TASKS)
         .select()
         .eq('user_id', userId)
-        .gte('date', date.clone().startOf('day').valueOf())
-        .lte('date', date.clone().endOf('day').valueOf());
+        .eq('date_key', getDateKey(date));
 
     if (error) {
         console.error(

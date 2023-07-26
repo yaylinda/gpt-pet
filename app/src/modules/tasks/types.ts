@@ -11,6 +11,7 @@ export interface Task {
     difficulty: TaskDifficulty;
     createdAt: moment.Moment;
     userId: string;
+    dateKey: string;
 }
 
 export enum TaskType {

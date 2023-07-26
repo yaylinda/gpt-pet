@@ -34,4 +34,4 @@ reset:
 	npx supabase db reset
 
 gen_local:
-	npx supabase gen types typescript --local --schema public > ../app/gen.ts
+	npx supabase gen types typescript --local --schema public > ../app/src/gen.ts
