@@ -11,17 +11,20 @@ export interface Database {
     Tables: {
       completed_tasks: {
         Row: {
-          date: string
+          created_at: string
+          date_key: string
           task_id: string
           user_id: string
         }
         Insert: {
-          date: string
+          created_at?: string
+          date_key: string
           task_id: string
           user_id: string
         }
         Update: {
-          date?: string
+          created_at?: string
+          date_key?: string
           task_id?: string
           user_id?: string
         }
@@ -77,6 +80,7 @@ export interface Database {
       tasks: {
         Row: {
           created_at: string
+          date_key: string
           difficulty: string
           id: string
           title: string
@@ -85,6 +89,7 @@ export interface Database {
         }
         Insert: {
           created_at?: string
+          date_key: string
           difficulty: string
           id?: string
           title: string
@@ -93,6 +98,7 @@ export interface Database {
         }
         Update: {
           created_at?: string
+          date_key?: string
           difficulty?: string
           id?: string
           title?: string

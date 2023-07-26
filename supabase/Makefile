@@ -7,7 +7,7 @@ start:
 	npx supabase start
 
 restart:
-	npx supabase stop && npx supabase restart
+	npx supabase stop && npx supabase start
 
 stop:
 	npx supabase stop --no-backup
