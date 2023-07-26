@@ -83,6 +83,7 @@ export interface Database {
           date_key: string
           difficulty: string
           id: string
+          nature: string
           title: string
           type: string
           user_id: string
@@ -92,6 +93,7 @@ export interface Database {
           date_key: string
           difficulty: string
           id?: string
+          nature: string
           title: string
           type: string
           user_id: string
@@ -101,6 +103,7 @@ export interface Database {
           date_key?: string
           difficulty?: string
           id?: string
+          nature?: string
           title?: string
           type?: string
           user_id?: string

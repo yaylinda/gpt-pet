@@ -33,11 +33,14 @@ push:
 reset:
 	npx supabase db reset
 
-gen_app:
-	npx supabase gen types typescript --local --schema public > ../app/src/gen.ts
-
-gen_supabase:
-	npx supabase gen types typescript --local --schema public > functions/gen.ts
+gen:
+	npx supabase gen types typescript --local --schema public > ../app/src/gen.ts && npx supabase gen types typescript --local --schema public > functions/gen.ts
 
 new_function:
 	npx supabase functions new $(name)
+
+serve:
+	npx supabase functions serve
+
+deploy:
+	npx supabase functions deploy

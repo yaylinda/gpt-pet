@@ -28,7 +28,7 @@ serve(async (req: Request) => {
 
     const supabaseClient = getSupabaseClient(req);
 
-    const {data: taskRow, error: dbError} = await insertTask(supabaseClient, {...request, nature: response.content});
+    const {data: taskRow, error: dbError} = await insertTask(supabaseClient, {...request, nature: response.content!});
 
     if (dbError || !taskRow) {
         return serverErrorResponse(dbError, 'call insertTask');
