@@ -28,6 +28,10 @@ const TaskSection = () => {
             }
     );
 
+    console.log(
+        `[TaskSection][render]\n\tdailyTask=${dailyTasks}\n\tspecialTasks=${specialTasks}\n\tcompletedTasks=${completedTasks}`
+    );
+
     return (
         <>
             <Tabs

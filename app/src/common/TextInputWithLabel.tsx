@@ -15,7 +15,6 @@ interface TextInputWithLabelProps {
 }
 
 const TextInputWithLabel = ({
-    id,
     label,
     placeholder,
     value,
@@ -27,9 +26,8 @@ const TextInputWithLabel = ({
 }: TextInputWithLabelProps) => {
     return (
         <Fieldset horizontal={horizontal}>
-            {label && <Label htmlFor={id}>{label}</Label>}
+            {label && <Label>{label}</Label>}
             <Input
-                id={id}
                 size="$4"
                 placeholder={placeholder}
                 placeholderTextColor="$color6"

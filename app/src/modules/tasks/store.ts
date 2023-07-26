@@ -95,6 +95,7 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
                 difficulty,
                 user_id: userId,
                 date_key: getDateKey(useTodayStore.getState().currentDate),
+                nature: 'TODO',
             });
             return true;
         } catch (e) {

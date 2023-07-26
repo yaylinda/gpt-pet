@@ -17,7 +17,7 @@ const AddTaskDialog = () => {
 
     const [title, setTitle] = React.useState<string>('');
     const [difficulty, setDifficulty] = React.useState<TaskDifficulty>(
-        TaskDifficulty.M
+        TaskDifficulty.S
     );
 
     const onClose = () => {

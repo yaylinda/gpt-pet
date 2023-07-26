@@ -127,7 +127,7 @@ export default function App() {
                     const row = payload.new as TaskRow;
                     upsertTask(row);
                     row.type === TaskType.DAILY
-                        ? insertDailyTask(row.date_key)
+                        ? insertDailyTask(row.id)
                         : insertSpecialTask(row.date_key, row.id);
                 }
             )

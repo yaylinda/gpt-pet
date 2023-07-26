@@ -1,6 +1,6 @@
 import type {TaskInsert, TaskRow} from '@modules/tasks/types';
 import type moment from 'moment';
-import {Tables} from '@/enums';
+import {SupabaseEdgeFunctions, Tables} from '@/enums';
 import {supabase} from '@/supabase';
 import {getDateKey} from '@/utils';
 import {taskAdapter} from '@modules/tasks/adapters';
@@ -11,11 +11,12 @@ import {TaskType} from '@modules/tasks/types';
  * @param row
  */
 export const insertTask = async (row: TaskInsert) => {
-    const { data, error } = await supabase
-        .from(Tables.TASKS)
-        .insert(row)
-        .select()
-        .single();
+    const { data, error } = await supabase.functions.invoke(
+        SupabaseEdgeFunctions.CREATE_TASK,
+        {
+            body: row,
+        }
+    );
 
     if (error) {
         console.error(`[insertTask] error: ${JSON.stringify(error)}`);

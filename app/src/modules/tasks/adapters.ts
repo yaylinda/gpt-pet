@@ -1,5 +1,10 @@
 import moment from 'moment';
-import type { Task, TaskRow , TaskDifficulty, TaskType } from '@modules/tasks/types';
+import type {
+    Task,
+    TaskDifficulty,
+    TaskRow,
+    TaskType,
+} from '@modules/tasks/types';
 import { getDateKey } from '@/utils';
 
 export const taskAdapter = (row: TaskRow): Task => ({
@@ -10,4 +15,5 @@ export const taskAdapter = (row: TaskRow): Task => ({
     createdAt: moment(row.created_at),
     userId: row.user_id,
     dateKey: getDateKey(moment(row.created_at)),
+    nature: row.nature,
 });

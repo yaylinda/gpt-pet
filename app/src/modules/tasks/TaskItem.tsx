@@ -9,6 +9,10 @@ interface TaskItemProps {
 const TaskItem = ({ taskId }: TaskItemProps) => {
     const task = useTasksStore((state) => state.tasks[taskId]);
 
+    if (!task) {
+        return null;
+    }
+
     return (
         <ListItem
             size="$3"
