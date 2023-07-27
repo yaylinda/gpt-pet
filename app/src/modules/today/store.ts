@@ -1,6 +1,8 @@
 import { produce } from 'immer';
 import moment from 'moment';
+import React from 'react';
 import { create } from 'zustand';
+import type { ICarouselInstance } from 'react-native-reanimated-carousel/src/types';
 import useStore from '@/store';
 import { getDateKey } from '@/utils';
 import { fetchCompletedTasksForUserOnDate } from '@modules/completedTasks/api';
@@ -10,6 +12,8 @@ interface TodayStoreStateData {
     currentDate: moment.Moment;
     endDate: moment.Moment;
     headerWeeks: number[];
+    dateCarouselRef: React.RefObject<ICarouselInstance>;
+    scrolledFromGoToToday: boolean;
     data: Record<string, { specialTasks: string[]; completedTasks: string[] }>;
 }
 
@@ -19,6 +23,7 @@ interface TodayStoreStateFunctions {
     prevWeek: () => void;
     nextWeek: () => void;
     setCurrentDate: (date: moment.Moment) => void;
+    goToToday: () => void;
     onScrolledToWeek: (index: number) => void;
     fetchDataForDay: () => void;
     insertSpecialTask: (dateKey: string, taskId: string) => void;
@@ -35,6 +40,8 @@ const DEFAULT_DATA: TodayStoreStateData = {
         moment().startOf('week').startOf('day').valueOf(),
         moment().startOf('week').startOf('day').add(1, 'week').valueOf(),
     ],
+    dateCarouselRef: React.createRef<ICarouselInstance>(),
+    scrolledFromGoToToday: false,
     data: {},
 };
 
@@ -83,7 +90,44 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
         get().fetchDataForDay();
     },
 
+    goToToday: () => {
+        const currentDate = get().currentDate.clone();
+        const today = moment().startOf('day');
+        const isSameWeek = currentDate.isSame(today, 'week');
+        // const currentDateValue = currentDate.valueOf();
+
+        get().setCurrentDate(today);
+
+        if (!get().dateCarouselRef.current || isSameWeek) {
+            console.log(
+                `[todayStore][goToToday] nowhere to scroll! isSameWeek=${isSameWeek}`
+            );
+            return;
+        }
+
+        set({ scrolledFromGoToToday: true });
+
+        const count = today.diff(currentDate, 'week');
+        console.log(`[todayStore][goToToday] today.diff(currentDate)=${count}`);
+
+        get().dateCarouselRef.current?.scrollTo({
+            count,
+            animated: true,
+            onFinished: () => {
+                console.log('[todayStore][goToToday] after scrolling to today');
+            },
+        });
+    },
+
     onScrolledToWeek: (index: number) => {
+        if (get().scrolledFromGoToToday) {
+            console.log(
+                '[todayStore][onScrolledToWeek] scrolled from goToToday button. no need to do stuff'
+            );
+            set({ scrolledFromGoToToday: false });
+            return;
+        }
+
         const isLastWeek = index === get().headerWeeks.length - 1;
         const weekStart = get().headerWeeks[index];
 

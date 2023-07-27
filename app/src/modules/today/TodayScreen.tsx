@@ -1,6 +1,8 @@
+import { CalendarHeart } from '@tamagui/lucide-icons';
+import moment from 'moment';
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
-import { XStack, YStack } from 'tamagui';
+import { Button, XStack, YStack } from 'tamagui';
 import useStore from '@/store';
 import ScreenHeader from '@common/ScreenHeader';
 import { TabbedScreenWrapper } from '@common/ScreenWrapper';
@@ -9,6 +11,33 @@ import PetCard from '@modules/pets/PetCard';
 import TaskSection from '@modules/tasks/TaskSection';
 import DateHeader from '@modules/today/DateHeader';
 import useTodayStore from '@modules/today/store';
+
+const TodayButton = () => {
+    const { currentDate, goToToday } = useTodayStore();
+
+    return (
+        <YStack
+            height={44} /* TODO - don't hard code */
+            width={50} /* TODO - don't hard code */
+            justifyContent="center"
+            alignItems="center"
+        >
+            {currentDate.isSame(moment(), 'day') ? null : (
+                <Button
+                    size="$3"
+                    circular
+                    padding={0}
+                    space={0}
+                    gap={0}
+                    chromeless
+                    icon={CalendarHeart}
+                    scaleIcon={1.5}
+                    onPress={goToToday}
+                />
+            )}
+        </YStack>
+    );
+};
 
 const TodayScreen = () => {
     const { height } = useWindowDimensions();
@@ -25,12 +54,10 @@ const TodayScreen = () => {
             <ScreenHeader />
             {currentPet && <PetCard pet={currentPet} />}
             <VerticalSpacer />
-            <XStack height={height * 0.6}>
-                <YStack height={height * 0.6}>
-                    <YStack
-                        height={44}
-                        width={50}
-                    />
+            {/* TODO - don't hard code */}
+            <XStack height={height * 0.55}>
+                <YStack>
+                    <TodayButton />
                     <DateHeader />
                 </YStack>
                 <TaskSection />

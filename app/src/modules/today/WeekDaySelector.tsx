@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { useWindowDimensions } from 'react-native';
 import { Button, SizableText, YStack } from 'tamagui';
+import useStore from '@/store';
 import { getDatesBetween } from '@/utils';
 import useTodayStore from '@modules/today/store';
 
@@ -10,13 +11,21 @@ interface DayOptionProps {
     isLast: boolean;
 }
 
-const DayOption = ({ date, isFirst, isLast }: DayOptionProps) => {
+const DayOption = ({ date }: DayOptionProps) => {
     const dow = date.format('ddd');
     const dom = date.format('DD');
 
     const { currentDate, setCurrentDate } = useTodayStore();
 
-    const isToday = date.isSame(currentDate, 'day');
+    const isCurrentDate = date.isSame(currentDate, 'day');
+
+    const isBeforeUser = useStore((state) =>
+        state.currentUser
+            ? state.currentUser.createdAt.isAfter(date, 'day')
+            : true
+    );
+
+    const textOpacity = isBeforeUser ? 0 : 1;
 
     return (
         <Button
@@ -27,15 +36,24 @@ const DayOption = ({ date, isFirst, isLast }: DayOptionProps) => {
             padding={0}
             gap={0}
             borderRadius={0}
-            borderTopLeftRadius={isFirst ? '$4' : 0}
-            borderBottomLeftRadius={isLast ? '$4' : 0}
             borderWidth="$0.25"
             borderColor="$background"
-            backgroundColor={isToday ? '$color5' : '$color2'}
+            backgroundColor={isCurrentDate ? '$color5' : '$color2'}
             onPress={() => setCurrentDate(date)}
+            disabled={isBeforeUser}
         >
-            <SizableText size="$2">{dow}</SizableText>
-            <SizableText size="$2">{dom}</SizableText>
+            <SizableText
+                size="$1"
+                opacity={textOpacity}
+            >
+                {dow}
+            </SizableText>
+            <SizableText
+                size="$1"
+                opacity={textOpacity}
+            >
+                {dom}
+            </SizableText>
         </Button>
     );
 };
@@ -49,39 +67,15 @@ const WeekDaySelector = ({
     weekStartValue,
     currentDateValue,
 }: WeekDaySelectorProps) => {
-    const { height } = useWindowDimensions();
+    const {} = useWindowDimensions();
 
     const days = getDatesBetween(
         moment(weekStartValue),
         moment(weekStartValue).endOf('week')
     );
 
-    // return (
-    //     <ToggleGroup
-    //         orientation="vertical"
-    //         type="single"
-    //         value={`${currentDateValue}`}
-    //         size="$4"
-    //         height={height * 0.6 - 44} // TODO - do not hard code
-    //         borderTopLeftRadius={0}
-    //         style={{
-    //             display: 'flex',
-    //             flexDirection: 'column',
-    //             justifyContent: 'center',
-    //         }}
-    //     >
-    //         {days.map((d) => (
-    //             <DayOption
-    //                 key={`${d.valueOf()}_${currentDateValue}`}
-    //                 date={d}
-    //             />
-    //         ))}
-    //     </ToggleGroup>
-    // );
-
     return (
         <YStack
-            height={height * 0.6 - 44}
             display="flex"
             flex={1}
         >

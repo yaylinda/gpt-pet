@@ -34,7 +34,11 @@ const TaskTabContent = ({
         />
     );
 
-    console.log(`[TaskTabContent][render] type=${type}, taskIds=${taskIds}`);
+    console.log(
+        `[TaskTabContent][render] type=${type}, taskIds=${JSON.stringify(
+            taskIds
+        )}`
+    );
 
     return (
         <Tabs.Content
