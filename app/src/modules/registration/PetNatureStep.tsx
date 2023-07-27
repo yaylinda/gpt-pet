@@ -19,9 +19,12 @@ const PetNatureOption = ({ nature, selected }: PetNatureOptionProps) => {
         <Button
             key={`${nature}_${selected}`}
             size="$2"
-            borderColor="$color"
-            onPress={() => togglePetNature(nature)}
+            bordered
+            backgroundColor="$backgroundTransparent"
+            borderColor="$background"
+            borderWidth="$1"
             themeInverse={selected}
+            onPress={() => togglePetNature(nature)}
         >
             {nature}
         </Button>
@@ -36,9 +39,7 @@ const PetNatureStep = () => {
             entering={FadeIn}
             exiting={FadeOut}
         >
-            <Label>
-                Select {NUM_NATURES} natures you want your pet to have
-            </Label>
+            <Label>Select your pet&#39;s natures</Label>
             <XStack
                 flexWrap="wrap"
                 gap="$2"
@@ -56,6 +57,8 @@ const PetNatureStep = () => {
                 <Button
                     icon={Dices}
                     size="$4"
+                    color="$colorFocus"
+                    chromeless
                     onPress={randomizePetNatures}
                 >
                     Randomize
@@ -64,7 +67,7 @@ const PetNatureStep = () => {
             <VerticalSpacer />
             <StepButtons
                 nextButtonVisible={petNatures.length === NUM_NATURES}
-                nextStep={() => setStep(Step.PET_NATURE)}
+                nextStep={() => setStep(Step.PET_NAME)}
                 prevStep={() => setStep(Step.PET_TYPE)}
             />
         </Animated.View>

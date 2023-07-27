@@ -25,8 +25,12 @@ const PetOption = ({ value, selectedValue, onPress }: PetOptionProps) => {
 
     return (
         <Button
-            size="$4"
             circular
+            size="$4"
+            bordered
+            backgroundColor="$backgroundTransparent"
+            borderColor="$background"
+            borderWidth="$1"
             themeInverse={selected}
             icon={icon}
             onPress={() => onPress(value)}
@@ -45,7 +49,7 @@ const PetTypeStep = () => {
             entering={FadeIn}
             exiting={FadeOut}
         >
-            <Label>Select your pet type</Label>
+            <Label>Select your pet&#39;s type</Label>
             <YStack space>
                 {chunk(petIcons, 5).map((pets, i) => (
                     <XStack
@@ -68,6 +72,8 @@ const PetTypeStep = () => {
                 <Button
                     icon={Dices}
                     size="$4"
+                    color="$colorFocus"
+                    chromeless
                     onPress={() =>
                         setPetType(
                             petIcons[
@@ -82,7 +88,7 @@ const PetTypeStep = () => {
             <VerticalSpacer />
             <StepButtons
                 nextButtonVisible={!!petType}
-                nextStep={() => setStep(Step.PET_NAME)}
+                nextStep={() => setStep(Step.PET_NATURE)}
                 prevStep={() => setStep(Step.NAME)}
             />
         </Animated.View>

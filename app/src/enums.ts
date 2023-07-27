@@ -7,4 +7,5 @@ export enum Tables {
 
 export enum SupabaseEdgeFunctions {
     CREATE_TASK = 'createTask',
+    CREATE_PET = 'createPet',
 }

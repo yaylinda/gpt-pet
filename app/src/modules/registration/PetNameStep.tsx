@@ -42,7 +42,7 @@ const PetNameStep = () => {
             <StepButtons
                 nextButtonVisible={petName.length >= MIN_DISPLAY_NAME_LENGTH}
                 nextStep={onStart}
-                prevStep={() => setStep(Step.PET_TYPE)}
+                prevStep={() => setStep(Step.PET_NATURE)}
                 nextButtonText="Start!"
             />
         </Animated.View>

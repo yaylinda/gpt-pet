@@ -8,7 +8,6 @@ import type {
     AuthStackNavigationProps,
     AuthStackRouteProps,
 } from '@nav/AuthStackNavigator';
-import ScreenHeader from '@common/ScreenHeader';
 import { FullHeightScreenWrapper } from '@common/ScreenWrapper';
 import TextInputWithLabel from '@common/TextInputWithLabel';
 import VerticalSpacer from '@common/VerticalSpacer';
@@ -35,9 +34,11 @@ const AuthStackSignUpScreen = () => {
 
     return (
         <FullHeightScreenWrapper>
-            <ScreenHeader title="" />
             <KeyboardAvoidingView
-                style={{ flex: 1, justifyContent: 'space-between' }}
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                }}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
                 <YStack space="$10">
@@ -105,20 +106,21 @@ const AuthStackSignUpScreen = () => {
                         </Button>
                     </Animated.View>
                 </YStack>
-
-                <XStack
-                    justifyContent="center"
-                    alignItems="center"
-                >
-                    <Paragraph>Don&#39;t have an account yet?</Paragraph>
-                    <Button
-                        size="$4"
-                        onPress={() => navSignUp(navigation, false)}
-                    >
-                        Sign Up
-                    </Button>
-                </XStack>
             </KeyboardAvoidingView>
+
+            <XStack
+                justifyContent="center"
+                alignItems="center"
+            >
+                <Paragraph>Don&#39;t have an account yet?</Paragraph>
+                <Button
+                    size="$4"
+                    onPress={() => navSignUp(navigation, false)}
+                    chromeless
+                >
+                    Sign Up
+                </Button>
+            </XStack>
         </FullHeightScreenWrapper>
     );
 };

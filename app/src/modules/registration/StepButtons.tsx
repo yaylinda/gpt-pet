@@ -1,7 +1,8 @@
 import React from 'react';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { Button, XStack } from 'tamagui';
+import { Button, Separator, XStack } from 'tamagui';
 import type { RegistrationStepProps } from '@modules/registration/types';
+import VerticalSpacer from '@common/VerticalSpacer';
 
 interface StepButtonsProps extends RegistrationStepProps {
     nextStep: () => void;
@@ -17,32 +18,39 @@ const StepButtons = ({
     nextButtonText = 'Next',
 }: StepButtonsProps) => {
     return (
-        <XStack justifyContent="space-between">
-            {prevStep && (
-                <Button
-                    size="$4"
-                    bordered
-                    onPress={prevStep}
-                    borderColor="$color"
-                >
-                    Back
-                </Button>
-            )}
-            {nextButtonVisible && (
-                <Animated.View
-                    entering={FadeIn}
-                    exiting={FadeOut}
-                >
+        <>
+            <Separator
+                borderColor="$color"
+                borderTopWidth="$0.25"
+                borderBottomWidth="$0"
+                opacity={0.25}
+            />
+            <VerticalSpacer />
+            <XStack justifyContent="space-between">
+                {prevStep && (
                     <Button
                         size="$4"
-                        themeInverse
-                        onPress={nextStep}
+                        onPress={prevStep}
                     >
-                        {nextButtonText}
+                        Back
                     </Button>
-                </Animated.View>
-            )}
-        </XStack>
+                )}
+                {nextButtonVisible && (
+                    <Animated.View
+                        entering={FadeIn}
+                        exiting={FadeOut}
+                    >
+                        <Button
+                            size="$4"
+                            themeInverse
+                            onPress={nextStep}
+                        >
+                            {nextButtonText}
+                        </Button>
+                    </Animated.View>
+                )}
+            </XStack>
+        </>
     );
 };
 

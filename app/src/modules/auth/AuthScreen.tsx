@@ -5,9 +5,10 @@ import Animated, {
     BounceInUp,
     FadeIn,
 } from 'react-native-reanimated';
-import { Button, H6, XStack, YStack } from 'tamagui';
+import { Button, H6, XStack } from 'tamagui';
 import type { AuthStackNavigationProps } from '@nav/AuthStackNavigator';
 import { FullHeightScreenWrapper } from '@common/ScreenWrapper';
+import VerticalSpacer from '@common/VerticalSpacer';
 import useAuthStore from '@modules/auth/store';
 
 const AuthScreen = () => {
@@ -44,22 +45,20 @@ const AuthScreen = () => {
             </Animated.View>
 
             <Animated.View entering={FadeIn.delay(1500)}>
-                <YStack space="$2">
-                    <Button
-                        size="$4"
-                        onPress={() => navSignUp(navigation, true)}
-                        themeInverse
-                    >
-                        Sign Up
-                    </Button>
-                    <Button
-                        size="$4"
-                        onPress={() => navLogIn(navigation, true)}
-                        bordered
-                    >
-                        Log In
-                    </Button>
-                </YStack>
+                <Button
+                    size="$4"
+                    onPress={() => navSignUp(navigation, true)}
+                    themeInverse
+                >
+                    Sign Up
+                </Button>
+                <VerticalSpacer />
+                <Button
+                    size="$4"
+                    onPress={() => navLogIn(navigation, true)}
+                >
+                    Log In
+                </Button>
             </Animated.View>
         </FullHeightScreenWrapper>
     );

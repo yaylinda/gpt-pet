@@ -1,5 +1,5 @@
 import type {PetInsert, PetRow} from '@modules/pets/types';
-import {Tables} from '@/enums';
+import {SupabaseEdgeFunctions, Tables} from '@/enums';
 import {supabase} from '@/supabase';
 import {petAdapter} from '@modules/pets/adapters';
 
@@ -8,11 +8,12 @@ import {petAdapter} from '@modules/pets/adapters';
  * @param row
  */
 export const insertPet = async (row: PetInsert) => {
-    const { data, error } = await supabase
-        .from(Tables.PETS)
-        .insert(row)
-        .select()
-        .single();
+    const { data, error } = await supabase.functions.invoke(
+        SupabaseEdgeFunctions.CREATE_PET,
+        {
+            body: row,
+        }
+    );
 
     if (error) {
         console.error(`[insertPet] error: ${JSON.stringify(error)}`);
