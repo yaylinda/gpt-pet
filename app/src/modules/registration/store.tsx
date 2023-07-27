@@ -94,7 +94,7 @@ const useRegistrationStore = create<RegistrationStoreState>()((set, get) => ({
             });
             set({ progressUpdateUser: true });
         } catch (e) {
-            errorAlert('updateUser', JSON.stringify(e));
+            errorAlert('Oops! Something went wrong...', JSON.stringify(e));
             return false;
         }
 
@@ -108,7 +108,7 @@ const useRegistrationStore = create<RegistrationStoreState>()((set, get) => ({
             });
             set({ progressInsertPet: true });
         } catch (e) {
-            errorAlert('insertPet', JSON.stringify(e));
+            errorAlert('Oops! Something went wrong...', JSON.stringify(e));
             return false;
         }
 

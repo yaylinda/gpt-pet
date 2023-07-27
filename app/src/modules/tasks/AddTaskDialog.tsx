@@ -1,5 +1,4 @@
 import { X } from '@tamagui/lucide-icons';
-import * as Burnt from 'burnt';
 import React from 'react';
 import { Button, Dialog, Separator, Spinner, Unspaced, XStack } from 'tamagui';
 import TextInputWithLabel from '@common/TextInputWithLabel';
@@ -30,11 +29,6 @@ const AddTaskDialog = () => {
         const success = await createTask(type!, title, difficulty);
         if (success) {
             onClose();
-            Burnt.toast({
-                title: 'Added new Task!',
-                preset: 'done',
-                duration: 2,
-            });
         }
     };
 

@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
+import * as Burnt from 'burnt';
 import { Button } from 'tamagui';
 import useTodayStore from '@modules/today/store';
 
@@ -17,6 +18,23 @@ const WeekNavigationButton = ({ prev }: WeekNavigationButtonProps) => {
         if (!dateCarouselRef.current) {
             return;
         }
+
+        if (prev && dateCarouselRef.current.getCurrentIndex() === 0) {
+            Burnt.toast({
+                title: 'No more scroll',
+                preset: 'custom',
+                icon: {
+                    ios: {
+                        name: '',
+                        color: '',
+                    },
+                },
+                haptic: 'warning',
+                duration: 1,
+            });
+        }
+
+        // TODO - toast on end of list scroll?
 
         prev
             ? dateCarouselRef.current.prev({ animated: true })

@@ -10,7 +10,7 @@ import {
     Rat,
     Skull,
 } from '@tamagui/lucide-icons';
-import Animated, { BounceIn } from 'react-native-reanimated';
+import Animated, { ZoomIn } from 'react-native-reanimated';
 import { H6, Separator, SizableText, XStack, YGroup } from 'tamagui';
 import type { Pet } from '@modules/pets/types';
 
@@ -49,7 +49,7 @@ const PetCard = ({ pet }: PetCardProps) => {
     return (
         <Animated.View
             style={{ flex: 1 }}
-            entering={BounceIn}
+            entering={ZoomIn.delay(250)}
         >
             <YGroup
                 flex={1}

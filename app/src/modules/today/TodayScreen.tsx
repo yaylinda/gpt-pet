@@ -1,43 +1,16 @@
-import { CalendarHeart } from '@tamagui/lucide-icons';
-import moment from 'moment';
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
-import { Button, XStack, YStack } from 'tamagui';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { YStack } from 'tamagui';
 import useStore from '@/store';
 import ScreenHeader from '@common/ScreenHeader';
 import { TabbedScreenWrapper } from '@common/ScreenWrapper';
 import VerticalSpacer from '@common/VerticalSpacer';
 import PetCard from '@modules/pets/PetCard';
 import TaskSection from '@modules/tasks/TaskSection';
+import TodayButton from '@modules/today/TodayButton';
 import WeekNavigationCarousel from '@modules/today/WeekNavigationCarousel';
 import useTodayStore from '@modules/today/store';
-
-const TodayButton = () => {
-    const { currentDate, goToToday } = useTodayStore();
-
-    return (
-        <YStack
-            height={44} /* TODO - don't hard code */
-            width={50} /* TODO - don't hard code */
-            justifyContent="center"
-            alignItems="center"
-        >
-            {currentDate.isSame(moment(), 'day') ? null : (
-                <Button
-                    size="$3"
-                    circular
-                    padding={0}
-                    space={0}
-                    gap={0}
-                    chromeless
-                    icon={CalendarHeart}
-                    scaleIcon={1.5}
-                    onPress={goToToday}
-                />
-            )}
-        </YStack>
-    );
-};
 
 const TodayScreen = () => {
     const { height } = useWindowDimensions();
@@ -55,13 +28,20 @@ const TodayScreen = () => {
             {currentPet && <PetCard pet={currentPet} />}
             <VerticalSpacer />
             {/* TODO - don't hard code */}
-            <XStack height={height * 0.55}>
+            <Animated.View
+                entering={FadeIn.delay(500)}
+                style={{
+                    height: height * 0.55,
+                    display: 'flex',
+                    flexDirection: 'row',
+                }}
+            >
                 <YStack>
                     <TodayButton />
                     <WeekNavigationCarousel />
                 </YStack>
                 <TaskSection />
-            </XStack>
+            </Animated.View>
             <VerticalSpacer />
         </TabbedScreenWrapper>
     );

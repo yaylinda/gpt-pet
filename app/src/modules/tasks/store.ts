@@ -1,3 +1,4 @@
+import * as Burnt from 'burnt';
 import { create } from 'zustand';
 import type {
     Task,
@@ -6,6 +7,7 @@ import type {
     TaskType,
 } from '@modules/tasks/types';
 import type moment from 'moment';
+import { errorAlert } from '@/alerts';
 import useStore from '@/store';
 import { getDateKey, reduce } from '@/utils';
 import { taskAdapter } from '@modules/tasks/adapters';
@@ -95,10 +97,17 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
                 difficulty,
                 user_id: userId,
                 date_key: getDateKey(useTodayStore.getState().currentDate),
-                nature: 'TODO',
+                emoji: 'TODO',
+            });
+            Burnt.toast({
+                title: 'Added new Task!',
+                preset: 'done',
+                haptic: 'success',
+                duration: 2,
             });
             return true;
         } catch (e) {
+            errorAlert('Oops! Something went wrong...', JSON.stringify(e));
             return false;
         } finally {
             set({ creating: false });

@@ -1,5 +1,5 @@
+import moment from 'moment/moment';
 import { Button, SizableText } from 'tamagui';
-import type moment from 'moment/moment';
 import useStore from '@/store';
 import useTodayStore from '@modules/today/store';
 
@@ -13,6 +13,10 @@ const WeekDayOption = ({ date }: WeekDayOptionProps) => {
     const dow = date.format('ddd');
     const dom = date.format('DD');
 
+    const isBeforeToday = date.isBefore(moment(), 'day');
+
+    const isToday = date.isSame(moment(), 'day');
+
     const { currentDate, setCurrentDate } = useTodayStore();
 
     const isCurrentDate = date.isSame(currentDate, 'day');
@@ -23,7 +27,7 @@ const WeekDayOption = ({ date }: WeekDayOptionProps) => {
             : true
     );
 
-    const textOpacity = isBeforeUser ? 0 : 1;
+    const textOpacity = isBeforeUser ? 0 : isBeforeToday ? 0.7 : 1;
 
     return (
         <Button
@@ -41,14 +45,16 @@ const WeekDayOption = ({ date }: WeekDayOptionProps) => {
             disabled={isBeforeUser}
         >
             <SizableText
-                size="$1"
+                size={isToday ? '$1.5' : '$1'}
                 opacity={textOpacity}
+                color={isToday ? '$colorFocus' : '$color'}
             >
                 {dow}
             </SizableText>
             <SizableText
-                size="$1"
+                size={isToday ? '$1.5' : '$1'}
                 opacity={textOpacity}
+                color={isToday ? '$colorFocus' : '$color'}
             >
                 {dom}
             </SizableText>
