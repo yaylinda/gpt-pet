@@ -12,12 +12,17 @@ const AddTaskButton = ({ type }: AddTaskButtonProps) => {
     const { openTaskDialog } = useTasksStore();
     return (
         <Button
+            elevate
+            circular
+            themeInverse
             size="$4"
+            position="absolute"
+            bottom={0}
+            right={0}
             icon={Plus}
+            scaleIcon={2}
             onPress={() => openTaskDialog(type)}
-        >
-            Add A Task
-        </Button>
+        />
     );
 };
 
