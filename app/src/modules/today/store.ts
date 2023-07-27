@@ -108,8 +108,12 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
             .clone()
             .isSameOrBefore(get().endDate, 'day');
 
+        const newCurrentDate = get().currentDate.clone().add(increment, 'week');
+
         set((state) => ({
-            currentDate: state.currentDate.clone().add(increment, 'week'),
+            currentDate: newCurrentDate.isBefore(moment(), 'day')
+                ? moment().startOf('day')
+                : newCurrentDate,
             headerWeeks:
                 isLastWeek && shouldAddNextWeek
                     ? [...state.headerWeeks, nextWeekStart.valueOf()]
