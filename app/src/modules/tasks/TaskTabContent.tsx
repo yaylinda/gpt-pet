@@ -2,10 +2,10 @@ import moment from 'moment';
 import React from 'react';
 import { FlatList } from 'react-native';
 import { Tabs } from 'tamagui';
-import type { TaskType } from '@modules/tasks/types';
 import AddTaskButton from '@modules/tasks/AddTaskButton';
 import EmptyTaskContent from '@modules/tasks/EmptyTaskContent';
 import TaskItem from '@modules/tasks/TaskItem';
+import { TaskType } from '@modules/tasks/types';
 import useTodayStore from '@modules/today/store';
 
 interface TaskTabContentProps {
@@ -20,6 +20,11 @@ const TaskTabContent = ({
     completedTaskIds,
 }: TaskTabContentProps) => {
     const { currentDate } = useTodayStore();
+
+    const showAdd =
+        currentDate.isSame(moment(), 'day') ||
+        (type === TaskType.SPECIAL &&
+            currentDate.isSameOrAfter(moment(), 'day'));
 
     const renderItem = ({ item }: { item: string; index: number }) => (
         <TaskItem
@@ -48,9 +53,7 @@ const TaskTabContent = ({
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={<EmptyTaskContent type={type} />}
             />
-            {currentDate.isSameOrAfter(moment(), 'day') && (
-                <AddTaskButton type={type} />
-            )}
+            {showAdd && <AddTaskButton type={type} />}
         </Tabs.Content>
     );
 };

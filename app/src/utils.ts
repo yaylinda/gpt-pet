@@ -78,3 +78,21 @@ export const formatDateHeader = (date: moment.Moment) => {
  * @param date
  */
 export const getDateKey = (date: moment.Moment) => date.format('YYYY-MM-DD');
+
+/**
+ *
+ * @param start
+ * @param end
+ */
+export const getDatesBetween = (
+    start: moment.Moment,
+    end: moment.Moment
+): moment.Moment[] => {
+    const dates: moment.Moment[] = [];
+    const startClone = start.clone();
+    while (startClone.isBefore(end)) {
+        dates.push(startClone.clone());
+        startClone.add(1, 'day');
+    }
+    return dates;
+};

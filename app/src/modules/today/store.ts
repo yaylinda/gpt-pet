@@ -1,7 +1,6 @@
 import { produce } from 'immer';
 import moment from 'moment';
 import { create } from 'zustand';
-import type { Pet } from '@modules/pets/types';
 import useStore from '@/store';
 import { getDateKey } from '@/utils';
 import { fetchCompletedTasksForUserOnDate } from '@modules/completedTasks/api';
@@ -9,13 +8,16 @@ import useTasksStore from '@modules/tasks/store';
 
 interface TodayStoreStateData {
     currentDate: moment.Moment;
-    pet: Pet | null;
+    headerWeeks: number[];
     data: Record<string, { specialTasks: string[]; completedTasks: string[] }>;
 }
 
 interface TodayStoreStateFunctions {
     prevDay: () => void;
     nextDay: () => void;
+    prevWeek: () => void;
+    nextWeek: () => void;
+    setCurrentDate: (date: moment.Moment) => void;
     fetchDataForDay: () => void;
     insertSpecialTask: (dateKey: string, taskId: string) => void;
     insertCompletedTask: (dateKey: string, taskId: string) => void;
@@ -26,7 +28,10 @@ type TodayStoreState = TodayStoreStateData & TodayStoreStateFunctions;
 
 const DEFAULT_DATA: TodayStoreStateData = {
     currentDate: moment().startOf('day'),
-    pet: null,
+    headerWeeks: [
+        moment().startOf('week').startOf('day').valueOf(),
+        moment().startOf('week').startOf('day').add(1, 'week').valueOf(),
+    ],
     data: {},
 };
 
@@ -47,6 +52,31 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
         set((state) => ({
             currentDate: state.currentDate.clone().add(1, 'day').startOf('day'),
         }));
+        get().fetchDataForDay();
+    },
+
+    prevWeek: () => {
+        set((state) => ({
+            currentDate: state.currentDate
+                .clone()
+                .subtract(1, 'week')
+                .startOf('day'),
+        }));
+        get().fetchDataForDay();
+    },
+
+    nextWeek: () => {
+        set((state) => ({
+            currentDate: state.currentDate
+                .clone()
+                .add(1, 'week')
+                .startOf('day'),
+        }));
+        get().fetchDataForDay();
+    },
+
+    setCurrentDate: (date: moment.Moment) => {
+        set({ currentDate: date.clone() });
         get().fetchDataForDay();
     },
 

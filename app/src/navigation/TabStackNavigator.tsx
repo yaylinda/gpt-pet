@@ -25,11 +25,22 @@ function TabStackNavigator() {
                 tabBarLabel: () => null,
                 tabBarIcon: ({ focused }) => {
                     const color = focused ? '$colorFocus' : '$color';
+                    const opacity = focused ? 1 : 0.5;
                     switch (route.name) {
                         case 'Today':
-                            return <CalendarHeart color={color} />;
+                            return (
+                                <CalendarHeart
+                                    color={color}
+                                    opacity={opacity}
+                                />
+                            );
                         case 'Profile':
-                            return <UserCog2 color={color} />;
+                            return (
+                                <UserCog2
+                                    color={color}
+                                    opacity={opacity}
+                                />
+                            );
                     }
                 },
                 tabBarStyle: {

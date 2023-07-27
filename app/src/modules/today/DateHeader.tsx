@@ -1,11 +1,14 @@
-import { ChevronLeft, ChevronRight } from '@tamagui/lucide-icons';
-import { Button, H6, XStack } from 'tamagui';
+import { useWindowDimensions } from 'react-native';
+import Carousel from 'react-native-reanimated-carousel';
+import { XStack } from 'tamagui';
 import useStore from '@/store';
-import { formatDateHeader } from '@/utils';
+import { getDateKey } from '@/utils';
+import WeekDaySelector from '@modules/today/WeekDaySelector';
 import useTodayStore from '@modules/today/store';
 
 const DateHeader = () => {
-    const { currentDate, prevDay, nextDay } = useTodayStore();
+    const { width } = useWindowDimensions();
+    const { headerWeeks, currentDate } = useTodayStore();
 
     const showPrev = useStore(({ currentUser }) => {
         if (!currentUser) {
@@ -14,31 +17,26 @@ const DateHeader = () => {
         return currentDate.isSameOrAfter(currentUser.createdAt);
     });
 
+    console.log(`[DateHeader] currentDate=${getDateKey(currentDate)}`);
+
     return (
-        <XStack
-            width="100%"
-            justifyContent="space-between"
-            alignItems="center"
-        >
-            <Button
-                circular
-                icon={showPrev ? ChevronLeft : undefined}
-                scaleIcon={2}
-                size="$4"
-                chromeless
-                onPress={prevDay}
-                disabled={!showPrev}
-                color="$colorFocus"
-            />
-            <H6 color="$colorFocus">{formatDateHeader(currentDate)}</H6>
-            <Button
-                circular
-                icon={ChevronRight}
-                scaleIcon={2}
-                size="$4"
-                chromeless
-                onPress={nextDay}
-                color="$colorFocus"
+        <XStack>
+            <Carousel
+                width={width - 18 * 2}
+                height={44}
+                style={{ display: 'flex', position: 'relative' }}
+                vertical={false}
+                loop={false}
+                autoPlay={false}
+                data={headerWeeks}
+                pagingEnabled={true}
+                onSnapToItem={(index) => console.log('current index:', index)}
+                renderItem={({ item }) => (
+                    <WeekDaySelector
+                        key={item}
+                        weekStartValue={item}
+                    />
+                )}
             />
         </XStack>
     );
