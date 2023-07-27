@@ -4,7 +4,7 @@ import WeekDaySelector from '@modules/today/WeekDaySelector';
 import useTodayStore from '@modules/today/store';
 
 const DateHeader = () => {
-    const { width } = useWindowDimensions();
+    const { height } = useWindowDimensions();
     const { headerWeeks, currentDate, onScrolledToWeek } = useTodayStore();
 
     // console.log(
@@ -17,10 +17,13 @@ const DateHeader = () => {
 
     return (
         <Carousel
-            width={width - 18 * 2} // TODO - don't hardcode
-            height={52} // TODO - don't hardcode
-            style={{ display: 'flex', justifyContent: 'center' }}
-            vertical={false}
+            width={50} // TODO - don't hardcode
+            height={height * 0.6 - 44} // TODO - don't hardcode
+            style={{
+                position: 'relative',
+                bottom: 0,
+            }}
+            vertical={true}
             loop={false}
             autoPlay={false}
             data={headerWeeks}

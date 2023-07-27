@@ -1,37 +1,42 @@
 import moment from 'moment';
-import { SizableText, ToggleGroup } from 'tamagui';
+import { useWindowDimensions } from 'react-native';
+import { Button, SizableText, YStack } from 'tamagui';
 import { getDatesBetween } from '@/utils';
 import useTodayStore from '@modules/today/store';
 
 interface DayOptionProps {
     date: moment.Moment;
+    isFirst: boolean;
+    isLast: boolean;
 }
 
-const DayOption = ({ date }: DayOptionProps) => {
-    const dow = date.format('dd')[0];
+const DayOption = ({ date, isFirst, isLast }: DayOptionProps) => {
+    const dow = date.format('ddd');
     const dom = date.format('DD');
 
-    const { setCurrentDate } = useTodayStore();
+    const { currentDate, setCurrentDate } = useTodayStore();
+
+    const isToday = date.isSame(currentDate, 'day');
 
     return (
-        <ToggleGroup.Item
-            value={`${date.valueOf()}`}
-            padding="$2"
-            paddingTop="$2"
-            paddingBottom="$2"
-            paddingLeft="$2"
-            paddingRight="$2"
-            marginTop={0}
-            marginBottom={0}
-            marginLeft={0}
-            marginRight={0}
-            display={'flex'}
+        <Button
+            size="$4"
+            flexDirection="column"
             flex={1}
+            space={0}
+            padding={0}
+            gap={0}
+            borderRadius={0}
+            borderTopLeftRadius={isFirst ? '$4' : 0}
+            borderBottomLeftRadius={isLast ? '$4' : 0}
+            borderWidth="$0.25"
+            borderColor="$background"
+            backgroundColor={isToday ? '$color5' : '$color2'}
             onPress={() => setCurrentDate(date)}
         >
             <SizableText size="$2">{dow}</SizableText>
             <SizableText size="$2">{dom}</SizableText>
-        </ToggleGroup.Item>
+        </Button>
     );
 };
 
@@ -44,30 +49,51 @@ const WeekDaySelector = ({
     weekStartValue,
     currentDateValue,
 }: WeekDaySelectorProps) => {
+    const { height } = useWindowDimensions();
+
     const days = getDatesBetween(
         moment(weekStartValue),
         moment(weekStartValue).endOf('week')
     );
 
+    // return (
+    //     <ToggleGroup
+    //         orientation="vertical"
+    //         type="single"
+    //         value={`${currentDateValue}`}
+    //         size="$4"
+    //         height={height * 0.6 - 44} // TODO - do not hard code
+    //         borderTopLeftRadius={0}
+    //         style={{
+    //             display: 'flex',
+    //             flexDirection: 'column',
+    //             justifyContent: 'center',
+    //         }}
+    //     >
+    //         {days.map((d) => (
+    //             <DayOption
+    //                 key={`${d.valueOf()}_${currentDateValue}`}
+    //                 date={d}
+    //             />
+    //         ))}
+    //     </ToggleGroup>
+    // );
+
     return (
-        <ToggleGroup
-            type="single"
-            value={`${currentDateValue}`}
-            size="$4"
-            height={52} // TODO - do not hard code
-            style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-            }}
+        <YStack
+            height={height * 0.6 - 44}
+            display="flex"
+            flex={1}
         >
-            {days.map((d) => (
+            {days.map((d, index) => (
                 <DayOption
                     key={`${d.valueOf()}_${currentDateValue}`}
                     date={d}
+                    isFirst={index === 0}
+                    isLast={index === days.length - 1}
                 />
             ))}
-        </ToggleGroup>
+        </YStack>
     );
 };
 

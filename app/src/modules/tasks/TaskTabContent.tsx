@@ -45,6 +45,8 @@ const TaskTabContent = ({
             borderRadius="$2"
             borderTopLeftRadius={0}
             borderTopRightRadius={0}
+            borderBottomLeftRadius={0}
+            borderBottomRightRadius="$4"
             borderWidth="$2"
         >
             <FlatList

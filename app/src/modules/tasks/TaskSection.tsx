@@ -35,7 +35,7 @@ const TaskSection = () => {
     return (
         <>
             <Tabs
-                flex={2.5}
+                flex={1}
                 defaultValue={TaskType.DAILY}
                 orientation="horizontal"
                 flexDirection="column"
@@ -43,6 +43,8 @@ const TaskSection = () => {
                 borderWidth="$0.25"
                 overflow="hidden"
                 borderColor="$borderColor"
+                borderBottomLeftRadius={0}
+                borderBottomRightRadius="$4"
             >
                 <Tabs.List
                     separator={<Separator vertical />}
