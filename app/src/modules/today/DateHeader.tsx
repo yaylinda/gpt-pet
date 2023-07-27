@@ -1,6 +1,6 @@
+import moment from 'moment';
 import { useWindowDimensions } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { XStack } from 'tamagui';
 import useStore from '@/store';
 import { getDateKey } from '@/utils';
 import WeekDaySelector from '@modules/today/WeekDaySelector';
@@ -8,7 +8,7 @@ import useTodayStore from '@modules/today/store';
 
 const DateHeader = () => {
     const { width } = useWindowDimensions();
-    const { headerWeeks, currentDate } = useTodayStore();
+    const { headerWeeks, currentDate, onScrolledToWeek } = useTodayStore();
 
     const showPrev = useStore(({ currentUser }) => {
         if (!currentUser) {
@@ -17,28 +17,32 @@ const DateHeader = () => {
         return currentDate.isSameOrAfter(currentUser.createdAt);
     });
 
-    console.log(`[DateHeader] currentDate=${getDateKey(currentDate)}`);
+    console.log(
+        `[DateHeader] currentDate=${getDateKey(
+            currentDate
+        )}, headerWeeks=${JSON.stringify(
+            headerWeeks.map((d) => getDateKey(moment(d)))
+        )}`
+    );
 
     return (
-        <XStack>
-            <Carousel
-                width={width - 18 * 2}
-                height={44}
-                style={{ display: 'flex', position: 'relative' }}
-                vertical={false}
-                loop={false}
-                autoPlay={false}
-                data={headerWeeks}
-                pagingEnabled={true}
-                onSnapToItem={(index) => console.log('current index:', index)}
-                renderItem={({ item }) => (
-                    <WeekDaySelector
-                        key={item}
-                        weekStartValue={item}
-                    />
-                )}
-            />
-        </XStack>
+        <Carousel
+            width={width - 18 * 2} // TODO - don't hardcode
+            height={44} // TODO - don't hardcode
+            style={{ display: 'flex', position: 'relative' }}
+            vertical={false}
+            loop={false}
+            autoPlay={false}
+            data={headerWeeks}
+            pagingEnabled={true}
+            onSnapToItem={onScrolledToWeek}
+            renderItem={({ item }) => (
+                <WeekDaySelector
+                    key={item}
+                    weekStartValue={item}
+                />
+            )}
+        />
     );
 };
 

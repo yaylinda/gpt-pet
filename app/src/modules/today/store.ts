@@ -8,6 +8,7 @@ import useTasksStore from '@modules/tasks/store';
 
 interface TodayStoreStateData {
     currentDate: moment.Moment;
+    endDate: moment.Moment;
     headerWeeks: number[];
     data: Record<string, { specialTasks: string[]; completedTasks: string[] }>;
 }
@@ -18,6 +19,7 @@ interface TodayStoreStateFunctions {
     prevWeek: () => void;
     nextWeek: () => void;
     setCurrentDate: (date: moment.Moment) => void;
+    onScrolledToWeek: (index: number) => void;
     fetchDataForDay: () => void;
     insertSpecialTask: (dateKey: string, taskId: string) => void;
     insertCompletedTask: (dateKey: string, taskId: string) => void;
@@ -28,6 +30,7 @@ type TodayStoreState = TodayStoreStateData & TodayStoreStateFunctions;
 
 const DEFAULT_DATA: TodayStoreStateData = {
     currentDate: moment().startOf('day'),
+    endDate: moment().startOf('day').add(1, 'month'),
     headerWeeks: [
         moment().startOf('week').startOf('day').valueOf(),
         moment().startOf('week').startOf('day').add(1, 'week').valueOf(),
@@ -78,6 +81,40 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
     setCurrentDate: (date: moment.Moment) => {
         set({ currentDate: date.clone() });
         get().fetchDataForDay();
+    },
+
+    onScrolledToWeek: (index: number) => {
+        const isLastWeek = index === get().headerWeeks.length - 1;
+        const weekStart = get().headerWeeks[index];
+
+        console.log(
+            `[todayStore][onScrolledToWeek] index=${index}, isLastWeek=${isLastWeek}, weekStart=${getDateKey(
+                moment(weekStart)
+            )}`
+        );
+
+        if (moment(weekStart).isSame(get().currentDate, 'week')) {
+            console.log('[todayStore][onScrolledToWeek] same week, no update');
+            return;
+        }
+
+        const increment = moment(weekStart).isAfter(get().currentDate, 'week')
+            ? 1
+            : -1;
+
+        const nextWeekStart = moment(weekStart).add(1, 'week');
+
+        const shouldAddNextWeek = nextWeekStart
+            .clone()
+            .isSameOrBefore(get().endDate, 'day');
+
+        set((state) => ({
+            currentDate: state.currentDate.clone().add(increment, 'week'),
+            headerWeeks:
+                isLastWeek && shouldAddNextWeek
+                    ? [...state.headerWeeks, nextWeekStart.valueOf()]
+                    : state.headerWeeks,
+        }));
     },
 
     fetchDataForDay: async () => {
