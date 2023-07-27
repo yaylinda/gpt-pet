@@ -9,7 +9,7 @@ import { TabbedScreenWrapper } from '@common/ScreenWrapper';
 import VerticalSpacer from '@common/VerticalSpacer';
 import PetCard from '@modules/pets/PetCard';
 import TaskSection from '@modules/tasks/TaskSection';
-import DateHeader from '@modules/today/DateHeader';
+import WeekNavigationCarousel from '@modules/today/WeekNavigationCarousel';
 import useTodayStore from '@modules/today/store';
 
 const TodayButton = () => {
@@ -58,7 +58,7 @@ const TodayScreen = () => {
             <XStack height={height * 0.55}>
                 <YStack>
                     <TodayButton />
-                    <DateHeader />
+                    <WeekNavigationCarousel />
                 </YStack>
                 <TaskSection />
             </XStack>
