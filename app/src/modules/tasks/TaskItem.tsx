@@ -18,7 +18,7 @@ const TaskItem = ({ taskId }: TaskItemProps) => {
             size="$3"
             pressTheme
             title={task.title}
-            subTitle={task.difficulty}
+            subTitle={`${task.difficulty} (${task.emoji})`}
         />
     );
 };

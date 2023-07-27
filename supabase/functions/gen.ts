@@ -47,6 +47,7 @@ export interface Database {
         Row: {
           created_at: string
           display_name: string
+          friendliness: number
           id: string
           natures: string[]
           type: string
@@ -55,6 +56,7 @@ export interface Database {
         Insert: {
           created_at?: string
           display_name: string
+          friendliness: number
           id?: string
           natures: string[]
           type: string
@@ -63,6 +65,7 @@ export interface Database {
         Update: {
           created_at?: string
           display_name?: string
+          friendliness?: number
           id?: string
           natures?: string[]
           type?: string
@@ -82,8 +85,8 @@ export interface Database {
           created_at: string
           date_key: string
           difficulty: string
+          emoji: string
           id: string
-          nature: string
           title: string
           type: string
           user_id: string
@@ -92,8 +95,8 @@ export interface Database {
           created_at?: string
           date_key: string
           difficulty: string
+          emoji: string
           id?: string
-          nature: string
           title: string
           type: string
           user_id: string
@@ -102,8 +105,8 @@ export interface Database {
           created_at?: string
           date_key?: string
           difficulty?: string
+          emoji?: string
           id?: string
-          nature?: string
           title?: string
           type?: string
           user_id?: string

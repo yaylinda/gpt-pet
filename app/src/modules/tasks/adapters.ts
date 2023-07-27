@@ -15,5 +15,5 @@ export const taskAdapter = (row: TaskRow): Task => ({
     createdAt: moment(row.created_at),
     userId: row.user_id,
     dateKey: getDateKey(moment(row.created_at)),
-    nature: row.nature,
+    emoji: row.emoji,
 });

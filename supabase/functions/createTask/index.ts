@@ -1,10 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import {serverErrorResponse, successResponse} from '../api.ts';
-import {getSupabaseClient, insertTask, TaskInsert} from '../db.ts';
+import {getSupabaseClient, insert, TaskInsert} from '../db.ts';
 import {getChatCompletion, getOpenAIClient} from '../openai.ts';
 
 const getPromptMessage = (task: string): string => (
-    `Given this list of adjectives: [Adamant, Bashful, Bold, Brave, Calm, Careful, Docile, Gentle, Hardy, Hasty, Impish, Jolly, Lax, Lonely, Mild, Modest, Naive, Naughty, Quiet, Quirky, Rash, Relaxed, Sassy, Serious, Timid]. I\'m going to give you the description of a task. Please respond with the adjective from the above list that is best associated with the task, without quotes or any other words. The task is "${task}".`
+    `Please respond with the most relevant emoji for this task: ${task}`
 );
 
 serve(async (req: Request) => {
@@ -28,7 +28,11 @@ serve(async (req: Request) => {
 
     const supabaseClient = getSupabaseClient(req);
 
-    const {data: taskRow, error: dbError} = await insertTask(supabaseClient, {...request, nature: response.content!});
+    const {data: taskRow, error: dbError} = await insert(
+        supabaseClient,
+        'tasks',
+        {...request, emoji: response.content!}
+    );
 
     if (dbError || !taskRow) {
         return serverErrorResponse(dbError, 'call insertTask');

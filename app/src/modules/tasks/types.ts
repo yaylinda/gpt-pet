@@ -12,7 +12,7 @@ export interface Task {
     createdAt: moment.Moment;
     userId: string;
     dateKey: string;
-    nature: string;
+    emoji: string;
 }
 
 export enum TaskType {

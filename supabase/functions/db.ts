@@ -5,6 +5,14 @@ import {Database} from './gen.ts';
 export type TaskRow = Database['public']['Tables']['tasks']['Row'];
 export type TaskInsert = Database['public']['Tables']['tasks']['Insert'];
 
+export type PetRow = Database['public']['Tables']['pets']['Row'];
+export type PetInsert = Database['public']['Tables']['pets']['Insert'];
+
+export type CompletedTaskRow = Database['public']['Tables']['completed_tasks']['Row'];
+export type CompletedTaskInsert = Database['public']['Tables']['completed_tasks']['Insert'];
+
+export type InsertType = TaskInsert | PetInsert | CompletedTaskInsert;
+
 /**
  *
  * @param req
@@ -25,15 +33,16 @@ export const getSupabaseClient = (req: Request) =>
 /**
  *
  * @param client
+ * @param table
  * @param input
  */
-export const insertTask = async (
+export const insert = async (
     client: SupabaseClient,
-    input: TaskInsert
-): Promise<APIResponse<TaskRow, PostgrestError>> => {
-
+    table: string,
+    input: InsertType
+): Promise<APIResponse<InsertType, PostgrestError>> => {
     const { data, error } = await client
-        .from('tasks')
+        .from(table)
         .insert(input)
         .select()
         .single();
@@ -45,6 +54,6 @@ export const insertTask = async (
     }
 
     return {
-        data: data as TaskRow, error: null,
+        data: data as InsertType, error: null,
     };
 };
