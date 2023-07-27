@@ -88,7 +88,7 @@ const useRegistrationStore = create<RegistrationStoreState>()((set, get) => ({
         get().randomizePetNatures();
 
         try {
-            const user = await updateUser(userId, {
+            await updateUser(userId, {
                 display_name: get().displayName,
                 has_registered: true,
             });
@@ -99,11 +99,12 @@ const useRegistrationStore = create<RegistrationStoreState>()((set, get) => ({
         }
 
         try {
-            const pet = await insertPet({
+            await insertPet({
                 user_id: userId,
                 display_name: get().petName,
                 natures: get().petNatures,
                 type: get().petType,
+                friendliness: 0,
             });
             set({ progressInsertPet: true });
         } catch (e) {

@@ -35,7 +35,7 @@ const TaskSection = () => {
     return (
         <>
             <Tabs
-                flex={3}
+                flex={2.5}
                 defaultValue={TaskType.DAILY}
                 orientation="horizontal"
                 flexDirection="column"

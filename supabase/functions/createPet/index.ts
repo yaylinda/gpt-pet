@@ -4,8 +4,8 @@ import {getSupabaseClient, insert, PetInsert} from '../db.ts';
 import {getChatCompletion, getOpenAIClient} from '../openai.ts';
 
 const getPromptMessage = (natures: string[]): string => (
-    `You are a virtual pet with the following natures: ${natures}. On a scale of 1-10, how would you rate the friendliness? 10 is most friendly. `
-    + 'Only reply with the number, without quotes.'
+    'Given the following adjectives, rate each one on a scale of 1-10, where 10 is the most desirable trait for a virtual pet, and 1 is the least.'
+        + `Only respond with comma-separated numbers. ${natures}`
 );
 
 serve(async (req: Request) => {
@@ -27,12 +27,15 @@ serve(async (req: Request) => {
 
   console.log(`response=${JSON.stringify(response)}`);
 
+  const values = response.content!.split(',').map(x => parseInt(x));
+  const score = Math.floor(values.reduce((prev, curr) => prev + curr, 0) / values.length);
+
   const supabaseClient = getSupabaseClient(req);
 
   const {data: taskRow, error: dbError} = await insert(
       supabaseClient,
       'pets',
-      {...request, friendliness: parseInt(response.content!)}
+      {...request, friendliness: score}
   );
 
   if (dbError || !taskRow) {

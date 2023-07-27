@@ -10,6 +10,7 @@ import {
     Rat,
     Skull,
 } from '@tamagui/lucide-icons';
+import Animated, { BounceIn } from 'react-native-reanimated';
 import { H6, Separator, SizableText, XStack, YGroup } from 'tamagui';
 import type { Pet } from '@modules/pets/types';
 
@@ -46,24 +47,29 @@ const PetCard = ({ pet }: PetCardProps) => {
     const petIcon = getIconForPet(pet.type);
 
     return (
-        <YGroup
-            flex={1}
-            elevate
-            padded
+        <Animated.View
+            style={{ flex: 1 }}
+            entering={BounceIn}
         >
-            <YGroup.Item>
-                <XStack
-                    width="100%"
-                    justifyContent="space-between"
-                    alignItems="center"
-                >
-                    <H6 color="$colorFocus">{pet.displayName}</H6>
-                    <SizableText color="$color7">LVL {1}</SizableText>
-                </XStack>
-                <Separator marginVertical="$2" />
-                {petIcon}
-            </YGroup.Item>
-        </YGroup>
+            <YGroup
+                flex={1}
+                elevate
+                padded
+            >
+                <YGroup.Item>
+                    <XStack
+                        width="100%"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+                        <H6 color="$colorFocus">{pet.displayName}</H6>
+                        <SizableText color="$color7">LVL {1}</SizableText>
+                    </XStack>
+                    <Separator marginVertical="$2" />
+                    {petIcon}
+                </YGroup.Item>
+            </YGroup>
+        </Animated.View>
     );
 };
 
