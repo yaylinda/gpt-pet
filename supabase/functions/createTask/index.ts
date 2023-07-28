@@ -26,12 +26,14 @@ serve(async (req: Request) => {
 
     console.log(`response=${JSON.stringify(response)}`);
 
+    const emoji = response.content.length !== 1 ? '🚫' : response.content;
+
     const supabaseClient = getSupabaseClient(req);
 
     const {data: taskRow, error: dbError} = await insert(
         supabaseClient,
         'tasks',
-        {...request, emoji: response.content!}
+        {...request, emoji}
     );
 
     if (dbError || !taskRow) {

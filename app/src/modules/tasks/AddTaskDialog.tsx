@@ -1,12 +1,13 @@
 import { X } from '@tamagui/lucide-icons';
 import React from 'react';
 import { Button, Dialog, Separator, Spinner, Unspaced, XStack } from 'tamagui';
-import type { TaskType } from '@modules/tasks/types';
+import { formatDateHeader } from '@/utils';
 import TextInputWithLabel from '@common/TextInputWithLabel';
 import TaskDifficultySelection from '@modules/tasks/TaskDifficultySelection';
 import TaskTypeSelection from '@modules/tasks/TaskTypeSelection';
 import useTasksStore from '@modules/tasks/store';
-import { TaskDifficulty } from '@modules/tasks/types';
+import { TaskDifficulty, TaskType } from '@modules/tasks/types';
+import useTodayStore from '@modules/today/store';
 
 const AddTaskDialog = () => {
     const {
@@ -16,6 +17,8 @@ const AddTaskDialog = () => {
         createTask,
         closeTaskDialog,
     } = useTasksStore();
+
+    const { currentDate } = useTodayStore();
 
     const [type, setType] = React.useState<TaskType>(activeTaskTab);
     const [title, setTitle] = React.useState<string>('');
@@ -78,6 +81,14 @@ const AddTaskDialog = () => {
 
                     <Separator />
 
+                    <Dialog.Description>
+                        {type === TaskType.DAILY
+                            ? 'A new task for everyday!'
+                            : `A new special task for ${formatDateHeader(
+                                  currentDate
+                              )}`}
+                    </Dialog.Description>
+
                     <TextInputWithLabel
                         id="task_title"
                         value={title}
@@ -115,7 +126,7 @@ const AddTaskDialog = () => {
                         <Button
                             size="$4"
                             onPress={onSave}
-                            disabled={creating}
+                            disabled={!title || creating}
                             icon={creating ? () => <Spinner /> : undefined}
                         >
                             Save

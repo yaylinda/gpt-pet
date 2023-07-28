@@ -99,11 +99,14 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
                 emoji: 'TODO',
             });
             Burnt.toast({
-                title: 'Added new Task!',
+                title: `Added a new ${type} task!`,
                 preset: 'done',
                 haptic: 'success',
                 duration: 2,
             });
+            if (type !== get().activeTaskTab) {
+                set({ activeTaskTab: type });
+            }
             return true;
         } catch (e) {
             errorAlert('Oops! Something went wrong...', JSON.stringify(e));
