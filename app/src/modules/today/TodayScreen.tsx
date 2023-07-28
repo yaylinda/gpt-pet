@@ -1,7 +1,7 @@
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { YStack } from 'tamagui';
+import { XStack, YStack } from 'tamagui';
 import useStore from '@/store';
 import ScreenHeader from '@common/ScreenHeader';
 import { TabbedScreenWrapper } from '@common/ScreenWrapper';
@@ -27,20 +27,17 @@ const TodayScreen = () => {
             <ScreenHeader />
             {currentPet && <PetCard pet={currentPet} />}
             <VerticalSpacer />
-            {/* TODO - don't hard code */}
-            <Animated.View
-                entering={FadeIn.delay(500)}
-                style={{
-                    height: height * 0.55,
-                    display: 'flex',
-                    flexDirection: 'row',
-                }}
-            >
-                <YStack>
-                    <TodayButton />
-                    <WeekNavigationCarousel />
-                </YStack>
-                <TaskSection />
+            <Animated.View entering={FadeIn.delay(500)}>
+                <XStack
+                    height={height * 0.55} // TODO - don't hard code
+                    elevation="$4"
+                >
+                    <YStack>
+                        <TodayButton />
+                        <WeekNavigationCarousel />
+                    </YStack>
+                    <TaskSection />
+                </XStack>
             </Animated.View>
             <VerticalSpacer />
         </TabbedScreenWrapper>

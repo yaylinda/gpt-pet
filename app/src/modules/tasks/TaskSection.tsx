@@ -1,5 +1,5 @@
 import React from 'react';
-import { Separator, SizableText, Tabs } from 'tamagui';
+import { SizableText, Tabs } from 'tamagui';
 import useStore from '@/store';
 import { getDateKey } from '@/utils';
 import AddTaskDialog from '@modules/tasks/AddTaskDialog';
@@ -12,6 +12,7 @@ const TaskTab = ({ value }: { value: TaskType }) => {
         <Tabs.Tab
             flex={1}
             value={value}
+            pressStyle={{ backgroundColor: '$color5' }}
         >
             <SizableText>{value}</SizableText>
         </Tabs.Tab>
@@ -38,20 +39,16 @@ const TaskSection = () => {
                 orientation="horizontal"
                 flexDirection="column"
                 borderRadius="$4"
-                borderWidth="$0.25"
+                borderWidth={0}
                 overflow="hidden"
                 borderColor="$borderColor"
                 borderBottomLeftRadius={0}
                 borderBottomRightRadius="$4"
             >
-                <Tabs.List
-                    separator={<Separator vertical />}
-                    disablePassBorderRadius="bottom"
-                >
+                <Tabs.List disablePassBorderRadius="bottom">
                     <TaskTab value={TaskType.DAILY} />
                     <TaskTab value={TaskType.SPECIAL} />
                 </Tabs.List>
-                <Separator />
                 <TaskTabContent
                     type={TaskType.DAILY}
                     taskIds={dailyTasks}

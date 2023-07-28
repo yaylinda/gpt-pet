@@ -5,7 +5,6 @@ import type { TaskType } from '@modules/tasks/types';
 import AddTaskButton from '@modules/tasks/AddTaskButton';
 import EmptyTaskContent from '@modules/tasks/EmptyTaskContent';
 import TaskItem from '@modules/tasks/TaskItem';
-import useTodayStore from '@modules/today/store';
 
 interface TaskTabContentProps {
     type: TaskType;
@@ -18,13 +17,6 @@ const TaskTabContent = ({
     taskIds,
     completedTaskIds,
 }: TaskTabContentProps) => {
-    const {  } = useTodayStore();
-
-    // const showAdd =
-    //     currentDate.isSame(moment(), 'day') ||
-    //     (type === TaskType.SPECIAL &&
-    //         currentDate.isSameOrAfter(moment(), 'day'));
-
     const renderItem = ({ item }: { item: string; index: number }) => (
         <TaskItem
             key={item}
@@ -43,14 +35,8 @@ const TaskTabContent = ({
         <Tabs.Content
             value={type}
             flex={1}
-            backgroundColor="$background"
-            borderColor="$background"
-            borderRadius="$2"
-            borderTopLeftRadius={0}
-            borderTopRightRadius={0}
-            borderBottomLeftRadius={0}
-            borderBottomRightRadius="$4"
-            borderWidth="$2"
+            backgroundColor="$color5"
+            padding="$3"
         >
             <FlatList
                 data={taskIds}

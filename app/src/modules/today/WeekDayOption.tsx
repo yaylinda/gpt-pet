@@ -39,8 +39,13 @@ const WeekDayOption = ({ date }: WeekDayOptionProps) => {
             gap={0}
             borderRadius={0}
             borderWidth="$0.25"
+            borderRightWidth={0}
             borderColor="$background"
             backgroundColor={isCurrentDate ? '$color5' : '$color2'}
+            pressStyle={{
+                backgroundColor: '$color5',
+                borderColor: '$background',
+            }}
             onPress={() => setCurrentDate(date)}
             disabled={isBeforeUser}
         >

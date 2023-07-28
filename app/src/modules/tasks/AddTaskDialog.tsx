@@ -3,25 +3,28 @@ import React from 'react';
 import { Button, Dialog, Separator, Spinner, Unspaced, XStack } from 'tamagui';
 import TextInputWithLabel from '@common/TextInputWithLabel';
 import TaskDifficultySelection from '@modules/tasks/TaskDifficultySelection';
+import TaskTypeSelection from '@modules/tasks/TaskTypeSelection';
 import useTasksStore from '@modules/tasks/store';
-import { TaskDifficulty } from '@modules/tasks/types';
+import { TaskDifficulty, TaskType } from '@modules/tasks/types';
 
 const AddTaskDialog = () => {
     const {
-        taskDialog: { open, type },
+        taskDialog: { open },
         creating,
         createTask,
         closeTaskDialog,
     } = useTasksStore();
 
+    const [type, setType] = React.useState<TaskType>(TaskType.SPECIAL);
     const [title, setTitle] = React.useState<string>('');
     const [difficulty, setDifficulty] = React.useState<TaskDifficulty>(
         TaskDifficulty.S
     );
 
     const onClose = () => {
+        setType(TaskType.SPECIAL);
         setTitle('');
-        setDifficulty(TaskDifficulty.M);
+        setDifficulty(TaskDifficulty.S);
         closeTaskDialog();
     };
 
@@ -65,7 +68,7 @@ const AddTaskDialog = () => {
                     exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
                     space
                 >
-                    <Dialog.Title size="$6">New {type} Task</Dialog.Title>
+                    <Dialog.Title size="$6">New Task</Dialog.Title>
 
                     <Separator />
 
@@ -74,6 +77,12 @@ const AddTaskDialog = () => {
                         value={title}
                         onUpdate={setTitle}
                         placeholder="Task Title"
+                        disabled={creating}
+                    />
+
+                    <TaskTypeSelection
+                        value={type}
+                        onValueChange={setType}
                         disabled={creating}
                     />
 
