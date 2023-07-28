@@ -1,28 +1,34 @@
 import { X } from '@tamagui/lucide-icons';
 import React from 'react';
 import { Button, Dialog, Separator, Spinner, Unspaced, XStack } from 'tamagui';
+import type { TaskType } from '@modules/tasks/types';
 import TextInputWithLabel from '@common/TextInputWithLabel';
 import TaskDifficultySelection from '@modules/tasks/TaskDifficultySelection';
 import TaskTypeSelection from '@modules/tasks/TaskTypeSelection';
 import useTasksStore from '@modules/tasks/store';
-import { TaskDifficulty, TaskType } from '@modules/tasks/types';
+import { TaskDifficulty } from '@modules/tasks/types';
 
 const AddTaskDialog = () => {
     const {
         taskDialog: { open },
+        activeTaskTab,
         creating,
         createTask,
         closeTaskDialog,
     } = useTasksStore();
 
-    const [type, setType] = React.useState<TaskType>(TaskType.SPECIAL);
+    const [type, setType] = React.useState<TaskType>(activeTaskTab);
     const [title, setTitle] = React.useState<string>('');
     const [difficulty, setDifficulty] = React.useState<TaskDifficulty>(
         TaskDifficulty.S
     );
 
+    React.useEffect(() => {
+        setType(activeTaskTab);
+    }, [activeTaskTab]);
+
     const onClose = () => {
-        setType(TaskType.SPECIAL);
+        setType(activeTaskTab);
         setTitle('');
         setDifficulty(TaskDifficulty.S);
         closeTaskDialog();

@@ -1,3 +1,4 @@
+import * as Burnt from 'burnt';
 import { create } from 'zustand';
 import { errorAlert } from '@/alerts';
 import { NUM_NATURES, PET_NATURES } from '@/constants';
@@ -85,20 +86,10 @@ const useRegistrationStore = create<RegistrationStoreState>()((set, get) => ({
             return false;
         }
 
-        get().randomizePetNatures();
-
         try {
-            await updateUser(userId, {
-                display_name: get().displayName,
-                has_registered: true,
-            });
-            set({ progressUpdateUser: true });
-        } catch (e) {
-            errorAlert('Oops! Something went wrong...', JSON.stringify(e));
-            return false;
-        }
-
-        try {
+            console.log(
+                '[registrationStore][doRegistration] inserting pet for user'
+            );
             await insertPet({
                 user_id: userId,
                 display_name: get().petName,
@@ -108,6 +99,22 @@ const useRegistrationStore = create<RegistrationStoreState>()((set, get) => ({
             });
             set({ progressInsertPet: true });
         } catch (e) {
+            Burnt.dismissAllAlerts();
+            errorAlert('Oops! Something went wrong...', JSON.stringify(e));
+            return false;
+        }
+
+        try {
+            console.log(
+                '[registrationStore][doRegistration] updating user displayName and registration status'
+            );
+            await updateUser(userId, {
+                display_name: get().displayName,
+                has_registered: true,
+            });
+            set({ progressUpdateUser: true });
+        } catch (e) {
+            Burnt.dismissAllAlerts();
             errorAlert('Oops! Something went wrong...', JSON.stringify(e));
             return false;
         }

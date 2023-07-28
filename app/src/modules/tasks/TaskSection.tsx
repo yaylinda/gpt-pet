@@ -4,6 +4,7 @@ import useStore from '@/store';
 import { getDateKey } from '@/utils';
 import AddTaskDialog from '@modules/tasks/AddTaskDialog';
 import TaskTabContent from '@modules/tasks/TaskTabContent';
+import useTasksStore from '@modules/tasks/store';
 import { TaskType } from '@modules/tasks/types';
 import useTodayStore from '@modules/today/store';
 
@@ -29,13 +30,16 @@ const TaskSection = () => {
             }
     );
 
+    const { activeTaskTab, setActiveTaskTab } = useTasksStore();
+
     console.log('[TaskSection][render]');
 
     return (
         <>
             <Tabs
                 flex={1}
-                defaultValue={TaskType.DAILY}
+                value={activeTaskTab}
+                onValueChange={(value) => setActiveTaskTab(value as TaskType)}
                 orientation="horizontal"
                 flexDirection="column"
                 borderRadius="$4"
@@ -44,6 +48,7 @@ const TaskSection = () => {
                 borderColor="$borderColor"
                 borderBottomLeftRadius={0}
                 borderBottomRightRadius="$4"
+                pressStyle={{ backgroundColor: '$color5' }}
             >
                 <Tabs.List disablePassBorderRadius="bottom">
                     <TaskTab value={TaskType.DAILY} />

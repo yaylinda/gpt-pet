@@ -24,9 +24,9 @@ const TaskDifficultyOption = ({
 }: TaskDifficultyOptionProps) => {
     const selected = difficulty === selectedDifficulty;
 
-    console.log(
-        `[TaskDifficultyOption] difficulty=${difficulty}, selectedDifficulty=${selectedDifficulty}, selected=${selected}`
-    );
+    // console.log(
+    //     `[TaskDifficultyOption] difficulty=${difficulty}, selectedDifficulty=${selectedDifficulty}, selected=${selected}`
+    // );
 
     return (
         <Button

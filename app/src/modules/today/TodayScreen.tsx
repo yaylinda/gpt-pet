@@ -7,6 +7,7 @@ import ScreenHeader from '@common/ScreenHeader';
 import { TabbedScreenWrapper } from '@common/ScreenWrapper';
 import VerticalSpacer from '@common/VerticalSpacer';
 import PetCard from '@modules/pets/PetCard';
+import AddTaskButton from '@modules/tasks/AddTaskButton';
 import TaskSection from '@modules/tasks/TaskSection';
 import TodayButton from '@modules/today/TodayButton';
 import WeekNavigationCarousel from '@modules/today/WeekNavigationCarousel';
@@ -37,6 +38,7 @@ const TodayScreen = () => {
                         <WeekNavigationCarousel />
                     </YStack>
                     <TaskSection />
+                    <AddTaskButton />
                 </XStack>
             </Animated.View>
             <VerticalSpacer />

@@ -3,15 +3,11 @@ import moment from 'moment';
 import React from 'react';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { Button } from 'tamagui';
-import type { TaskType } from '@modules/tasks/types';
+
 import useTasksStore from '@modules/tasks/store';
 import useTodayStore from '@modules/today/store';
 
-interface AddTaskButtonProps {
-    type: TaskType;
-}
-
-const AddTaskButton = ({ type }: AddTaskButtonProps) => {
+const AddTaskButton = () => {
     const { openTaskDialog } = useTasksStore();
     const { currentDate } = useTodayStore();
 
@@ -34,7 +30,7 @@ const AddTaskButton = ({ type }: AddTaskButtonProps) => {
                 right="$3"
                 icon={Plus}
                 scaleIcon={2}
-                onPress={() => openTaskDialog(type)}
+                onPress={() => openTaskDialog()}
             />
         </Animated.View>
     );

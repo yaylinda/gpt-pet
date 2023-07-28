@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { Tabs } from 'tamagui';
 import type { TaskType } from '@modules/tasks/types';
-import AddTaskButton from '@modules/tasks/AddTaskButton';
+
 import EmptyTaskContent from '@modules/tasks/EmptyTaskContent';
 import TaskItem from '@modules/tasks/TaskItem';
 
@@ -44,7 +44,6 @@ const TaskTabContent = ({
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={<EmptyTaskContent type={type} />}
             />
-            <AddTaskButton type={type} />
         </Tabs.Content>
     );
 };

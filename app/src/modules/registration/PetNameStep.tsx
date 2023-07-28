@@ -17,7 +17,7 @@ const PetNameStep = () => {
             title: 'Hang on',
             message: 'Getting things ready for you and your new pet',
             preset: 'spinner',
-            duration: 2,
+            duration: 10,
         });
 
         const status = await doRegistration();

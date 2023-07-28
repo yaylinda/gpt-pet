@@ -1,11 +1,6 @@
 import * as Burnt from 'burnt';
 import { create } from 'zustand';
-import type {
-    Task,
-    TaskDifficulty,
-    TaskRow,
-    TaskType,
-} from '@modules/tasks/types';
+import type { Task, TaskDifficulty, TaskRow } from '@modules/tasks/types';
 import type moment from 'moment';
 import { errorAlert } from '@/alerts';
 import useStore from '@/store';
@@ -16,12 +11,14 @@ import {
     fetchSpecialTasksForUserOnDate,
     insertTask,
 } from '@modules/tasks/api';
+import { TaskType } from '@modules/tasks/types';
 import useTodayStore from '@modules/today/store';
 
 interface TasksStoreStateData {
     creating: boolean;
     tasks: Record<string, Task>;
-    taskDialog: { open: boolean; type: TaskType | null };
+    taskDialog: { open: boolean };
+    activeTaskTab: TaskType;
 }
 
 interface TasksStoreStateFunctions {
@@ -37,7 +34,8 @@ interface TasksStoreStateFunctions {
     ) => Promise<boolean>;
     getTask: (taskId: string) => Task;
     upsertTask: (taskRow: TaskRow) => void;
-    openTaskDialog: (type: TaskType) => void;
+    setActiveTaskTab: (activeTaskTab: TaskType) => void;
+    openTaskDialog: () => void;
     closeTaskDialog: () => void;
 }
 
@@ -46,7 +44,8 @@ type TasksStoreState = TasksStoreStateData & TasksStoreStateFunctions;
 const DEFAULT_DATA: TasksStoreStateData = {
     creating: false,
     tasks: {},
-    taskDialog: { open: false, type: null },
+    taskDialog: { open: false },
+    activeTaskTab: TaskType.DAILY,
 };
 
 const useTasksStore = create<TasksStoreState>()((set, get) => ({
@@ -127,12 +126,19 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
         }));
     },
 
-    openTaskDialog: (type: TaskType) => {
-        set({ taskDialog: { open: true, type: type } });
+    setActiveTaskTab: (activeTaskTab: TaskType) => {
+        console.log(
+            `[taskStore][setActiveTaskTab] activeTaskTab=${activeTaskTab}`
+        );
+        set({ activeTaskTab });
+    },
+
+    openTaskDialog: () => {
+        set({ taskDialog: { open: true } });
     },
 
     closeTaskDialog: () => {
-        set({ taskDialog: { open: false, type: null } });
+        set({ taskDialog: { open: false } });
     },
 }));
 
