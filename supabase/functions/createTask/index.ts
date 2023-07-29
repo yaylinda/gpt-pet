@@ -23,10 +23,8 @@ serve(async (req: Request) => {
     if (gptError || !response) {
         return serverErrorResponse(gptError, 'call getChatCompletion');
     }
-
-    console.log(`response=${JSON.stringify(response)}`);
-
-    const emoji = response.content.length !== 1 ? '🚫' : response.content;
+    
+    const emoji = response.content.length !== 2 ? '🚫' : response.content;
 
     const supabaseClient = getSupabaseClient(req);
 
