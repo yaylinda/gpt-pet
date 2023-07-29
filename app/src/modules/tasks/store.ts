@@ -6,13 +6,8 @@ import { errorAlert } from '@/alerts';
 import useStore from '@/store';
 import { getDateKey, reduce } from '@/utils';
 import { taskAdapter } from '@modules/tasks/adapters';
-import {
-    fetchDailyTasksForUser,
-    fetchSpecialTasksForUserOnDate,
-    insertTask,
-} from '@modules/tasks/api';
+import { fetchDailyTasksForUser, fetchSpecialTasksForUserOnDate, insertTask } from '@modules/tasks/api';
 import { TaskType } from '@modules/tasks/types';
-import useTodayStore from '@modules/today/store';
 
 interface TasksStoreStateData {
     creating: boolean;
@@ -23,11 +18,9 @@ interface TasksStoreStateData {
 
 interface TasksStoreStateFunctions {
     fetchDailyTasks: (userId: string) => Promise<string[]>;
-    fetchSpecialTasks: (
-        userId: string,
-        date: moment.Moment
-    ) => Promise<string[]>;
+    fetchSpecialTasks: (userId: string, date: moment.Moment) => Promise<string[]>;
     createTask: (
+        currentDate: moment.Moment,
         type: TaskType,
         title: string,
         difficulty: TaskDifficulty
@@ -64,10 +57,7 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
         return tasks.map((t) => t.id);
     },
 
-    fetchSpecialTasks: async (
-        userId: string,
-        date: moment.Moment
-    ): Promise<string[]> => {
+    fetchSpecialTasks: async (userId: string, date: moment.Moment): Promise<string[]> => {
         const tasks = await fetchSpecialTasksForUserOnDate(userId, date);
 
         set((state) => ({
@@ -81,6 +71,7 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
     },
 
     createTask: async (
+        currentDate: moment.Moment,
         type: TaskType,
         title: string,
         difficulty: TaskDifficulty
@@ -95,7 +86,7 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
                 title,
                 difficulty,
                 user_id: userId,
-                date_key: getDateKey(useTodayStore.getState().currentDate),
+                date_key: getDateKey(currentDate),
                 emoji: 'TODO',
             });
             Burnt.toast({
@@ -130,9 +121,7 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
     },
 
     setActiveTaskTab: (activeTaskTab: TaskType) => {
-        console.log(
-            `[taskStore][setActiveTaskTab] activeTaskTab=${activeTaskTab}`
-        );
+        console.log(`[taskStore][setActiveTaskTab] activeTaskTab=${activeTaskTab}`);
         set({ activeTaskTab });
     },
 

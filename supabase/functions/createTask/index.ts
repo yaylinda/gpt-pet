@@ -23,7 +23,7 @@ serve(async (req: Request) => {
     if (gptError || !response) {
         return serverErrorResponse(gptError, 'call getChatCompletion');
     }
-    
+
     const emoji = response.content.length !== 2 ? '🚫' : response.content;
 
     const supabaseClient = getSupabaseClient(req);

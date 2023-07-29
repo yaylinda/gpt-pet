@@ -7,6 +7,7 @@ import ScreenHeader from '@common/ScreenHeader';
 import { TabbedScreenWrapper } from '@common/ScreenWrapper';
 import VerticalSpacer from '@common/VerticalSpacer';
 import PetCard from '@modules/pets/PetCard';
+
 import AddTaskButton from '@modules/tasks/AddTaskButton';
 import TaskSection from '@modules/tasks/TaskSection';
 import TodayButton from '@modules/today/TodayButton';
@@ -31,7 +32,7 @@ const TodayScreen = () => {
             <Animated.View entering={FadeIn.delay(500)}>
                 <XStack
                     height={height * 0.55} // TODO - don't hard code
-                    elevation="$4"
+                    // elevation="$4"
                 >
                     <YStack>
                         <TodayButton />

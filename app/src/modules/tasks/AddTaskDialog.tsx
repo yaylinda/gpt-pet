@@ -36,7 +36,7 @@ const AddTaskDialog = () => {
     };
 
     const onSave = async () => {
-        const success = await createTask(type!, title, difficulty);
+        const success = await createTask(currentDate, type!, title, difficulty);
         if (success) {
             onClose();
         }

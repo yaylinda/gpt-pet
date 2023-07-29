@@ -1,10 +1,10 @@
 import React from 'react';
-import { Animated } from 'react-native';
+import { FlatList } from 'react-native';
 import { Tabs } from 'tamagui';
 import type { TaskType } from '@modules/tasks/types';
-import TaskItem from '@modules/tasks/TaskItem';
-import FlatList = Animated.FlatList;
 import EmptyTaskContent from '@modules/tasks/EmptyTaskContent';
+import TaskItem from '@modules/tasks/TaskItem';
+// import FlatList = Animated.FlatList;
 
 interface TaskTabContentProps {
     type: TaskType;
@@ -28,7 +28,7 @@ const TaskTabContent = ({ type, taskIds, completedTaskIds }: TaskTabContentProps
             value={type}
             flex={1}
             backgroundColor="$color5"
-            padding="$3"
+            // padding="$3"
         >
             <FlatList
                 data={taskIds}
@@ -36,6 +36,16 @@ const TaskTabContent = ({ type, taskIds, completedTaskIds }: TaskTabContentProps
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={<EmptyTaskContent type={type} />}
             />
+            {/*<ScrollView*/}
+            {/*    contentContainerStyle={{ flex: 1, backgroundColor: 'green', padding: 50 }}*/}
+            {/*    onTouchStart={() => console.log('on touch start!')}*/}
+            {/*    onScrollBeginDrag={() => console.log('on begin drag!')}*/}
+            {/*>*/}
+            {/*    {taskIds.map((t, i) => renderItem({ item: t, index: i }))}*/}
+            {/*</ScrollView>*/}
+            {/*<ScrollView onTouchStart={() => console.log('on touch start!')}>*/}
+            {/*    <EmptyTaskContent type={type} />*/}
+            {/*</ScrollView>*/}
         </Tabs.Content>
     );
 };
