@@ -1,10 +1,10 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { Animated } from 'react-native';
 import { Tabs } from 'tamagui';
 import type { TaskType } from '@modules/tasks/types';
-
-import EmptyTaskContent from '@modules/tasks/EmptyTaskContent';
 import TaskItem from '@modules/tasks/TaskItem';
+import FlatList = Animated.FlatList;
+import EmptyTaskContent from '@modules/tasks/EmptyTaskContent';
 
 interface TaskTabContentProps {
     type: TaskType;
@@ -12,11 +12,7 @@ interface TaskTabContentProps {
     completedTaskIds: string[];
 }
 
-const TaskTabContent = ({
-    type,
-    taskIds,
-    completedTaskIds,
-}: TaskTabContentProps) => {
+const TaskTabContent = ({ type, taskIds, completedTaskIds }: TaskTabContentProps) => {
     const renderItem = ({ item }: { item: string; index: number }) => (
         <TaskItem
             key={item}
@@ -25,11 +21,7 @@ const TaskTabContent = ({
         />
     );
 
-    console.log(
-        `[TaskTabContent][render] type=${type}, taskIds=${JSON.stringify(
-            taskIds
-        )}`
-    );
+    console.log(`[TaskTabContent][render] type=${type}, taskIds=${JSON.stringify(taskIds)}`);
 
     return (
         <Tabs.Content

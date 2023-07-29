@@ -3,6 +3,7 @@ import { SizableText, Tabs } from 'tamagui';
 import useStore from '@/store';
 import { getDateKey } from '@/utils';
 import AddTaskDialog from '@modules/tasks/AddTaskDialog';
+
 import TaskTabContent from '@modules/tasks/TaskTabContent';
 import useTasksStore from '@modules/tasks/store';
 import { TaskType } from '@modules/tasks/types';
@@ -44,15 +45,21 @@ const TaskSection = () => {
                 flexDirection="column"
                 borderRadius="$4"
                 borderWidth={0}
-                overflow="hidden"
+                overflow="scroll"
                 borderColor="$borderColor"
                 borderBottomLeftRadius={0}
                 borderBottomRightRadius="$4"
                 pressStyle={{ backgroundColor: '$color5' }}
             >
                 <Tabs.List disablePassBorderRadius="bottom">
-                    <TaskTab value={TaskType.DAILY} />
-                    <TaskTab value={TaskType.SPECIAL} />
+                    <TaskTab
+                        key={TaskType.DAILY}
+                        value={TaskType.DAILY}
+                    />
+                    <TaskTab
+                        key={TaskType.SPECIAL}
+                        value={TaskType.SPECIAL}
+                    />
                 </Tabs.List>
                 <TaskTabContent
                     type={TaskType.DAILY}

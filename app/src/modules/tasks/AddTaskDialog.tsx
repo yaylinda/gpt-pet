@@ -22,9 +22,7 @@ const AddTaskDialog = () => {
 
     const [type, setType] = React.useState<TaskType>(activeTaskTab);
     const [title, setTitle] = React.useState<string>('');
-    const [difficulty, setDifficulty] = React.useState<TaskDifficulty>(
-        TaskDifficulty.S
-    );
+    const [difficulty, setDifficulty] = React.useState<TaskDifficulty>(TaskDifficulty.S);
 
     React.useEffect(() => {
         setType(activeTaskTab);
@@ -83,10 +81,8 @@ const AddTaskDialog = () => {
 
                     <Dialog.Description>
                         {type === TaskType.DAILY
-                            ? 'A new task for everyday!'
-                            : `A new special task for ${formatDateHeader(
-                                  currentDate
-                              )}`}
+                            ? `A new task for everyday!\nStarting ${formatDateHeader(currentDate)}`
+                            : `A new special task for ${formatDateHeader(currentDate)}!`}
                     </Dialog.Description>
 
                     <TextInputWithLabel

@@ -1,4 +1,4 @@
-import { ListItem } from 'tamagui';
+import { SizableText, XGroup } from 'tamagui';
 import useTasksStore from '@modules/tasks/store';
 
 interface TaskItemProps {
@@ -14,12 +14,22 @@ const TaskItem = ({ taskId }: TaskItemProps) => {
     }
 
     return (
-        <ListItem
-            size="$3"
-            pressTheme
-            title={task.title}
-            subTitle={`${task.difficulty} (${task.emoji})`}
-        />
+        <XGroup
+            size="$4"
+            justifyContent="flex-start"
+            alignItems="center"
+            marginVertical="$1.5"
+            padding="$2"
+            borderRadius="$10"
+            borderColor="$color6"
+            borderWidth="$2"
+            borderStyle="solid"
+            gap="$1.5"
+        >
+            <SizableText>{task.emoji}</SizableText>
+            {/*<Circle backgroundColor="$color12" />*/}
+            <SizableText>{task.title}</SizableText>
+        </XGroup>
     );
 };
 

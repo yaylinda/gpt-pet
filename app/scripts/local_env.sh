@@ -7,7 +7,7 @@ SECRETS_FILE="$(pwd)/.env.secrets"
 cat "$TEMPLATE_FILE" > "$ENV_FILE"
 
 # Get the local IP address
-IP=$(ifconfig | grep inet | grep -v :: | grep -v 127.0.0.1 | awk '{print $2}' | cut -d'/' -f1 | head -n1)
+IP=$(ifconfig | grep inet | grep -v inet6 | grep -v 127.0.0.1 | awk '{print $2}' | cut -d'/' -f1 | head -n1)
 
 # Replace {LOCAL_IP} with the IP in .env.local
 sed -i "" "s/{LOCAL_IP}/$IP/g" "$ENV_FILE"
