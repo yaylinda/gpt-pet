@@ -20,8 +20,8 @@ const TaskTab = ({ type, isFirst, isLast }: { type: TaskType; isFirst?: boolean;
             borderBottomLeftRadius={0}
             borderBottomRightRadius={0}
             backgroundColor={activeTaskTab === type ? '$color5' : '$color2'}
-            pressStyle={{ backgroundColor: '$color5' }}
-            onPress={() => setActiveTaskTab(activeTaskTab)}
+            pressStyle={{ backgroundColor: '$color5', borderColor: '$color5' }}
+            onPress={() => setActiveTaskTab(type)}
         >
             <SizableText>{type}</SizableText>
         </Button>
@@ -29,8 +29,9 @@ const TaskTab = ({ type, isFirst, isLast }: { type: TaskType; isFirst?: boolean;
 };
 
 const TaskSection = () => {
+    const { activeTaskTab } = useTasksStore();
     const { dailyTasks } = useStore();
-    const { completedTasks } = useTodayStore(
+    const { completedTasks, specialTasks } = useTodayStore(
         (state) =>
             state.data[getDateKey(state.currentDate)] || {
                 specialTasks: [],
@@ -38,16 +39,15 @@ const TaskSection = () => {
             }
     );
 
-    const { activeTaskTab } = useTasksStore();
-
-    console.log('[TaskSection][render]');
+    console.log(`[TaskSection][render] activeTaskTab=${activeTaskTab}`);
 
     return (
         <>
             <YStack
                 flex={1}
                 backgroundColor="$color5"
-                borderBottomRightRadius="$4"
+                borderRadius="$4"
+                borderBottomLeftRadius={0}
             >
                 <XStack>
                     <TaskTab
@@ -68,46 +68,11 @@ const TaskSection = () => {
                 ) : (
                     <TaskTabContent
                         type={TaskType.SPECIAL}
-                        taskIds={dailyTasks}
+                        taskIds={specialTasks}
                         completedTaskIds={completedTasks}
                     />
                 )}
             </YStack>
-            {/*<Tabs*/}
-            {/*    flex={1}*/}
-            {/*    value={activeTaskTab}*/}
-            {/*    onValueChange={(value) => setActiveTaskTab(value as TaskType)}*/}
-            {/*    orientation="horizontal"*/}
-            {/*    flexDirection="column"*/}
-            {/*    borderRadius="$4"*/}
-            {/*    borderWidth={0}*/}
-            {/*    overflow="scroll"*/}
-            {/*    borderColor="$borderColor"*/}
-            {/*    borderBottomLeftRadius={0}*/}
-            {/*    borderBottomRightRadius="$4"*/}
-            {/*    pressStyle={{ backgroundColor: '$color5' }}*/}
-            {/*>*/}
-            {/*    <Tabs.List disablePassBorderRadius="bottom">*/}
-            {/*        <TaskTab*/}
-            {/*            key={TaskType.DAILY}*/}
-            {/*            value={TaskType.DAILY}*/}
-            {/*        />*/}
-            {/*        <TaskTab*/}
-            {/*            key={TaskType.SPECIAL}*/}
-            {/*            value={TaskType.SPECIAL}*/}
-            {/*        />*/}
-            {/*    </Tabs.List>*/}
-            {/*    <TaskTabContent*/}
-            {/*        type={TaskType.DAILY}*/}
-            {/*        taskIds={dailyTasks}*/}
-            {/*        completedTaskIds={completedTasks}*/}
-            {/*    />*/}
-            {/*    <TaskTabContent*/}
-            {/*        type={TaskType.SPECIAL}*/}
-            {/*        taskIds={specialTasks}*/}
-            {/*        completedTaskIds={completedTasks}*/}
-            {/*    />*/}
-            {/*</Tabs>*/}
             <AddTaskDialog />
         </>
     );
