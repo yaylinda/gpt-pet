@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import type { Task, TaskDifficulty, TaskRow } from '@modules/tasks/types';
 import type moment from 'moment';
 import { errorAlert } from '@/alerts';
-import useStore from '@/store';
+
 import { getDateKey, reduce } from '@/utils';
 import { taskAdapter } from '@modules/tasks/adapters';
 import { fetchDailyTasksForUser, fetchSpecialTasksForUserOnDate, insertTask } from '@modules/tasks/api';
@@ -20,6 +20,7 @@ interface TasksStoreStateFunctions {
     fetchDailyTasks: (userId: string) => Promise<string[]>;
     fetchSpecialTasks: (userId: string, date: moment.Moment) => Promise<string[]>;
     createTask: (
+        userId: string,
         currentDate: moment.Moment,
         type: TaskType,
         title: string,
@@ -71,13 +72,12 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
     },
 
     createTask: async (
+        userId: string,
         currentDate: moment.Moment,
         type: TaskType,
         title: string,
         difficulty: TaskDifficulty
     ): Promise<boolean> => {
-        const userId = useStore.getState().userId;
-
         set({ creating: true });
 
         try {
