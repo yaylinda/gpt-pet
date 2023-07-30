@@ -121,6 +121,9 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
     },
 
     setActiveTaskTab: (activeTaskTab: TaskType) => {
+        if (activeTaskTab === get().activeTaskTab) {
+            return;
+        }
         console.log(`[taskStore][setActiveTaskTab] activeTaskTab=${activeTaskTab}`);
         set({ activeTaskTab });
     },

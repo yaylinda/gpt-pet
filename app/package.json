@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "ios": "./scripts/local_env.sh && export $(cat .env.local | xargs) && expo run:ios --device",
+    "ios_device": "./scripts/local_env.sh && export $(cat .env.local | xargs) && expo run:ios --device",
     "ios_sim": "./scripts/local_env.sh && export $(cat .env.local | xargs) && expo run:ios",
     "ios_sim_manual": "expo run:ios",
     "android": "./scripts/local_env.sh && export $(cat .env.local | xargs) && expo run:android --device",
@@ -16,7 +16,8 @@
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
-    "@supabase/supabase-js": "^2.23.0",
+    "@supabase/supabase-js": "^2.27.0",
+    "@supabase/gotrue-js": "^2.45.0",
     "@tamagui/animations-react-native": "^1.43.11",
     "@tamagui/babel-plugin": "^1.43.11",
     "@tamagui/config": "^1.43.11",
@@ -60,7 +61,8 @@
     "react-native-web": "^0.19.6",
     "tamagui": "^1.43.11",
     "victory-native": "^36.6.11",
-    "zustand": "^4.3.8"
+    "zustand": "^4.3.8",
+    "expo-haptics": "~12.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

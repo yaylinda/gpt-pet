@@ -1,6 +1,7 @@
 import { X } from '@tamagui/lucide-icons';
 import React from 'react';
 import { Button, Dialog, Separator, Spinner, Unspaced, XStack } from 'tamagui';
+import useStore from '@/store';
 import { formatDateHeader } from '@/utils';
 import TextInputWithLabel from '@common/TextInputWithLabel';
 import TaskDifficultySelection from '@modules/tasks/TaskDifficultySelection';
@@ -10,6 +11,7 @@ import { TaskDifficulty, TaskType } from '@modules/tasks/types';
 import useTodayStore from '@modules/today/store';
 
 const AddTaskDialog = () => {
+    const { userId } = useStore();
     const {
         taskDialog: { open },
         activeTaskTab,
@@ -36,7 +38,7 @@ const AddTaskDialog = () => {
     };
 
     const onSave = async () => {
-        const success = await createTask(currentDate, type!, title, difficulty);
+        const success = await createTask(userId, currentDate, type!, title, difficulty);
         if (success) {
             onClose();
         }

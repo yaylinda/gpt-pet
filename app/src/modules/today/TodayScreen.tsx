@@ -32,7 +32,7 @@ const TodayScreen = () => {
             <Animated.View entering={FadeIn.delay(500)}>
                 <XStack
                     height={height * 0.55} // TODO - don't hard code
-                    // elevation="$4"
+                    elevation="$4"
                 >
                     <YStack>
                         <TodayButton />

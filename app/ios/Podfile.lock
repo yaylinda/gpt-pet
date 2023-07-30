@@ -77,6 +77,8 @@ PODS:
     - ExpoModulesCore
   - ExpoDevice (5.4.0):
     - ExpoModulesCore
+  - ExpoHaptics (12.4.0):
+    - ExpoModulesCore
   - ExpoKeepAwake (12.3.0):
     - ExpoModulesCore
   - ExpoModulesCore (1.5.7):
@@ -591,6 +593,7 @@ DEPENDENCIES:
   - expo-dev-menu-interface (from `../node_modules/expo-dev-menu-interface/ios`)
   - ExpoBlur (from `../node_modules/expo-blur/ios`)
   - ExpoDevice (from `../node_modules/expo-device/ios`)
+  - ExpoHaptics (from `../node_modules/expo-haptics/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
@@ -688,6 +691,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-blur/ios"
   ExpoDevice:
     :path: "../node_modules/expo-device/ios"
+  ExpoHaptics:
+    :path: "../node_modules/expo-haptics/ios"
   ExpoKeepAwake:
     :path: "../node_modules/expo-keep-awake/ios"
   ExpoModulesCore:
@@ -809,6 +814,7 @@ SPEC CHECKSUMS:
   expo-dev-menu-interface: bda969497e73dadc2663c479e0fa726ca79a306e
   ExpoBlur: a2c90bdfa4ff9f459cdb0f83191bddf020e3e2db
   ExpoDevice: 1c1b0c9cad96c292c1de73948649cfd654b2b3c0
+  ExpoHaptics: 360af6898407ee4e8265d30a1a8fb16491a660eb
   ExpoKeepAwake: be4cbd52d9b177cde0fd66daa1913afa3161fc1d
   ExpoModulesCore: f8f3cac222bb0f574c77664d7e05817eaa97434b
   ExpoSecureStore: 57db3b6da8b59046e2057e95bf7738a8027b47c3

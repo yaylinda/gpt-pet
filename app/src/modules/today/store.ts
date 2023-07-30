@@ -2,6 +2,7 @@ import { produce } from 'immer';
 import moment from 'moment';
 import React from 'react';
 import { create } from 'zustand';
+import type { FlatList } from 'react-native';
 import type { ICarouselInstance } from 'react-native-reanimated-carousel/src/types';
 import useStore from '@/store';
 import { getDateKey } from '@/utils';
@@ -13,6 +14,7 @@ interface TodayStoreStateData {
     endDate: moment.Moment;
     headerWeeks: number[];
     dateCarouselRef: React.RefObject<ICarouselInstance>;
+    taskListRef: React.RefObject<FlatList>;
     scrolledFromGoToToday: boolean;
     data: Record<string, { specialTasks: string[]; completedTasks: string[] }>;
 }
@@ -41,6 +43,7 @@ const DEFAULT_DATA: TodayStoreStateData = {
         moment().startOf('week').startOf('day').add(1, 'week').valueOf(),
     ],
     dateCarouselRef: React.createRef<ICarouselInstance>(),
+    taskListRef: React.createRef<FlatList>(),
     scrolledFromGoToToday: false,
     data: {},
 };
@@ -50,10 +53,7 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
 
     prevDay: () => {
         set((state) => ({
-            currentDate: state.currentDate
-                .clone()
-                .subtract(1, 'day')
-                .startOf('day'),
+            currentDate: state.currentDate.clone().subtract(1, 'day').startOf('day'),
         }));
         get().fetchDataForDay();
     },
@@ -67,20 +67,14 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
 
     prevWeek: () => {
         set((state) => ({
-            currentDate: state.currentDate
-                .clone()
-                .subtract(1, 'week')
-                .startOf('day'),
+            currentDate: state.currentDate.clone().subtract(1, 'week').startOf('day'),
         }));
         get().fetchDataForDay();
     },
 
     nextWeek: () => {
         set((state) => ({
-            currentDate: state.currentDate
-                .clone()
-                .add(1, 'week')
-                .startOf('day'),
+            currentDate: state.currentDate.clone().add(1, 'week').startOf('day'),
         }));
         get().fetchDataForDay();
     },
@@ -88,20 +82,18 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
     setCurrentDate: (date: moment.Moment) => {
         set({ currentDate: date.clone() });
         get().fetchDataForDay();
+        get().taskListRef.current?.scrollToIndex({ animated: true, index: 0 });
     },
 
     goToToday: () => {
         const currentDate = get().currentDate.clone();
         const today = moment().startOf('day');
         const isSameWeek = currentDate.isSame(today, 'week');
-        // const currentDateValue = currentDate.valueOf();
 
         get().setCurrentDate(today);
 
         if (!get().dateCarouselRef.current || isSameWeek) {
-            console.log(
-                `[todayStore][goToToday] nowhere to scroll! isSameWeek=${isSameWeek}`
-            );
+            console.log(`[todayStore][goToToday] nowhere to scroll! isSameWeek=${isSameWeek}`);
             return;
         }
 
@@ -121,9 +113,7 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
 
     onScrolledToWeek: (index: number) => {
         if (get().scrolledFromGoToToday) {
-            console.log(
-                '[todayStore][onScrolledToWeek] scrolled from goToToday button. no need to do stuff'
-            );
+            console.log('[todayStore][onScrolledToWeek] scrolled from goToToday button. no need to do stuff');
             set({ scrolledFromGoToToday: false });
             return;
         }
@@ -142,26 +132,19 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
             return;
         }
 
-        const increment = moment(weekStart).isAfter(get().currentDate, 'week')
-            ? 1
-            : -1;
+        const increment = moment(weekStart).isAfter(get().currentDate, 'week') ? 1 : -1;
 
         const nextWeekStart = moment(weekStart).add(1, 'week');
 
-        const shouldAddNextWeek = nextWeekStart
-            .clone()
-            .isSameOrBefore(get().endDate, 'day');
+        const shouldAddNextWeek = nextWeekStart.clone().isSameOrBefore(get().endDate, 'day');
 
         const newCurrentDate = get().currentDate.clone().add(increment, 'week');
 
+        get().setCurrentDate(newCurrentDate.isBefore(moment(), 'day') ? moment().startOf('day') : newCurrentDate);
+
         set((state) => ({
-            currentDate: newCurrentDate.isBefore(moment(), 'day')
-                ? moment().startOf('day')
-                : newCurrentDate,
             headerWeeks:
-                isLastWeek && shouldAddNextWeek
-                    ? [...state.headerWeeks, nextWeekStart.valueOf()]
-                    : state.headerWeeks,
+                isLastWeek && shouldAddNextWeek ? [...state.headerWeeks, nextWeekStart.valueOf()] : state.headerWeeks,
         }));
     },
 
@@ -169,22 +152,15 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
         const userId = useStore.getState().userId;
         const dateKey = getDateKey(get().currentDate);
 
-        console.log(
-            `[useTodayStore][fetchDataForDay] ${getDateKey(get().currentDate)}`
-        );
+        console.log(`[useTodayStore][fetchDataForDay] ${getDateKey(get().currentDate)}`);
 
         if (get().data[dateKey] || !userId) {
             return;
         }
 
         try {
-            const completed = await fetchCompletedTasksForUserOnDate(
-                userId,
-                get().currentDate
-            );
-            const specialTasks = await useTasksStore
-                .getState()
-                .fetchSpecialTasks(userId, get().currentDate);
+            const completed = await fetchCompletedTasksForUserOnDate(userId, get().currentDate);
+            const specialTasks = await useTasksStore.getState().fetchSpecialTasks(userId, get().currentDate);
             set((state) => ({
                 data: {
                     ...state.data,
@@ -229,9 +205,7 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
                 if (!draft[dateKey]) {
                     draft[dateKey] = { specialTasks: [], completedTasks: [] };
                 }
-                draft[dateKey].completedTasks = draft[
-                    dateKey
-                ].completedTasks.filter((t) => t !== taskId);
+                draft[dateKey].completedTasks = draft[dateKey].completedTasks.filter((t) => t !== taskId);
             }),
         }));
     },
