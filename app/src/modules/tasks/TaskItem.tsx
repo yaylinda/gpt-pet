@@ -6,7 +6,6 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SizableText, XStack } from 'tamagui';
 import useStore from '@/store';
 import useTasksStore from '@modules/tasks/store';
-
 import useTodayStore from '@modules/today/store';
 
 interface TaskItemProps {
@@ -14,13 +13,14 @@ interface TaskItemProps {
     completed: boolean;
 }
 
-const TaskItem = ({ taskId }: TaskItemProps) => {
+const TaskItem = ({ taskId, completed }: TaskItemProps) => {
     const { userId, getCurrentPet } = useStore();
     const { currentDate } = useTodayStore();
     const task = useTasksStore((state) => state.tasks[taskId]);
     const { completeTask } = useTasksStore();
 
-    if (!task) {
+    if (!task || completed) {
+        console.log(`\t[TaskItem][render(NULL)] taskId=${taskId}, completed=${completed}`);
         return null;
     }
 
@@ -53,6 +53,8 @@ const TaskItem = ({ taskId }: TaskItemProps) => {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         completeTask(userId, task, currentDate, getCurrentPet());
     };
+
+    console.log(`\t[TaskItem][render] taskId=${taskId}`);
 
     return (
         <Animated.View
