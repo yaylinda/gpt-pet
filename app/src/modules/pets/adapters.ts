@@ -1,5 +1,5 @@
 import moment from 'moment';
-import type { Pet , PetRow } from '@modules/pets/types';
+import type { Pet, PetRow } from '@modules/pets/types';
 
 export const petAdapter = (row: PetRow): Pet => ({
     id: row.id,
@@ -8,4 +8,5 @@ export const petAdapter = (row: PetRow): Pet => ({
     createdAt: moment(row.created_at),
     displayName: row.display_name,
     userId: row.user_id,
+    friendliness: row.friendliness,
 });

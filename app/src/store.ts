@@ -21,6 +21,7 @@ interface StoreStateFunctions {
     setUserId: (userId: string) => void;
     updateCurrentUser: (userRow: UserRow) => void;
     updateCurrentPet: (petRow: PetRow) => void;
+    getCurrentPet: () => Pet;
     insertDailyTask: (taskId: string) => void;
     setTheme: (color: string, dark?: boolean, alt?: 'alt1' | 'alt2') => void;
     reset: () => void;
@@ -37,7 +38,7 @@ const DEFAULT_DATA: StoreStateData = {
     dailyTasks: [],
 };
 
-const useStore = create<StoreState>()((set) => ({
+const useStore = create<StoreState>()((set, get) => ({
     ...DEFAULT_DATA,
 
     setUserId: async (userId: string) => {
@@ -53,9 +54,7 @@ const useStore = create<StoreState>()((set) => ({
         try {
             const users = await useUsersStore.getState().fetchUsers([userId]);
             const pets = await usePetsStore.getState().fetchPets(userId);
-            const dailyTasks = await useTasksStore
-                .getState()
-                .fetchDailyTasks(userId);
+            const dailyTasks = await useTasksStore.getState().fetchDailyTasks(userId);
 
             set({
                 currentUser: users[userId],
@@ -77,6 +76,10 @@ const useStore = create<StoreState>()((set) => ({
     updateCurrentPet: (petRow: PetRow) => {
         console.log('[store][updateCurrentPet] currentPet update');
         set({ currentPet: petAdapter(petRow) });
+    },
+
+    getCurrentPet: () => {
+        return get().currentPet!;
     },
 
     insertDailyTask: (taskId: string) => {

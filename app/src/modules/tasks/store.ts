@@ -1,10 +1,11 @@
 import * as Burnt from 'burnt';
 import { create } from 'zustand';
+import type { Pet } from '@modules/pets/types';
 import type { Task, TaskDifficulty, TaskRow } from '@modules/tasks/types';
 import type moment from 'moment';
 import { errorAlert } from '@/alerts';
-
 import { getDateKey, reduce } from '@/utils';
+import { completeTask } from '@modules/completedTasks/api';
 import { taskAdapter } from '@modules/tasks/adapters';
 import { fetchDailyTasksForUser, fetchSpecialTasksForUserOnDate, insertTask } from '@modules/tasks/api';
 import { TaskType } from '@modules/tasks/types';
@@ -26,6 +27,7 @@ interface TasksStoreStateFunctions {
         title: string,
         difficulty: TaskDifficulty
     ) => Promise<boolean>;
+    completeTask: (userId: string, task: Task, currentDate: moment.Moment, pet: Pet) => void;
     getTask: (taskId: string) => Task;
     upsertTask: (taskRow: TaskRow) => void;
     setActiveTaskTab: (activeTaskTab: TaskType) => void;
@@ -104,6 +106,20 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
             return false;
         } finally {
             set({ creating: false });
+        }
+    },
+
+    completeTask: async (userId: string, task: Task, currentDate: moment.Moment, pet: Pet) => {
+        try {
+            const row = { user_id: userId, task_id: task.id, date_key: getDateKey(currentDate) };
+            const petTaskInfo = { petNatures: pet.natures, petFriendliness: pet.friendliness, taskTitle: task.title };
+            console.log(
+                `[tasksStore][completeTask] row=${JSON.stringify(row)}, petTaskInfo=${JSON.stringify(petTaskInfo)}`
+            );
+            const response = await completeTask(row, petTaskInfo);
+            console.log(`[tasksStore][completeTask] response=${response}`);
+        } catch (e) {
+            errorAlert('Oops! Something went wrong...', JSON.stringify(e));
         }
     },
 

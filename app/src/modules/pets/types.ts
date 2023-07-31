@@ -11,4 +11,5 @@ export interface Pet {
     createdAt: moment.Moment;
     displayName: string;
     userId: string;
+    friendliness: number;
 }

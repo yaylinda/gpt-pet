@@ -1,22 +1,19 @@
-import type {TaskInsert, TaskRow} from '@modules/tasks/types';
+import type { TaskInsert, TaskRow } from '@modules/tasks/types';
 import type moment from 'moment';
-import {SupabaseEdgeFunctions, Tables} from '@/enums';
-import {supabase} from '@/supabase';
-import {getDateKey} from '@/utils';
-import {taskAdapter} from '@modules/tasks/adapters';
-import {TaskType} from '@modules/tasks/types';
+import { SupabaseEdgeFunctions, Tables } from '@/enums';
+import { supabase } from '@/supabase';
+import { getDateKey } from '@/utils';
+import { taskAdapter } from '@modules/tasks/adapters';
+import { TaskType } from '@modules/tasks/types';
 
 /**
  *
  * @param row
  */
 export const insertTask = async (row: TaskInsert) => {
-    const { data, error } = await supabase.functions.invoke(
-        SupabaseEdgeFunctions.CREATE_TASK,
-        {
-            body: row,
-        }
-    );
+    const { data, error } = await supabase.functions.invoke(SupabaseEdgeFunctions.CREATE_TASK, {
+        body: row,
+    });
 
     if (error) {
         console.error(`[insertTask] error: ${JSON.stringify(error)}`);
@@ -31,26 +28,16 @@ export const insertTask = async (row: TaskInsert) => {
  * @param userId
  */
 export const fetchDailyTasksForUser = async (userId: string) => {
-    const { data, error } = await supabase
-        .from(Tables.TASKS)
-        .select()
-        .eq('user_id', userId)
-        .eq('type', TaskType.DAILY);
+    const { data, error } = await supabase.from(Tables.TASKS).select().eq('user_id', userId).eq('type', TaskType.DAILY);
 
     if (error) {
-        console.error(
-            `[fetchDailyTasksForUser] error: ${JSON.stringify(error)}`
-        );
+        console.error(`[fetchDailyTasksForUser] error: ${JSON.stringify(error)}`);
         throw error;
     }
 
     const taskRows: TaskRow[] = data;
 
-    console.log(
-        `[fetchDailyTasksForUser] userId=${userId}, tasks=${JSON.stringify(
-            taskRows
-        )}`
-    );
+    console.log(`[fetchDailyTasksForUser] userId=${userId}, tasks=${JSON.stringify(taskRows)}`);
 
     return taskRows.map((p) => taskAdapter(p));
 };
@@ -60,10 +47,7 @@ export const fetchDailyTasksForUser = async (userId: string) => {
  * @param userId
  * @param date
  */
-export const fetchSpecialTasksForUserOnDate = async (
-    userId: string,
-    date: moment.Moment
-) => {
+export const fetchSpecialTasksForUserOnDate = async (userId: string, date: moment.Moment) => {
     const { data, error } = await supabase
         .from(Tables.TASKS)
         .select()
@@ -72,19 +56,13 @@ export const fetchSpecialTasksForUserOnDate = async (
         .eq('date_key', getDateKey(date));
 
     if (error) {
-        console.error(
-            `[fetchSpecialTasksForUserOnDay] error: ${JSON.stringify(error)}`
-        );
+        console.error(`[fetchSpecialTasksForUserOnDay] error: ${JSON.stringify(error)}`);
         throw error;
     }
 
     const taskRows: TaskRow[] = data;
 
-    console.log(
-        `[fetchSpecialTasksForUserOnDay] userId=${userId}, tasks=${JSON.stringify(
-            taskRows
-        )}`
-    );
+    console.log(`[fetchSpecialTasksForUserOnDay] userId=${userId}, tasks=${JSON.stringify(taskRows)}`);
 
     return taskRows.map((p) => taskAdapter(p));
 };
