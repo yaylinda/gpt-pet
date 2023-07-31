@@ -1,9 +1,9 @@
-import type { CompletedTaskRow, CompletedTaskInsert } from '@modules/completedTasks/types';
+import type {CompletedTaskInsert, CompletedTaskRow} from '@modules/completedTasks/types';
 import type moment from 'moment';
-import { SupabaseEdgeFunctions, Tables } from '@/enums';
-import { supabase } from '@/supabase';
-import { getDateKey } from '@/utils';
-import { completedTaskAdapter } from '@modules/completedTasks/adapters';
+import {SupabaseEdgeFunctions, Tables} from '@/enums';
+import {supabase} from '@/supabase';
+import {getDateKey} from '@/utils';
+import {completedTaskAdapter} from '@modules/completedTasks/adapters';
 
 /**
  *

@@ -1,6 +1,6 @@
 import React from 'react';
-import { FlatList } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Animated, { SequencedTransition } from 'react-native-reanimated';
 import type { TaskType } from '@modules/tasks/types';
 import EmptyTaskContent from '@modules/tasks/EmptyTaskContent';
 import TaskItem from '@modules/tasks/TaskItem';
@@ -34,8 +34,11 @@ const TaskTabContent = ({ type, taskIds, completedTaskIds }: TaskTabContentProps
 
     return (
         <GestureHandlerRootView>
-            <FlatList
+            <Animated.FlatList
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-ignore
                 ref={taskListRef}
+                layout={SequencedTransition}
                 style={{
                     padding: 13, // $3
                     borderBottomRightRadius: 9, // $4
