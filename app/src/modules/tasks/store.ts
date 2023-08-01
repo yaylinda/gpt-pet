@@ -27,7 +27,7 @@ interface TasksStoreStateFunctions {
         title: string,
         difficulty: TaskDifficulty
     ) => Promise<boolean>;
-    completeTask: (userId: string, task: Task, currentDate: moment.Moment, pet: Pet) => void;
+    completeTask: (userId: string, task: Task, currentDateKey: string, pet: Pet) => void;
     getTask: (taskId: string) => Task;
     upsertTask: (taskRow: TaskRow) => void;
     setActiveTaskTab: (activeTaskTab: TaskType) => void;
@@ -109,9 +109,9 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
         }
     },
 
-    completeTask: async (userId: string, task: Task, currentDate: moment.Moment, pet: Pet) => {
+    completeTask: async (userId: string, task: Task, currentDateKey: string, pet: Pet) => {
         try {
-            const row = { user_id: userId, task_id: task.id, date_key: getDateKey(currentDate) };
+            const row = { user_id: userId, task_id: task.id, date_key: currentDateKey };
             const petTaskInfo = { petNatures: pet.natures, petFriendliness: pet.friendliness, taskTitle: task.title };
             console.log(
                 `[tasksStore][completeTask] row=${JSON.stringify(row)}, petTaskInfo=${JSON.stringify(petTaskInfo)}`

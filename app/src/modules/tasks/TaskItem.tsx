@@ -6,21 +6,22 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SizableText, XStack } from 'tamagui';
 import useStore from '@/store';
 import useTasksStore from '@modules/tasks/store';
-import useTodayStore from '@modules/today/store';
 
 interface TaskItemProps {
     taskId: string;
     completed: boolean;
+    currentDateKey: string;
 }
 
-const TaskItem = ({ taskId, completed }: TaskItemProps) => {
+const TaskItem = ({ taskId, completed, currentDateKey }: TaskItemProps) => {
     const { userId, getCurrentPet } = useStore();
-    const { currentDate } = useTodayStore();
     const task = useTasksStore((state) => state.tasks[taskId]);
     const { completeTask } = useTasksStore();
 
-    if (!task || completed) {
-        console.log(`\t[TaskItem][render(NULL)] taskId=${taskId}, completed=${completed}`);
+    if (!task) {
+        console.log(
+            `\t\t[TaskItem][render(NULL)] currentDateKey=${currentDateKey}, taskId=${taskId}, completed=${completed}`
+        );
         return null;
     }
 
@@ -51,10 +52,10 @@ const TaskItem = ({ taskId, completed }: TaskItemProps) => {
 
     const onComplete = () => {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        completeTask(userId, task, currentDate, getCurrentPet());
+        completeTask(userId, task, currentDateKey, getCurrentPet());
     };
 
-    console.log(`\t[TaskItem][render] taskId=${taskId}`);
+    console.log(`\t\t[TaskItem][render] currentDateKey=${currentDateKey}, taskId=${taskId}`);
 
     return (
         <Animated.View
