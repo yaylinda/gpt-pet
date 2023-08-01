@@ -1,9 +1,10 @@
 import { X } from '@tamagui/lucide-icons';
 import React from 'react';
-import { Button, Dialog, Separator, Spinner, Unspaced, XStack } from 'tamagui';
+import { Button, Dialog, Separator, SizableText, Spinner, Unspaced, XStack, YStack } from 'tamagui';
 import useStore from '@/store';
 import { formatDateHeader } from '@/utils';
 import TextInputWithLabel from '@common/TextInputWithLabel';
+import VerticalSpacer from '@common/VerticalSpacer';
 import TaskDifficultySelection from '@modules/tasks/TaskDifficultySelection';
 import TaskTypeSelection from '@modules/tasks/TaskTypeSelection';
 import useTasksStore from '@modules/tasks/store';
@@ -82,9 +83,15 @@ const AddTaskDialog = () => {
                     <Separator />
 
                     <Dialog.Description>
-                        {type === TaskType.DAILY
-                            ? `A new task for everyday!\nStarting ${formatDateHeader(currentDate)}`
-                            : `A new special task for ${formatDateHeader(currentDate)}!`}
+                        {type === TaskType.DAILY ? (
+                            <YStack>
+                                <SizableText>A new task for everyday</SizableText>
+                                <VerticalSpacer size="$0.5" />
+                                <SizableText opacity={0.5}>Starts {formatDateHeader(currentDate)}</SizableText>
+                            </YStack>
+                        ) : (
+                            <SizableText>A new special task for {formatDateHeader(currentDate)}</SizableText>
+                        )}
                     </Dialog.Description>
 
                     <TextInputWithLabel
