@@ -51,7 +51,6 @@ const TaskList = ({ headerText, taskIds, completed = false }: TaskListProps) => 
                 <TaskItem
                     key={`${t}_${currentDateKey}`}
                     taskId={t}
-                    currentDateKey={currentDateKey}
                     completed={completed}
                 />
             ))}

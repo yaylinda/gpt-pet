@@ -18,8 +18,10 @@ const TaskTabContent = ({ type, incompleteTaskIds, completeTaskIds }: TaskTabCon
 
     return (
         <ScrollView
-            padding="$3"
+            paddingHorizontal="$3"
             borderBottomRightRadius="$4"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingVertical: 13 /* $3 */ }}
             space
         >
             {isEmpty(incompleteTaskIds) && isEmpty(completeTaskIds) ? (
