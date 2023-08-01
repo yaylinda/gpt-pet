@@ -1,4 +1,4 @@
-import { difference } from 'lodash';
+import { difference, intersection } from 'lodash';
 import React from 'react';
 import { XStack, YStack } from 'tamagui';
 import { getDateKey } from '@/utils';
@@ -12,7 +12,7 @@ import useTodayStore from '@modules/today/store';
 
 const TaskSection = () => {
     const { currentDate, loadingDataCurrentDateKey, dailyTasks } = useTodayStore();
-    const { completedTasks, specialTasks } = useTodayStore(
+    const { completedTasks: allCompletedTasks, specialTasks } = useTodayStore(
         (state) =>
             state.data[getDateKey(state.currentDate)] || {
                 specialTasks: [],
@@ -22,6 +22,8 @@ const TaskSection = () => {
     const { activeTaskTab } = useTasksStore();
 
     const taskIds = activeTaskTab === TaskType.DAILY ? dailyTasks : specialTasks;
+
+    const completedTasks = intersection(allCompletedTasks, taskIds);
 
     console.log(
         `[TaskSection][render] currentDate=${getDateKey(

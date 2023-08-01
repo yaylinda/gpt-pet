@@ -23,7 +23,12 @@ export default function App() {
     const { upsertUser } = useUsersStore();
     const { upsertPet } = usePetsStore();
     const { upsertTask } = useTasksStore();
-    const { insertSpecialTask, insertCompletedTask, deleteCompletedTask } = useTodayStore();
+    const {
+        insertDailyTask: insertCurrentDateDailyTask,
+        insertSpecialTask,
+        insertCompletedTask,
+        deleteCompletedTask,
+    } = useTodayStore();
 
     const [loaded] = useFonts({
         Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
@@ -116,7 +121,12 @@ export default function App() {
                 (payload) => {
                     const row = payload.new as TaskRow;
                     upsertTask(row);
-                    row.type === TaskType.DAILY ? insertDailyTask(row) : insertSpecialTask(row.date_key, row.id);
+                    if (row.type === TaskType.DAILY) {
+                        insertDailyTask(row);
+                        insertCurrentDateDailyTask(row.date_key, row.id);
+                    } else if (row.type === TaskType.SPECIAL) {
+                        insertSpecialTask(row.date_key, row.id);
+                    }
                 }
             )
             .on(

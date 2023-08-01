@@ -87,4 +87,4 @@ const TaskItem = ({ taskId, completed, currentDateKey }: TaskItemProps) => {
     );
 };
 
-export default TaskItem;
+export default React.memo(TaskItem, (prev, next) => prev.taskId === next.taskId && prev.completed === next.completed);

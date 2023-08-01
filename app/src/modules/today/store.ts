@@ -28,6 +28,7 @@ interface TodayStoreStateFunctions {
     goToToday: () => void;
     onScrolledToWeek: (index: number) => void;
     fetchDataForDay: () => void;
+    insertDailyTask: (dateKey: string, taskId: string) => void;
     insertSpecialTask: (dateKey: string, taskId: string) => void;
     insertCompletedTask: (dateKey: string, taskId: string) => void;
     deleteCompletedTask: (dateKey: string, taskId: string) => void;
@@ -68,6 +69,9 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
     },
 
     setCurrentDate: (date: moment.Moment) => {
+        if (date.isSame(get().currentDate, 'day')) {
+            return;
+        }
         set({ currentDate: date.clone() });
         get().fetchDataForDay();
         get().taskListRef.current?.scrollToIndex({ animated: true, index: 0 });
@@ -154,7 +158,7 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
         set((state) => ({
             dailyTasks: useStore
                 .getState()
-                .dailyTasks.filter((t) => t.createdAt.isSameOrBefore(state.currentDate, 'day'))
+                .dailyTasks.filter((t) => moment(t.dateKey).isSameOrBefore(state.currentDate, 'day'))
                 .map((t) => t.id),
         }));
 
@@ -180,6 +184,16 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
         } finally {
             set({ loadingDataCurrentDateKey: '' });
         }
+    },
+
+    insertDailyTask: (dateKey: string, taskId: string) => {
+        set((state) => ({
+            dailyTasks: produce(state.dailyTasks, (draft) => {
+                if (dateKey === getDateKey(state.currentDate)) {
+                    draft.push(taskId);
+                }
+            }),
+        }));
     },
 
     insertSpecialTask: (dateKey: string, taskId: string) => {

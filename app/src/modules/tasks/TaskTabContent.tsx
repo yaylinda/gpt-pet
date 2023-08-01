@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import React from 'react';
 import { ScrollView } from 'tamagui';
 import type { TaskType } from '@modules/tasks/types';
-import VerticalSpacer from '@common/VerticalSpacer';
+import EmptyTaskContent from '@modules/tasks/EmptyTaskContent';
 import TaskList from '@modules/tasks/TaskList';
 
 interface TaskTabContentProps {
@@ -20,12 +20,16 @@ const TaskTabContent = ({ type, incompleteTaskIds, completeTaskIds }: TaskTabCon
         <ScrollView
             padding="$3"
             borderBottomRightRadius="$4"
+            space
         >
-            <TaskList
-                headerText="TODO"
-                taskIds={incompleteTaskIds}
-            />
-            <VerticalSpacer />
+            {isEmpty(incompleteTaskIds) && isEmpty(completeTaskIds) ? (
+                <EmptyTaskContent type={type} />
+            ) : (
+                <TaskList
+                    headerText="TODO"
+                    taskIds={incompleteTaskIds}
+                />
+            )}
             {!isEmpty(completeTaskIds) && (
                 <TaskList
                     headerText="Completed"
