@@ -55,7 +55,7 @@ const TaskItem = ({ taskId, completed, currentDateKey }: TaskItemProps) => {
         completeTask(userId, task, currentDateKey, getCurrentPet());
     };
 
-    console.log(`\t\t[TaskItem][render] currentDateKey=${currentDateKey}, taskId=${taskId}`);
+    console.log(`\t\t[TaskItem][render] currentDateKey=${currentDateKey}, taskId=${taskId}, completed=${completed}`);
 
     return (
         <Animated.View
@@ -63,8 +63,8 @@ const TaskItem = ({ taskId, completed, currentDateKey }: TaskItemProps) => {
             exiting={FadeOut}
         >
             <Swipeable
-                renderLeftActions={() => renderLeftActions()}
-                onSwipeableOpen={onComplete}
+                renderLeftActions={completed ? undefined : () => renderLeftActions()}
+                onSwipeableOpen={completed ? undefined : () => onComplete()}
             >
                 <XStack
                     height="$4"

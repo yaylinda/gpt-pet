@@ -18,7 +18,7 @@ interface TasksStoreStateData {
 }
 
 interface TasksStoreStateFunctions {
-    fetchDailyTasks: (userId: string) => Promise<string[]>;
+    fetchDailyTasks: (userId: string) => Promise<Task[]>;
     fetchSpecialTasks: (userId: string, date: moment.Moment) => Promise<string[]>;
     createTask: (
         userId: string,
@@ -47,7 +47,7 @@ const DEFAULT_DATA: TasksStoreStateData = {
 const useTasksStore = create<TasksStoreState>()((set, get) => ({
     ...DEFAULT_DATA,
 
-    fetchDailyTasks: async (userId: string): Promise<string[]> => {
+    fetchDailyTasks: async (userId: string): Promise<Task[]> => {
         const tasks = await fetchDailyTasksForUser(userId);
 
         set((state) => ({
@@ -57,7 +57,7 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
             },
         }));
 
-        return tasks.map((t) => t.id);
+        return tasks;
     },
 
     fetchSpecialTasks: async (userId: string, date: moment.Moment): Promise<string[]> => {

@@ -11,8 +11,10 @@ interface TaskTabContentProps {
     completeTaskIds: string[];
 }
 
-const TaskTabContent = ({ incompleteTaskIds, completeTaskIds }: TaskTabContentProps) => {
-    // TODO - handle cases if task lists are empty
+const TaskTabContent = ({ type, incompleteTaskIds, completeTaskIds }: TaskTabContentProps) => {
+    console.log(
+        `[TaskTabContent][render] type=${type}, incompleteTaskIds=${incompleteTaskIds.length}, completeTaskIds=${completeTaskIds.length}`
+    );
 
     return (
         <ScrollView

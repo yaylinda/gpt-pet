@@ -36,13 +36,12 @@ const WeekNavigationButton = ({ prev }: WeekNavigationButtonProps) => {
 
         // TODO - toast on end of list scroll?
 
-        prev
-            ? dateCarouselRef.current.prev({ animated: true })
-            : dateCarouselRef.current.next({ animated: true });
+        prev ? dateCarouselRef.current.prev({ animated: true }) : dateCarouselRef.current.next({ animated: true });
     };
 
     return (
         <Button
+            key={prev ? 'prev' : 'next'}
             size="$2"
             borderTopLeftRadius={topLeftRad}
             borderTopRightRadius={0}

@@ -1,20 +1,23 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
 import type { Pet, PetRow } from '@modules/pets/types';
+import type { Task, TaskRow } from '@modules/tasks/types';
 import type { User, UserRow } from '@modules/users/types';
 import { petAdapter } from '@modules/pets/adapters';
 import usePetsStore from '@modules/pets/store';
+import { taskAdapter } from '@modules/tasks/adapters';
 import useTasksStore from '@modules/tasks/store';
 import { userAdapter } from '@modules/users/adapters';
 import useUsersStore from '@modules/users/store';
 
 interface StoreStateData {
-    loadingSession: boolean;
     theme: string;
+    loadingSession: boolean;
     userId: string;
+    loadingData: boolean;
     currentUser: User | null;
     currentPet: Pet | null;
-    dailyTasks: string[];
+    dailyTasks: Task[];
 }
 
 interface StoreStateFunctions {
@@ -22,7 +25,7 @@ interface StoreStateFunctions {
     updateCurrentUser: (userRow: UserRow) => void;
     updateCurrentPet: (petRow: PetRow) => void;
     getCurrentPet: () => Pet;
-    insertDailyTask: (taskId: string) => void;
+    insertDailyTask: (taskRow: TaskRow) => void;
     setTheme: (color: string, dark?: boolean, alt?: 'alt1' | 'alt2') => void;
     reset: () => void;
 }
@@ -30,11 +33,12 @@ interface StoreStateFunctions {
 interface StoreState extends StoreStateData, StoreStateFunctions {}
 
 const DEFAULT_DATA: StoreStateData = {
+    theme: 'light_blue',
     loadingSession: true,
     userId: '',
+    loadingData: false,
     currentUser: null,
     currentPet: null,
-    theme: 'light_blue',
     dailyTasks: [],
 };
 
@@ -44,6 +48,7 @@ const useStore = create<StoreState>()((set, get) => ({
     setUserId: async (userId: string) => {
         set({
             loadingSession: false,
+            loadingData: true,
             userId,
         });
 
@@ -64,7 +69,7 @@ const useStore = create<StoreState>()((set, get) => ({
         } catch (e) {
             // TODO
         } finally {
-            // TODO
+            set({ loadingData: false });
         }
     },
 
@@ -82,10 +87,10 @@ const useStore = create<StoreState>()((set, get) => ({
         return get().currentPet!;
     },
 
-    insertDailyTask: (taskId: string) => {
+    insertDailyTask: (taskRow: TaskRow) => {
         set((state) => ({
             dailyTasks: produce(state.dailyTasks, (draft) => {
-                draft.push(taskId);
+                draft.push(taskAdapter(taskRow));
             }),
         }));
     },

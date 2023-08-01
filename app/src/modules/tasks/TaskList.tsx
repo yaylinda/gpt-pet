@@ -38,8 +38,10 @@ interface TaskListProps {
     completed?: boolean;
 }
 
-const TaskList = ({ headerText, taskIds, completed }: TaskListProps) => {
+const TaskList = ({ headerText, taskIds, completed = false }: TaskListProps) => {
     const currentDateKey = useTodayStore((state) => getDateKey(state.currentDate));
+
+    console.log(`[TaskList][render] headerText=${headerText}, taskIds=${taskIds.length}, completed=${completed}`);
 
     return (
         <Animated.View layout={SequencedTransition}>

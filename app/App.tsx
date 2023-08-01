@@ -19,19 +19,11 @@ import useUsersStore from '@modules/users/store';
 import AppStackNavigator from '@nav/AppStackNavigator';
 
 export default function App() {
-    const {
-        userId,
-        setUserId,
-        updateCurrentUser,
-        updateCurrentPet,
-        insertDailyTask,
-        theme,
-    } = useStore();
+    const { userId, setUserId, updateCurrentUser, updateCurrentPet, insertDailyTask, theme } = useStore();
     const { upsertUser } = useUsersStore();
     const { upsertPet } = usePetsStore();
     const { upsertTask } = useTasksStore();
-    const { insertSpecialTask, insertCompletedTask, deleteCompletedTask } =
-        useTodayStore();
+    const { insertSpecialTask, insertCompletedTask, deleteCompletedTask } = useTodayStore();
 
     const [loaded] = useFonts({
         Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
@@ -51,9 +43,9 @@ export default function App() {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, session) => {
             console.log(
-                `[App][onAuthStateChange][subscription] _event=${JSON.stringify(
-                    _event
-                )} session=${JSON.stringify(session)}`
+                `[App][onAuthStateChange][subscription] _event=${JSON.stringify(_event)} session=${JSON.stringify(
+                    session
+                )}`
             );
             setUserId(session?.user.id || '');
         });
@@ -70,9 +62,7 @@ export default function App() {
             return;
         }
 
-        console.log(
-            `[App] subscribing to user, pets, tasks, completed_tasks, on channel='user_${userId}'`
-        );
+        console.log(`[App] subscribing to user, pets, tasks, completed_tasks, on channel='user_${userId}'`);
 
         const userSubscriptions = supabase
             .channel(`user_${userId}`)
@@ -126,9 +116,7 @@ export default function App() {
                 (payload) => {
                     const row = payload.new as TaskRow;
                     upsertTask(row);
-                    row.type === TaskType.DAILY
-                        ? insertDailyTask(row.id)
-                        : insertSpecialTask(row.date_key, row.id);
+                    row.type === TaskType.DAILY ? insertDailyTask(row) : insertSpecialTask(row.date_key, row.id);
                 }
             )
             .on(
@@ -170,9 +158,7 @@ export default function App() {
             .subscribe();
 
         return () => {
-            console.log(
-                `[App] unsubscribing from user, pets, tasks, completed_tasks, on channel='user_${userId}'`
-            );
+            console.log(`[App] unsubscribing from user, pets, tasks, completed_tasks, on channel='user_${userId}'`);
             userSubscriptions.unsubscribe();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps

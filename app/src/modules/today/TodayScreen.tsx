@@ -17,12 +17,16 @@ import useTodayStore from '@modules/today/store';
 const TodayScreen = () => {
     const { height } = useWindowDimensions();
 
-    const { currentPet } = useStore();
+    const { loadingData, currentPet } = useStore();
     const { fetchDataForDay } = useTodayStore();
 
     React.useEffect(() => {
         fetchDataForDay();
     }, [fetchDataForDay]);
+
+    if (loadingData) {
+        return null;
+    }
 
     return (
         <TabbedScreenWrapper>

@@ -16,12 +16,12 @@ interface TodayStoreStateData {
     dateCarouselRef: React.RefObject<ICarouselInstance>;
     taskListRef: React.RefObject<FlatList>;
     scrolledFromGoToToday: boolean;
+    loadingDataCurrentDateKey: string;
+    dailyTasks: string[]; // daily task ids that were created on or before currentDate
     data: Record<string, { specialTasks: string[]; completedTasks: string[] }>;
 }
 
 interface TodayStoreStateFunctions {
-    prevDay: () => void;
-    nextDay: () => void;
     prevWeek: () => void;
     nextWeek: () => void;
     setCurrentDate: (date: moment.Moment) => void;
@@ -45,25 +45,13 @@ const DEFAULT_DATA: TodayStoreStateData = {
     dateCarouselRef: React.createRef<ICarouselInstance>(),
     taskListRef: React.createRef<FlatList>(),
     scrolledFromGoToToday: false,
+    loadingDataCurrentDateKey: getDateKey(moment().startOf('day')),
+    dailyTasks: [],
     data: {},
 };
 
 const useTodayStore = create<TodayStoreState>()((set, get) => ({
     ...DEFAULT_DATA,
-
-    prevDay: () => {
-        set((state) => ({
-            currentDate: state.currentDate.clone().subtract(1, 'day').startOf('day'),
-        }));
-        get().fetchDataForDay();
-    },
-
-    nextDay: () => {
-        set((state) => ({
-            currentDate: state.currentDate.clone().add(1, 'day').startOf('day'),
-        }));
-        get().fetchDataForDay();
-    },
 
     prevWeek: () => {
         set((state) => ({
@@ -152,13 +140,30 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
         const userId = useStore.getState().userId;
         const dateKey = getDateKey(get().currentDate);
 
+        if (!userId) {
+            console.log(
+                `[useTodayStore][fetchDataForDay] currentDate=${getDateKey(
+                    get().currentDate
+                )}, unknown userId... doing nothing`
+            );
+            return;
+        }
+
         console.log(`[useTodayStore][fetchDataForDay] ${getDateKey(get().currentDate)}`);
 
-        if (get().data[dateKey] || !userId) {
+        set((state) => ({
+            dailyTasks: useStore
+                .getState()
+                .dailyTasks.filter((t) => t.createdAt.isSameOrBefore(state.currentDate, 'day'))
+                .map((t) => t.id),
+        }));
+
+        if (get().data[dateKey]) {
             return;
         }
 
         try {
+            set({ loadingDataCurrentDateKey: dateKey });
             const completed = await fetchCompletedTasksForUserOnDate(userId, get().currentDate);
             const specialTasks = await useTasksStore.getState().fetchSpecialTasks(userId, get().currentDate);
             set((state) => ({
@@ -173,7 +178,7 @@ const useTodayStore = create<TodayStoreState>()((set, get) => ({
         } catch (e) {
             // TODO
         } finally {
-            // TODO
+            set({ loadingDataCurrentDateKey: '' });
         }
     },
 

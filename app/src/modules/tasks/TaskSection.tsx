@@ -1,7 +1,6 @@
 import { difference } from 'lodash';
 import React from 'react';
 import { XStack, YStack } from 'tamagui';
-import useStore from '@/store';
 import { getDateKey } from '@/utils';
 import AddTaskDialog from '@modules/tasks/AddTaskDialog';
 import TaskTabButton from '@modules/tasks/TaskTabButton';
@@ -12,7 +11,7 @@ import { TaskType } from '@modules/tasks/types';
 import useTodayStore from '@modules/today/store';
 
 const TaskSection = () => {
-    const { dailyTasks } = useStore();
+    const { currentDate, loadingDataCurrentDateKey, dailyTasks } = useTodayStore();
     const { completedTasks, specialTasks } = useTodayStore(
         (state) =>
             state.data[getDateKey(state.currentDate)] || {
@@ -24,7 +23,13 @@ const TaskSection = () => {
 
     const taskIds = activeTaskTab === TaskType.DAILY ? dailyTasks : specialTasks;
 
-    console.log(`[TaskSection][render] activeTaskTab=${activeTaskTab}`);
+    console.log(
+        `[TaskSection][render] currentDate=${getDateKey(
+            currentDate
+        )}, loadingDataCurrentDateKey=${loadingDataCurrentDateKey}, activeTaskTab=${activeTaskTab}, dailyTasks=${
+            dailyTasks.length
+        }, completedTasks=${completedTasks.length}, specialTasks=${specialTasks.length}`
+    );
 
     return (
         <>
@@ -44,11 +49,13 @@ const TaskSection = () => {
                         isLast
                     />
                 </XStack>
-                <TaskTabContent
-                    type={activeTaskTab}
-                    incompleteTaskIds={difference(taskIds, completedTasks)}
-                    completeTaskIds={completedTasks}
-                />
+                {!loadingDataCurrentDateKey && (
+                    <TaskTabContent
+                        type={activeTaskTab}
+                        incompleteTaskIds={difference(taskIds, completedTasks)}
+                        completeTaskIds={completedTasks}
+                    />
+                )}
             </YStack>
             <AddTaskDialog />
         </>
