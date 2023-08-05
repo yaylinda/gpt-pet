@@ -5,7 +5,7 @@ import type { Task, TaskDifficulty, TaskRow } from '@modules/tasks/types';
 import type moment from 'moment';
 import { errorAlert } from '@/alerts';
 import { getDateKey, reduce } from '@/utils';
-import { completeTask } from '@modules/completedTasks/api';
+import { completeTask, uncompleteTask } from '@modules/completedTasks/api';
 import { taskAdapter } from '@modules/tasks/adapters';
 import { fetchDailyTasksForUser, fetchSpecialTasksForUserOnDate, insertTask } from '@modules/tasks/api';
 import { TaskType } from '@modules/tasks/types';
@@ -28,6 +28,7 @@ interface TasksStoreStateFunctions {
         difficulty: TaskDifficulty
     ) => Promise<boolean>;
     completeTask: (userId: string, task: Task, currentDate: moment.Moment, pet: Pet) => void;
+    uncompleteTask: (userId: string, task: Task, currentDate: moment.Moment) => void;
     getTask: (taskId: string) => Task;
     upsertTask: (taskRow: TaskRow) => void;
     setActiveTaskTab: (activeTaskTab: TaskType) => void;
@@ -118,6 +119,17 @@ const useTasksStore = create<TasksStoreState>()((set, get) => ({
             );
             const response = await completeTask(row, petTaskInfo);
             console.log(`[tasksStore][completeTask] response=${response}`);
+        } catch (e) {
+            errorAlert('Oops! Something went wrong...', JSON.stringify(e));
+        }
+    },
+
+    uncompleteTask: async (userId: string, task: Task, currentDate: moment.Moment) => {
+        try {
+            await uncompleteTask(userId, task.id, getDateKey(currentDate));
+            console.log(
+                `[tasksStore][uncompleteTask] userId=${userId}, taskId=${task.id}, dateKey=${getDateKey(currentDate)}`
+            );
         } catch (e) {
             errorAlert('Oops! Something went wrong...', JSON.stringify(e));
         }

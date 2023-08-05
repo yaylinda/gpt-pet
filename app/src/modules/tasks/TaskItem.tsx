@@ -1,11 +1,10 @@
-import { Check } from '@tamagui/lucide-icons';
-import * as Burnt from 'burnt';
+import { Check, Undo2 } from '@tamagui/lucide-icons';
 import * as Haptics from 'expo-haptics';
 import moment from 'moment';
 import React from 'react';
 import { Swipeable } from 'react-native-gesture-handler';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { SizableText, XStack } from 'tamagui';
+import { Button, SizableText, XStack } from 'tamagui';
 import useStore from '@/store';
 import { getDateKey } from '@/utils';
 import useTasksStore from '@modules/tasks/store';
@@ -20,7 +19,7 @@ const TaskItem = ({ taskId, completed }: TaskItemProps) => {
     const { userId, getCurrentPet } = useStore();
     const { currentDate } = useTodayStore();
     const task = useTasksStore((state) => state.tasks[taskId]);
-    const { completeTask } = useTasksStore();
+    const { completeTask, uncompleteTask } = useTasksStore();
 
     if (!task) {
         console.log(
@@ -32,13 +31,29 @@ const TaskItem = ({ taskId, completed }: TaskItemProps) => {
     }
 
     const renderLeftActions = () => {
-        if (completed) {
+        if (currentDate.isAfter(moment(), 'day')) {
             return null;
         }
 
-        if (currentDate.isAfter(moment(), 'day')) {
-            // return <View style={{ width: '10%' }} />;
-            return null;
+        if (completed) {
+            return (
+                <Animated.View
+                    entering={FadeIn}
+                    exiting={FadeOut}
+                    style={{ justifyContent: 'center' }}
+                >
+                    <Button
+                        size="$2"
+                        borderRadius="$10"
+                        icon={Undo2}
+                        scaleIcon={1.5}
+                        marginRight="$2"
+                        onPress={() => uncompleteTask(userId, task, currentDate)}
+                    >
+                        Undo
+                    </Button>
+                </Animated.View>
+            );
         }
 
         return (
@@ -71,22 +86,9 @@ const TaskItem = ({ taskId, completed }: TaskItemProps) => {
         );
     };
 
-    const onComplete = (direction: 'left' | 'right' ) => {
+    const onSwipeableOpen = (direction: 'left' | 'right') => {
         if (direction === 'left') {
-            if (currentDate.isAfter(moment(), 'day')) {
-                // swipeable.close();
-                Burnt.toast({
-                    title: 'Can\'t complete tasks in the future...',
-                    preset: 'custom',
-                    icon: {
-                        ios: {
-                            name: '',
-                            color: '',
-                        },
-                    },
-                    haptic: 'warning',
-                    duration: 1,
-                });
+            if (completed) {
                 return;
             }
 
@@ -108,7 +110,7 @@ const TaskItem = ({ taskId, completed }: TaskItemProps) => {
         >
             <Swipeable
                 renderLeftActions={renderLeftActions}
-                onSwipeableOpen={onComplete}
+                onSwipeableOpen={onSwipeableOpen}
             >
                 <XStack
                     height="$4"

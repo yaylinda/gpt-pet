@@ -161,7 +161,7 @@ export default function App() {
                     filter: `user_id=eq.${userId}`,
                 },
                 (payload) => {
-                    const row = payload.new as CompletedTaskRow;
+                    const row = payload.old as CompletedTaskRow;
                     deleteCompletedTask(row.date_key, row.task_id);
                 }
             )

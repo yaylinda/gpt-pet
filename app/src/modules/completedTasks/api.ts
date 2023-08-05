@@ -36,6 +36,20 @@ export const completeTask = async (
     return data.content;
 };
 
+export const uncompleteTask = async (userId: string, taskId: string, dateKey: string): Promise<void> => {
+    const {  error } = await supabase
+        .from(Tables.COMPLETED_TASKS)
+        .delete()
+        .eq('user_id', userId)
+        .eq('task_id', taskId)
+        .eq('date_key', dateKey);
+
+    if (error) {
+        console.error(`[uncompleteTask] error: ${JSON.stringify(error)}`);
+        throw error;
+    }
+};
+
 /**
  *
  * @param userId
