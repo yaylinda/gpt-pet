@@ -5,28 +5,28 @@ PODS:
     - SPAlert
     - SPIndicator
   - DoubleConversion (1.1.6)
-  - EXApplication (5.3.0):
+  - EXApplication (5.3.1):
     - ExpoModulesCore
   - EXConstants (14.4.2):
     - ExpoModulesCore
-  - EXFileSystem (15.4.2):
+  - EXFileSystem (15.4.5):
     - ExpoModulesCore
   - EXFont (11.4.0):
     - ExpoModulesCore
   - EXJSONUtils (0.7.1)
-  - EXManifests (0.7.1):
+  - EXManifests (0.7.2):
     - ExpoModulesCore
-  - Expo (49.0.3):
+  - Expo (49.0.21):
     - ExpoModulesCore
-  - expo-dev-client (2.4.6):
+  - expo-dev-client (2.4.12):
     - EXManifests
     - expo-dev-launcher
     - expo-dev-menu
     - expo-dev-menu-interface
     - EXUpdatesInterface
-  - expo-dev-launcher (2.4.8):
+  - expo-dev-launcher (2.4.14):
     - EXManifests
-    - expo-dev-launcher/Main (= 2.4.8)
+    - expo-dev-launcher/Main (= 2.4.14)
     - expo-dev-menu
     - expo-dev-menu-interface
     - ExpoModulesCore
@@ -34,7 +34,7 @@ PODS:
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTAppDelegate
-  - expo-dev-launcher/Main (2.4.8):
+  - expo-dev-launcher/Main (2.4.14):
     - EXManifests
     - expo-dev-launcher/Unsafe
     - expo-dev-menu
@@ -44,7 +44,7 @@ PODS:
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTAppDelegate
-  - expo-dev-launcher/Unsafe (2.4.8):
+  - expo-dev-launcher/Unsafe (2.4.14):
     - EXManifests
     - expo-dev-menu
     - expo-dev-menu-interface
@@ -53,23 +53,23 @@ PODS:
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTAppDelegate
-  - expo-dev-menu (3.1.8):
-    - expo-dev-menu/Main (= 3.1.8)
+  - expo-dev-menu (3.2.2):
+    - expo-dev-menu/Main (= 3.2.2)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - expo-dev-menu-interface (1.3.0)
-  - expo-dev-menu/Main (3.1.8):
+  - expo-dev-menu/Main (3.2.2):
     - EXManifests
     - expo-dev-menu-interface
     - expo-dev-menu/Vendored
     - ExpoModulesCore
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - expo-dev-menu/SafeAreaView (3.1.8):
+  - expo-dev-menu/SafeAreaView (3.2.2):
     - ExpoModulesCore
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - expo-dev-menu/Vendored (3.1.8):
+  - expo-dev-menu/Vendored (3.2.2):
     - expo-dev-menu/SafeAreaView
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -81,7 +81,7 @@ PODS:
     - ExpoModulesCore
   - ExpoKeepAwake (12.3.0):
     - ExpoModulesCore
-  - ExpoModulesCore (1.5.7):
+  - ExpoModulesCore (1.5.12):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-NativeModulesApple
@@ -89,7 +89,7 @@ PODS:
     - ReactCommon/turbomodule/core
   - ExpoSecureStore (12.3.1):
     - ExpoModulesCore
-  - EXSplashScreen (0.20.4):
+  - EXSplashScreen (0.20.5):
     - ExpoModulesCore
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -530,7 +530,7 @@ PODS:
     - React-Core
   - RNCMaskedView (0.2.9):
     - React-Core
-  - RNGestureHandler (2.12.0):
+  - RNGestureHandler (2.12.1):
     - React-Core
   - RNPurchases (6.2.3):
     - PurchasesHybridCommon (= 5.2.4)
@@ -567,12 +567,12 @@ PODS:
   - RNScreens (3.22.1):
     - React-Core
     - React-RCTImage
-  - RNSVG (13.10.0):
+  - RNSVG (13.14.0):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
   - SocketRocket (0.6.1)
-  - SPAlert (4.2.0)
+  - SPAlert (5.1.8)
   - SPIndicator (1.6.4)
   - Yoga (1.14.0)
 
@@ -801,24 +801,24 @@ SPEC CHECKSUMS:
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   Burnt: ab447594da52c2485e3520c9e68b70ac30d4eaf0
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
-  EXApplication: 02655a251434d564bb0e73291f5a490c74b5b76f
+  EXApplication: 042aa2e3f05258a16962ea1a9914bf288db9c9a1
   EXConstants: ce5bbea779da8031ac818c36bea41b10e14d04e1
-  EXFileSystem: d7f59869885cfeab3ac771e2a8d0f5ed98cd3fdb
+  EXFileSystem: f8b838a880254de42a5a7da20ed5ce12e2697c1b
   EXFont: 738c44c390953ebcbab075a4848bfbef025fd9ee
   EXJSONUtils: 6802be4282d42b97c51682468ddc1026a06f8276
-  EXManifests: 8a4a480e3b58891d5657d3996a39229e5c96d912
-  Expo: d5956de70d4076190861f6730b93e75478b6faf8
-  expo-dev-client: 4f773679557bc150e44eea1a1e3a3fd65ab82a5a
-  expo-dev-launcher: de065738958421c704ee024f4fe1bf14b2d8a713
-  expo-dev-menu: 9b3792cc2241011b63747cc77d06b0dcbcc57780
+  EXManifests: cf66451b11b2c2f6464917528d792759f7fd6ce0
+  Expo: 61a8e1aa94311557c137c0a4dfd4fe78281cfbb4
+  expo-dev-client: 1e20e0d67534fd63da37604747a60e7d69fc46f5
+  expo-dev-launcher: e9411e0c91abaa448682d0fa688957e7dbff356e
+  expo-dev-menu: f7036f78c69f0f6ecb386f5543a06266dde64bf5
   expo-dev-menu-interface: bda969497e73dadc2663c479e0fa726ca79a306e
   ExpoBlur: a2c90bdfa4ff9f459cdb0f83191bddf020e3e2db
   ExpoDevice: 1c1b0c9cad96c292c1de73948649cfd654b2b3c0
   ExpoHaptics: 360af6898407ee4e8265d30a1a8fb16491a660eb
   ExpoKeepAwake: be4cbd52d9b177cde0fd66daa1913afa3161fc1d
-  ExpoModulesCore: f8f3cac222bb0f574c77664d7e05817eaa97434b
+  ExpoModulesCore: c480fd4e3c7c8e81f0a6ba3a7c56869f25fe016d
   ExpoSecureStore: 57db3b6da8b59046e2057e95bf7738a8027b47c3
-  EXSplashScreen: 89586b0961acd173b04713b7457949b063a659da
+  EXSplashScreen: c0e7f2d4a640f3b875808ed0b88575538daf6d82
   EXUpdatesInterface: 82ed48d417cdcd376c12ca1c2ce390d35500bed6
   FBLazyVector: 55cd4593d570bd9e5e227488d637ce6a9581ce51
   FBReactNativeSpec: 799b0e1a1561699cd0e424e24fe5624da38402f0
@@ -863,14 +863,14 @@ SPEC CHECKSUMS:
   RevenueCat: 2b099ec01da3f3c1f26c1c4c4da3ab36a4d88f25
   RNCAsyncStorage: ddc4ee162bfd41b0d2c68bf2d95acd81dd7f1f93
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
-  RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
+  RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
   RNPurchases: eb321b3a13f7d05f9e2d899b3a70d94d2d0f8977
   RNReanimated: 9f7068e43b9358a46a688d94a5a3adb258139457
   RNScreens: 50ffe2fa2342eabb2d0afbe19f7c1af286bc7fb3
-  RNSVG: 80584470ff1ffc7994923ea135a3e5ad825546b9
+  RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  SPAlert: 735da1f16a887e294719217572ce1f936d8c8782
+  SPAlert: 7027ed9df9a2ba8202cab39fd05b53e110f48a99
   SPIndicator: 93e0a4fb23de51294ac48e874c0f081a5e293e4f
   Yoga: 65286bb6a07edce5e4fe8c90774da977ae8fc009
 

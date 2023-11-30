@@ -3,12 +3,15 @@
   "version": "0.0.1",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
+    "start": "expo start",
     "ios_device": "./scripts/local_env.sh && export $(cat .env.local | xargs) && expo run:ios --device",
     "ios_sim": "./scripts/local_env.sh && export $(cat .env.local | xargs) && expo run:ios",
     "ios_sim_manual": "expo run:ios",
     "android": "./scripts/local_env.sh && export $(cat .env.local | xargs) && expo run:android --device",
     "build_and_submit": "./scripts/build_and_submit.sh",
-    "lint": "eslint App.tsx src --ext .ts,.tsx --fix"
+    "prebuild:clean": "expo prebuild --clean",
+    "lint": "eslint App.tsx src --ext .ts,.tsx --fix",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.18.2",
